@@ -2,8 +2,8 @@
 <resources>
     <string name="label_customization">Customization</string>
     <string name="label_beta">BETA</string>
-    <string name="shut_up_attempt_shizuku_restart">Attempt Shizuku restart</string>
-    <string name="shut_up_shizuku_restart_warning_title">Shizuku Restart Warning</string>
+    <string name="shut_up_attempt_shizuku_restart">Shizuku restart poging</string>
+    <string name="shut_up_shizuku_restart_warning_title">Shizuku restart waarschuwing</string>
     <string name="shut_up_shizuku_restart_warning_message">Since wireless debugging was toggled, Shizuku services might not have started automatically causing freezing to not function. Consider turning on attempt shizuku restart as well</string>
     <string name="accessibility_service_description"><b>Toegankelijkheidsservice van Essentials</b>\n\nDeze service is vereist voor de volgende geavanceerde functies:\n\n<b>• Opnieuw toewijzen van fysieke knoppen:</b>\nDetecteert het klikken van de volumeknoppen, zelfs wanneer het scherm uit is, om acties te starten zoals de zaklamp.\n\n<b>• Instellingen per app:</b>\nBekijkt de momenteel actieve app om specifieke profielen toe te passen voor Dynamisch nachtlicht, Meldingsbelichtingskleuren en Appvergrendeling.\n\n<b>• Schermbesturing:</b>\nLaat de app het scherm vergrendelen (bijv. met dubbelklikken of met widgets) en veranderingen van schermstaat detecteren.\n\n<b>• Beveiliging:</b>\nVoorkomt ongeautoriseerde wijzigingen door vensterinhoud te detecteren wanneer het apparaat vergrendeld is.\n\n<small>Geen invoertekst of gevoelige gebruikersdata wordt verzameld of overgezet.</small></string>
     <string name="freeze_activity_title">Apps bevriezen</string>
@@ -28,7 +28,7 @@
     <string name="app_lock_description">Beveilig je apps met biometrische authenticatie. Vergrendelde apps zullen authenticatie vereisen bij openen, blijft ontgrendeld totdat het scherm word uitgezet.</string>
     <string name="app_lock_warning">Wees er van bewust dat dit niet een robuuste oplossing is, omdat dit alleen maar een app van een derde partij is. Als je sterke beveiliging nodig hebt, probeer dan Privéruimte of andere dergelijke functies.</string>
     <string name="app_lock_biometric_note">Nog een opmerking: De biometrische authenticatie laat je alleen STERKE beveiligingsmethoden gebruiken. Gezichtsherkenning wordt als ZWAK gezien bij apparaten zoals de Pixel 7. Zulke apparaten zullen andere STERKE beveiligingsmethoden gebruiken zoals vingerafdruk of pincode.</string>
-    <string name="setting_use_usage_access_title">Use usage access</string>
+    <string name="setting_use_usage_access_title">Gebruik toegang tot opslag</string>
     <string name="setting_use_usage_access_desc">Instead of accessibility (Freeze, App Lock, Dynamic Night Light)</string>
     <!-- Button Remap -->
     <string name="button_remap_enable_title">Opnieuw toewijzen van fysieke knoppen inschakelen</string>
@@ -66,11 +66,11 @@
     <string name="like_song_aod_overlay_title">Overlay tonen op de Always-On Display</string>
     <string name="feat_essentials_on_display_title">Essentials On Display</string>
     <string name="feat_essentials_on_display_desc">Glance at media and info on AOD</string>
-    <string name="essentials_on_display_docked_mode_title">Docked mode</string>
+    <string name="essentials_on_display_docked_mode_title">Gedockte modus</string>
     <string name="essentials_on_display_docked_mode_desc">Keep the overlay visible indefinitely while music is playing on AOD</string>
-    <string name="essentials_on_display_respect_notifications_title">Respect new notifications</string>
-    <string name="essentials_on_display_respect_notifications_desc">Briefly disable for new notifications</string>
-    <string name="essentials_on_display_random_shapes_title">Random shapes</string>
+    <string name="essentials_on_display_respect_notifications_title">Respecteer nieuwe meldingen</string>
+    <string name="essentials_on_display_respect_notifications_desc">Schakel kort uit bij nieuwe meldingen</string>
+    <string name="essentials_on_display_random_shapes_title">Willekeurige vormen</string>
     <string name="essentials_on_display_random_shapes_desc">Use various Material 3 shapes for the album art</string>
     <string name="essentials_on_display_album_art_title">Album art</string>
     <string name="essentials_on_display_clock_title">Clock</string>
