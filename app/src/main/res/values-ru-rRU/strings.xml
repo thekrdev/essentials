@@ -746,7 +746,7 @@
     <string name="location_reached_instructional_desc">Поделитесь координатами (точка на карте) из Google Maps в Essentials, чтобы сохранить их в качестве пункта назначения.\n\nУказанное расстояние - это прямое расстояние до пункта назначения, а не расстояние по дорогам.\n\nОтноситесь ко всем расчетам времени и расстояния со всей серьезностью, поскольку они не всегда точны.</string>
     <string name="tile_location_reached">Мы уже на месте?</string>
     <string name="location_reached_pause">Pause</string>
-    <string name="location_reached_resume">Resume</string>
+    <string name="location_reached_resume">Продолжить</string>
     <string name="location_reached_radius_label">Радиус: %1$d м</string>
     <string name="location_reached_distance_label">Расстояние до цели: %1$s</string>
     <string name="location_reached_last_travelled">Последнее: %1$s</string>
