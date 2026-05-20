@@ -21,6 +21,8 @@ import androidx.core.content.edit
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.domain.ScreenOffMethod
+import com.sameerasw.essentials.ui.components.cards.FeatureCard
+import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.components.pickers.HapticFeedbackPicker
 import com.sameerasw.essentials.ui.components.pickers.ScreenOffMethodPicker
@@ -55,6 +57,10 @@ fun ScreenOffWidgetSettingsUI(
         )
     }
 
+    var isDoubleTapRequired by remember {
+        mutableStateOf(prefs.getBoolean("screen_off_double_tap", false))
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -65,7 +71,7 @@ fun ScreenOffWidgetSettingsUI(
         Text(
             text = stringResource(R.string.screen_off_method_title),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
@@ -88,6 +94,27 @@ fun ScreenOffWidgetSettingsUI(
                     }
                 },
                 modifier = Modifier.highlight(highlightSetting == "screen_off_method_picker")
+            )
+        }
+
+        // Double Tap Toggle
+        RoundedCardContainer(
+            modifier = Modifier.padding(top = 16.dp),
+            spacing = 8.dp,
+            cornerRadius = 24.dp
+        ) {
+            IconToggleItem(
+                title = stringResource(R.string.require_double_tap_title),
+                description = stringResource(R.string.require_double_tap_desc),
+                iconRes = R.drawable.rounded_touch_app_24,
+                isChecked = isDoubleTapRequired,
+                onCheckedChange = {
+                    isDoubleTapRequired = it
+                    prefs.edit {
+                        putBoolean("screen_off_double_tap", it)
+                    }
+                },
+                showToggle = true
             )
         }
 

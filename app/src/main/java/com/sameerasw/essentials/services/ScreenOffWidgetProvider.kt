@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.PowerManager
+import android.os.SystemClock
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.provider.Settings
@@ -24,6 +25,10 @@ import com.sameerasw.essentials.utils.performHapticFeedback
 
 class ScreenOffWidgetProvider : AppWidgetProvider() {
 
+    companion object {
+        private const val DOUBLE_TAP_TIMEOUT = 500L // 500ms
+    }
+
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -38,51 +43,83 @@ class ScreenOffWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
         if (intent.action == "WIDGET_CLICK") {
             val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
-            val selectedScreenOffMethod = try {
-                ScreenOffMethod.valueOf(prefs.getString("screen_off_method", ScreenOffMethod.ACCESSIBILITY.name) ?: ScreenOffMethod.ACCESSIBILITY.name)
-            } catch (e: IllegalArgumentException) {
-                ScreenOffMethod.ACCESSIBILITY
-            }
+            val isDoubleTapRequired = prefs.getBoolean("screen_off_double_tap", false)
 
-            val hapticFeedbackType = try {
-                HapticFeedbackType.valueOf(prefs.getString("haptic_feedback_type", HapticFeedbackType.NONE.name) ?: HapticFeedbackType.NONE.name)
-            } catch (e: IllegalArgumentException) {
-                HapticFeedbackType.NONE
-            }
+            if (isDoubleTapRequired) {
+                val lastTapTime = prefs.getLong("screen_off_last_tap_time", 0)
+                val currentTime = SystemClock.elapsedRealtime()
 
-            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                context.getSystemService(VibratorManager::class.java)?.defaultVibrator
-            } else {
-                @Suppress("DEPRECATION")
-                context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-            }
-
-            if (vibrator != null) {
-                performHapticFeedback(vibrator, hapticFeedbackType)
-            }
-
-            when (selectedScreenOffMethod) {
-                ScreenOffMethod.ACCESSIBILITY -> {
-                    if (isAccessibilityEnabled(context)) {
-                        val serviceIntent =
-                            Intent(context, ScreenOffAccessibilityService::class.java).apply {
-                                action = "LOCK_SCREEN"
-                            }
-                        context.startService(serviceIntent)
+                if (currentTime - lastTapTime < DOUBLE_TAP_TIMEOUT) {
+                    // Double tap detected
+                    prefs.edit().putLong("screen_off_last_tap_time", 0).apply()
+                    triggerScreenOff(context)
+                } else {
+                    // First tap
+                    prefs.edit().putLong("screen_off_last_tap_time", currentTime).apply()
+                    
+                    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        context.getSystemService(VibratorManager::class.java)?.defaultVibrator
                     } else {
-                        Toast.makeText(context, "Missing Accessibility permission, Check the app", Toast.LENGTH_SHORT)
-                            .show()
+                        @Suppress("DEPRECATION")
+                        context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                    }
+                    if (vibrator != null) {
+                        performHapticFeedback(vibrator, HapticFeedbackType.TICK)
                     }
                 }
-                ScreenOffMethod.INPUT -> {
-                    if (ShellUtils.hasPermission(context)) {
-                        // Simulate power button press using input keyevent
-                        // Requires root or Shizuku, which ShellUtils handles
-                        ShellUtils.runCommand(context, "input keyevent ${KeyEvent.KEYCODE_POWER}")
-                    } else {
-                        Toast.makeText(context, "Missing Shizuku/Root permission for Input method, Check the app", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+            } else {
+                // Double tap not required, trigger immediately
+                triggerScreenOff(context)
+            }
+        }
+    }
+
+    private fun triggerScreenOff(context: Context) {
+        val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
+        val selectedScreenOffMethod = try {
+            ScreenOffMethod.valueOf(prefs.getString("screen_off_method", ScreenOffMethod.ACCESSIBILITY.name) ?: ScreenOffMethod.ACCESSIBILITY.name)
+        } catch (e: IllegalArgumentException) {
+            ScreenOffMethod.ACCESSIBILITY
+        }
+
+        val hapticFeedbackType = try {
+            HapticFeedbackType.valueOf(prefs.getString("haptic_feedback_type", HapticFeedbackType.NONE.name) ?: HapticFeedbackType.NONE.name)
+        } catch (e: IllegalArgumentException) {
+            HapticFeedbackType.NONE
+        }
+
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(VibratorManager::class.java)?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+        }
+
+        if (vibrator != null) {
+            performHapticFeedback(vibrator, hapticFeedbackType)
+        }
+
+        when (selectedScreenOffMethod) {
+            ScreenOffMethod.ACCESSIBILITY -> {
+                if (isAccessibilityEnabled(context)) {
+                    val serviceIntent =
+                        Intent(context, ScreenOffAccessibilityService::class.java).apply {
+                            action = "LOCK_SCREEN"
+                        }
+                    context.startService(serviceIntent)
+                } else {
+                    Toast.makeText(context, "Missing Accessibility permission, Check the app", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            ScreenOffMethod.INPUT -> {
+                if (ShellUtils.hasPermission(context)) {
+                    // Simulate power button press using input keyevent
+                    // Requires root or Shizuku, which ShellUtils handles
+                    ShellUtils.runCommand(context, "input keyevent ${KeyEvent.KEYCODE_POWER}")
+                } else {
+                    Toast.makeText(context, "Missing Shizuku/Root permission for Input method, Check the app", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
