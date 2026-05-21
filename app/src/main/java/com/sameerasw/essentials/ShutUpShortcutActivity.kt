@@ -1,8 +1,10 @@
 package com.sameerasw.essentials
 
+import android.content.ContentResolver
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -139,15 +141,15 @@ class ShutUpShortcutActivity : ComponentActivity() {
                 )
 
                 secureSettings.forEach { key ->
-                    Settings.Secure.getString(contentResolver, key)
+                    safeReadSetting(contentResolver, SettingsTable.SECURE, key)
                         ?.let { originalSettings["secure:$key"] = it }
                 }
                 systemSettings.forEach { key ->
-                    Settings.System.getString(contentResolver, key)
+                    safeReadSetting(contentResolver, SettingsTable.SYSTEM, key)
                         ?.let { originalSettings["system:$key"] = it }
                 }
                 globalSettings.forEach { key ->
-                    Settings.Global.getString(contentResolver, key)
+                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, key)
                         ?.let { originalSettings["global:$key"] = it }
                 }
 
@@ -163,7 +165,8 @@ class ShutUpShortcutActivity : ComponentActivity() {
             // as some apps check this specific setting directly.
             if (config.disableUsbDebugging) {
                 val current =
-                    Settings.Global.getString(contentResolver, Settings.Global.ADB_ENABLED) ?: "0"
+                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, Settings.Global.ADB_ENABLED)
+                        ?: "0"
                 if (current == "1") {
                     if (!originalSettings.containsKey("global:${Settings.Global.ADB_ENABLED}")) {
                         originalSettings["global:${Settings.Global.ADB_ENABLED}"] = "1"
@@ -173,7 +176,8 @@ class ShutUpShortcutActivity : ComponentActivity() {
             }
 
             if (config.disableWirelessDebugging) {
-                val current = Settings.Global.getString(contentResolver, "adb_wifi_enabled") ?: "0"
+                val current =
+                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, "adb_wifi_enabled") ?: "0"
                 if (current == "1") {
                     if (!originalSettings.containsKey("global:adb_wifi_enabled")) {
                         originalSettings["global:adb_wifi_enabled"] = "1"
@@ -183,8 +187,9 @@ class ShutUpShortcutActivity : ComponentActivity() {
             }
 
             if (config.disableAccessibility) {
-                val current = Settings.Secure.getString(
+                val current = safeReadSetting(
                     contentResolver,
+                    SettingsTable.SECURE,
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
                 )
                 if (!current.isNullOrEmpty()) {
@@ -202,6 +207,25 @@ class ShutUpShortcutActivity : ComponentActivity() {
                 repository.saveShutUpOriginalSettings(originalSettings)
             }
         }
+    }
+
+    private enum class SettingsTable { SYSTEM, SECURE, GLOBAL }
+
+    // Android 12+ throws SecurityException reading @hide settings that aren't
+    // @Readable (e.g. show_key_presses). WRITE_SECURE_SETTINGS doesn't cover reads.
+    private fun safeReadSetting(
+        resolver: ContentResolver,
+        table: SettingsTable,
+        key: String
+    ): String? = try {
+        when (table) {
+            SettingsTable.SYSTEM -> Settings.System.getString(resolver, key)
+            SettingsTable.SECURE -> Settings.Secure.getString(resolver, key)
+            SettingsTable.GLOBAL -> Settings.Global.getString(resolver, key)
+        }
+    } catch (e: SecurityException) {
+        Log.w("ShutUpShortcut", "Skipping unreadable setting $table:$key", e)
+        null
     }
 
     private fun launchApp(packageName: String) {
