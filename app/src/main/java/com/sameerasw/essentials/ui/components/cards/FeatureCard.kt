@@ -62,7 +62,8 @@ fun FeatureCard(
     onHelpClick: (() -> Unit)? = null,
     additionalMenuItems: (@Composable (onDismiss: () -> Unit) -> Unit)? = null,
     customTrailingContent: (@Composable () -> Unit)? = null,
-    iconPainter: androidx.compose.ui.graphics.painter.Painter? = null
+    iconPainter: androidx.compose.ui.graphics.painter.Painter? = null,
+    isSelected: Boolean = false
 ) {
     val view = LocalView.current
     var showMenu by remember { mutableStateOf(false) }
@@ -203,7 +204,11 @@ fun FeatureCard(
             }
         },
         colors = androidx.compose.material3.ListItemDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.surfaceBright
+            containerColor = if (isSelected) {
+                MaterialTheme.colorScheme.secondaryContainer
+            } else {
+                MaterialTheme.colorScheme.surfaceBright
+            }
         ),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             horizontal = 16.dp,

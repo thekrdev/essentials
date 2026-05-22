@@ -73,7 +73,6 @@ import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
-import com.sameerasw.essentials.FeatureSettingsActivity
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.registry.FeatureRegistry
 import com.sameerasw.essentials.domain.registry.PermissionRegistry
@@ -99,7 +98,9 @@ fun SetupFeatures(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     searchRequested: Boolean = false,
     onSearchHandled: () -> Unit = {},
-    onHelpClick: () -> Unit = {}
+    onHelpClick: () -> Unit = {},
+    onNavigate: (featureId: String, highlight: String?) -> Unit = { _, _ -> },
+    selectedFeatureId: String? = null
 ) {
     val isAccessibilityEnabled by viewModel.isAccessibilityEnabled
     val isWriteSecureSettingsEnabled by viewModel.isWriteSecureSettingsEnabled
@@ -1142,17 +1143,23 @@ fun SetupFeatures(
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically()
                 ) {
+                    val handleFeatureClick: (com.sameerasw.essentials.domain.model.Feature) -> Unit = { feature ->
+                        BiometricSecurityHelper.runWithAuth(
+                            activity = context as FragmentActivity,
+                            feature = feature,
+                            action = {
+                                if (feature.id == "Watermark" || feature.id == "App updates") {
+                                    feature.onClick(context, viewModel)
+                                } else {
+                                    onNavigate(feature.id, null)
+                                }
+                            }
+                        )
+                    }
+
                     FavoriteCarousel(
                         pinnedKeys = pinnedFeatureKeys,
-                        onFeatureClick = { feature ->
-                            BiometricSecurityHelper.runWithAuth(
-                                activity = context as FragmentActivity,
-                                feature = feature,
-                                action = {
-                                    feature.onClick(context, viewModel)
-                                }
-                            )
-                        },
+                        onFeatureClick = handleFeatureClick,
                         onFeatureLongClick = { feature ->
                             viewModel.togglePinFeature(feature.id)
                         },
@@ -1168,7 +1175,8 @@ fun SetupFeatures(
                         allFeatures = allFeatures,
                         pinnedFeatureKeys = pinnedFeatureKeys,
                         context = context,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        onNavigate = onNavigate
                     )
                 }
             } else if (isFocused && searchQuery.isNotEmpty()) {
@@ -1202,7 +1210,8 @@ fun SetupFeatures(
                         allFeatures = allFeatures,
                         pinnedFeatureKeys = pinnedFeatureKeys,
                         context = context,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        onNavigate = onNavigate
                     )
                 }
             } else if (!isFocused) {
@@ -1217,6 +1226,7 @@ fun SetupFeatures(
                                 FeatureCard(
                                     title = feature.title,
                                     isEnabled = feature.isEnabled(viewModel),
+                                    isSelected = feature.id == selectedFeatureId,
                                     onToggle = { enabled ->
                                         BiometricSecurityHelper.runWithAuth(
                                             activity = context as FragmentActivity,
@@ -1232,7 +1242,11 @@ fun SetupFeatures(
                                             activity = context as FragmentActivity,
                                             feature = feature,
                                             action = {
-                                                feature.onClick(context, viewModel)
+                                                if (feature.id == "Watermark" || feature.id == "App updates") {
+                                                    feature.onClick(context, viewModel)
+                                                } else {
+                                                    onNavigate(feature.id, null)
+                                                }
                                             }
                                         )
                                     },
@@ -1243,7 +1257,7 @@ fun SetupFeatures(
                                     hasMoreSettings = feature.hasMoreSettings,
                                     onDisabledToggleClick = {
                                         if (feature.id == "Screen locked security") {
-                                            feature.onClick(context, viewModel)
+                                            onNavigate(feature.id, null)
                                         } else {
                                             currentFeature = feature.title
                                             showSheet = true
@@ -1277,7 +1291,8 @@ private fun RecentSearchesSection(
     allFeatures: List<com.sameerasw.essentials.domain.model.Feature>,
     pinnedFeatureKeys: List<String>,
     context: Context,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onNavigate: (featureId: String, highlight: String?) -> Unit
 ) {
     if (recentSearches.isEmpty()) {
         Column(
@@ -1337,19 +1352,15 @@ private fun RecentSearchesSection(
                                 activity = context as FragmentActivity,
                                 feature = feature,
                                 action = {
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            FeatureSettingsActivity::class.java
-                                        ).apply {
-                                            putExtra("feature", result.featureKey)
-                                            result.targetSettingHighlightKey?.let {
-                                                putExtra("highlight_setting", it)
-                                            }
-                                        }
-                                    )
+                                    if (feature.id == "Watermark" || feature.id == "App updates") {
+                                        feature.onClick(context, viewModel)
+                                    } else {
+                                        onNavigate(result.featureKey, result.targetSettingHighlightKey)
+                                    }
                                 }
                             )
+                        } else {
+                            onNavigate(result.featureKey, result.targetSettingHighlightKey)
                         }
                     },
                     iconRes = result.icon ?: R.drawable.rounded_settings_24,
@@ -1373,7 +1384,8 @@ private fun SearchResultsSection(
     allFeatures: List<com.sameerasw.essentials.domain.model.Feature>,
     pinnedFeatureKeys: List<String>,
     context: Context,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onNavigate: (featureId: String, highlight: String?) -> Unit
 ) {
     if (searchResults.isNotEmpty()) {
         Text(
@@ -1399,31 +1411,15 @@ private fun SearchResultsSection(
                                 activity = context as FragmentActivity,
                                 feature = feature,
                                 action = {
-                                    context.startActivity(
-                                        Intent(
-                                            context,
-                                            FeatureSettingsActivity::class.java
-                                        ).apply {
-                                            putExtra("feature", result.featureKey)
-                                            result.targetSettingHighlightKey?.let {
-                                                putExtra("highlight_setting", it)
-                                            }
-                                        }
-                                    )
-                                }
-                            )
-                        } else {
-                            context.startActivity(
-                                Intent(
-                                    context,
-                                    FeatureSettingsActivity::class.java
-                                ).apply {
-                                    putExtra("feature", result.featureKey)
-                                    result.targetSettingHighlightKey?.let {
-                                        putExtra("highlight_setting", it)
+                                    if (feature.id == "Watermark" || feature.id == "App updates") {
+                                        feature.onClick(context, viewModel)
+                                    } else {
+                                        onNavigate(result.featureKey, result.targetSettingHighlightKey)
                                     }
                                 }
                             )
+                        } else {
+                            onNavigate(result.featureKey, result.targetSettingHighlightKey)
                         }
                     },
                     iconRes = result.icon ?: R.drawable.rounded_settings_24,

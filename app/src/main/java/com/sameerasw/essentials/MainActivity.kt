@@ -20,14 +20,26 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingToolbarDefaults
@@ -36,8 +48,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,6 +81,7 @@ import com.sameerasw.essentials.ui.components.sheets.InstructionsBottomSheet
 import com.sameerasw.essentials.ui.components.sheets.PrankBottomSheet
 import com.sameerasw.essentials.ui.components.sheets.UpdateBottomSheet
 import com.sameerasw.essentials.ui.composables.DIYScreen
+import com.sameerasw.essentials.ui.composables.FeatureSettingsContent
 import com.sameerasw.essentials.ui.composables.FreezeGridUI
 import com.sameerasw.essentials.ui.composables.SetupFeatures
 import com.sameerasw.essentials.ui.composables.WelcomeScreen
@@ -78,6 +94,11 @@ import com.sameerasw.essentials.viewmodels.GitHubAuthViewModel
 import com.sameerasw.essentials.viewmodels.LocationReachedViewModel
 import com.sameerasw.essentials.viewmodels.MainViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.ui.platform.LocalConfiguration
+import com.sameerasw.essentials.ui.components.sheets.FeatureHelpBottomSheet
+import com.sameerasw.essentials.ui.components.sheets.WatchInstallHelpBottomSheet
+import com.sameerasw.essentials.domain.registry.FeatureRegistry
+import androidx.compose.material3.VerticalDivider
 
 class MainActivity : AppCompatActivity() {
     val viewModel: MainViewModel by viewModels()
@@ -85,6 +106,49 @@ class MainActivity : AppCompatActivity() {
     val locationViewModel: LocationReachedViewModel by viewModels()
     val gitHubAuthViewModel: GitHubAuthViewModel by viewModels()
     private var isAppReady = false
+
+    val backStack = mutableStateListOf("main")
+
+    data class ParsedRoute(val featureId: String, val highlightSetting: String?)
+
+    private fun parseRoute(route: String): ParsedRoute? {
+        if (!route.startsWith("feature/")) return null
+        val content = route.substringAfter("feature/")
+        val parts = content.split("?highlight=")
+        val featureId = parts[0]
+        val highlightSetting = if (parts.size > 1) parts[1] else null
+        return ParsedRoute(featureId, highlightSetting)
+    }
+
+    private fun handleNavigationIntent(intent: Intent?) {
+        intent?.let {
+            if (locationViewModel.handleIntent(it)) {
+                navigateToFeature("Location reached", null)
+                return
+            }
+            val featureId = it.getStringExtra("feature")
+            val highlightSetting = it.getStringExtra("highlight_setting")
+            if (featureId != null) {
+                navigateToFeature(featureId, highlightSetting)
+            }
+        }
+    }
+
+    fun navigateToFeature(featureId: String, highlight: String?) {
+        val parentFeatureId = FeatureRegistry.ALL_FEATURES.find { it.id == featureId }?.parentFeatureId
+        val targetRoute = if (highlight != null) {
+            "feature/$featureId?highlight=$highlight"
+        } else {
+            "feature/$featureId"
+        }
+        if (backStack.lastOrNull() == targetRoute) return
+        backStack.clear()
+        backStack.add("main")
+        if (parentFeatureId != null) {
+            backStack.add("feature/$parentFeatureId")
+        }
+        backStack.add(targetRoute)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Install and configure the splash screen
@@ -199,7 +263,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("MainActivity", "onCreate with action: ${intent?.action}")
-        handleLocationIntent(intent)
+        savedInstanceState?.getStringArrayList("backstack_keys")?.let { keys ->
+            backStack.clear()
+            backStack.addAll(keys)
+        }
+        handleNavigationIntent(intent)
 
         // Initialize HapticUtil with saved preferences
         HapticUtil.initialize(this)
@@ -253,6 +321,11 @@ class MainActivity : AppCompatActivity() {
                         updatesViewModel.loadTrackedRepos(context)
                     }
 
+                    // Help Sheet States
+                    var showHelpSheet by remember { mutableStateOf(false) }
+                    var selectedHelpFeature by remember { mutableStateOf<com.sameerasw.essentials.domain.model.Feature?>(null) }
+                    var showWatchInstallHelpSheet by remember { mutableStateOf(false) }
+
                     // Dynamic tabs configuration
                     val tabs = remember { DIYTabs.entries }
 
@@ -269,12 +342,37 @@ class MainActivity : AppCompatActivity() {
                     val backProgress = remember { Animatable(0f) }
                     val scope = rememberCoroutineScope()
 
-                    // Handle predictive back button for tab navigation
-                    PredictiveBackHandler(enabled = currentPage != initialPage) { progress ->
+                    // Predictive Back for Routes
+                    PredictiveBackHandler(enabled = backStack.size > 1) { progress ->
                         try {
                             progress.collect { backEvent ->
                                 backProgress.snapTo(backEvent.progress)
                             }
+                            HapticUtil.performUIHaptic(view)
+                            backStack.removeLast()
+                            scope.launch {
+                                backProgress.animateTo(
+                                    targetValue = 0f,
+                                    animationSpec = tween(durationMillis = 400)
+                                )
+                            }
+                        } catch (e: java.util.concurrent.CancellationException) {
+                            scope.launch {
+                                backProgress.animateTo(
+                                    targetValue = 0f,
+                                    animationSpec = tween(durationMillis = 300)
+                                )
+                            }
+                        }
+                    }
+
+                    // Predictive Back for Tabs
+                    PredictiveBackHandler(enabled = backStack.size == 1 && currentPage != initialPage) { progress ->
+                        try {
+                            progress.collect { backEvent ->
+                                backProgress.snapTo(backEvent.progress)
+                            }
+                            HapticUtil.performUIHaptic(view)
                             currentPage = initialPage
                             scope.launch {
                                 backProgress.animateTo(
@@ -445,184 +543,320 @@ class MainActivity : AppCompatActivity() {
                                         direction = BlurDirection.TOP
                                     )
                             ) {
-                                val currentTab = remember(tabs, currentPage) {
-                                    tabs.getOrNull(currentPage) ?: tabs.firstOrNull()
-                                    ?: DIYTabs.ESSENTIALS
+                                val topRoute = backStack.lastOrNull() ?: "main"
+                                val depth = backStack.size - 1
+                                val isMultiPane = LocalConfiguration.current.screenWidthDp >= 600
+
+                                val selectedFeatureId = when {
+                                    !isMultiPane -> null
+                                    depth == 2 -> parseRoute(backStack[2])?.featureId
+                                    depth == 1 -> parseRoute(backStack[1])?.featureId
+                                    else -> FeatureRegistry.ALL_FEATURES.firstOrNull { it.parentFeatureId == null && it.isVisibleInMain }?.id
                                 }
 
-                                EssentialsFloatingToolbar(
-                                    modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .zIndex(1f),
-                                    selectedIndex = currentPage,
-                                    items = tabs.mapIndexed { index, tab ->
-                                        ToolbarItem(
-                                            iconRes = tab.iconRes,
-                                            labelRes = tab.title,
-                                            onClick = {
-                                                HapticUtil.performUIHaptic(view)
-                                                currentPage = index
-                                            },
-                                            hasBadge = false
-                                        )
-                                    },
-                                    scrollBehavior = exitAlwaysScrollBehavior,
-                                    floatingActionButton = {
-                                        Box { // Menu anchor
-                                            FloatingActionButton(
-                                                onClick = {
-                                                    HapticUtil.performVirtualKeyHaptic(view)
-                                                    when (currentTab) {
-                                                        DIYTabs.ESSENTIALS -> {
-                                                            startActivity(
-                                                                Intent(
-                                                                    context,
-                                                                    SettingsActivity::class.java
-                                                                )
-                                                            )
-                                                        }
+                                val handleBack = {
+                                    if (backStack.size > 1) {
+                                        HapticUtil.performUIHaptic(view)
+                                        backStack.removeLast()
+                                    }
+                                }
 
-                                                        DIYTabs.FREEZE -> {
-                                                            startActivity(
-                                                                Intent(
-                                                                    context,
-                                                                    FeatureSettingsActivity::class.java
-                                                                ).apply {
-                                                                    putExtra("feature", "Freeze")
-                                                                })
-                                                        }
+                                if (isMultiPane) {
+                                    Row(modifier = Modifier.fillMaxSize()) {
+                                        if (depth == 2) {
+                                            val parentRoute = backStack[1]
+                                            val childRoute = backStack[2]
+                                            val parentParsed = parseRoute(parentRoute)
+                                            val childParsed = parseRoute(childRoute)
 
-                                                        DIYTabs.DIY -> {
-                                                            showNewAutomationSheet = true
-                                                        }
-                                                    }
-                                                },
-                                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                shape = MaterialTheme.shapes.large,
-                                                elevation = androidx.compose.material3.FloatingActionButtonDefaults.elevation(
-                                                    0.dp,
-                                                    0.dp,
-                                                    0.dp,
-                                                    0.dp
-                                                )
-                                            ) {
-                                                when (currentTab) {
-                                                    DIYTabs.ESSENTIALS -> {
-                                                        Icon(
-                                                            painter = painterResource(id = R.drawable.rounded_settings_heart_24),
-                                                            contentDescription = stringResource(R.string.content_desc_settings)
-                                                        )
-                                                    }
-
-                                                    DIYTabs.FREEZE -> {
-                                                        Icon(
-                                                            painter = painterResource(id = R.drawable.rounded_settings_heart_24),
-                                                            contentDescription = stringResource(R.string.content_desc_settings)
-                                                        )
-                                                    }
-
-                                                    DIYTabs.DIY -> {
-                                                        Icon(
-                                                            painter = painterResource(id = R.drawable.rounded_add_24),
-                                                            contentDescription = stringResource(R.string.diy_editor_new_title)
-                                                        )
-                                                    }
-
+                                            Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                                                if (parentParsed != null) {
+                                                    FeatureSettingsContent(
+                                                        featureId = parentParsed.featureId,
+                                                        highlightSetting = parentParsed.highlightSetting,
+                                                        showToolbar = false,
+                                                        onNavigate = { featureId, highlight ->
+                                                            navigateToFeature(featureId, highlight)
+                                                        },
+                                                        onBackClick = handleBack,
+                                                        modifier = Modifier.fillMaxSize(),
+                                                        selectedFeatureId = selectedFeatureId
+                                                    )
                                                 }
                                             }
 
+                                            Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                                                if (childParsed != null) {
+                                                    FeatureSettingsContent(
+                                                        featureId = childParsed.featureId,
+                                                        highlightSetting = childParsed.highlightSetting,
+                                                        showToolbar = false,
+                                                        onNavigate = { featureId, highlight ->
+                                                            navigateToFeature(featureId, highlight)
+                                                        },
+                                                        onBackClick = handleBack,
+                                                        modifier = Modifier.fillMaxSize(),
+                                                        selectedFeatureId = selectedFeatureId
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            Box(
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .fillMaxHeight()
+                                                    .background(MaterialTheme.colorScheme.surfaceContainer)
+                                                    .progressiveBlur(
+                                                        blurRadius = if (isBlurEnabled) 40f else 0f,
+                                                        height = with(androidx.compose.ui.platform.LocalDensity.current) { 150.dp.toPx() },
+                                                        direction = BlurDirection.BOTTOM
+                                                    )
+                                            ) {
+                                                MainTabsContent(
+                                                    currentPage = currentPage,
+                                                    tabs = tabs,
+                                                    viewModel = viewModel,
+                                                    contentPadding = PaddingValues(
+                                                        top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                                                        bottom = 150.dp,
+                                                        start = 16.dp,
+                                                        end = 16.dp
+                                                    ),
+                                                    showInstructionsSheet = { showInstructionsSheet = true },
+                                                    showNewAutomationSheet = showNewAutomationSheet,
+                                                    onDismissNewAutomationSheet = { showNewAutomationSheet = false },
+                                                    onNavigate = { featureId, highlight ->
+                                                        navigateToFeature(featureId, highlight)
+                                                    },
+                                                    selectedFeatureId = selectedFeatureId
+                                                )
+                                            }
+
+                                            Box(modifier = Modifier.weight(1f).fillMaxHeight()) {
+                                                if (depth == 1) {
+                                                    val parentParsed = parseRoute(topRoute)
+                                                    if (parentParsed != null) {
+                                                        FeatureSettingsContent(
+                                                            featureId = parentParsed.featureId,
+                                                            highlightSetting = parentParsed.highlightSetting,
+                                                            showToolbar = false,
+                                                            onNavigate = { featureId, highlight ->
+                                                                navigateToFeature(featureId, highlight)
+                                                            },
+                                                            onBackClick = handleBack,
+                                                            modifier = Modifier.fillMaxSize(),
+                                                            selectedFeatureId = selectedFeatureId
+                                                        )
+                                                    }
+                                                } else {
+                                                    val firstFeature = remember {
+                                                        FeatureRegistry.ALL_FEATURES.firstOrNull { it.parentFeatureId == null && it.isVisibleInMain }
+                                                    }
+                                                    if (firstFeature != null) {
+                                                        FeatureSettingsContent(
+                                                            featureId = firstFeature.id,
+                                                            highlightSetting = null,
+                                                            showToolbar = false,
+                                                            onNavigate = { featureId, highlight ->
+                                                                navigateToFeature(featureId, highlight)
+                                                            },
+                                                            onBackClick = handleBack,
+                                                            modifier = Modifier.fillMaxSize(),
+                                                            selectedFeatureId = selectedFeatureId
+                                                        )
+                                                    } else {
+                                                        PlaceholderScreen()
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
-                                )
+                                } else {
+                                    AnimatedContent(
+                                        targetState = topRoute,
+                                        transitionSpec = {
+                                            val animationSpec = tween<Float>(durationMillis = 400)
+                                            val slideOffset = 150
+
+                                            (fadeIn(animationSpec = animationSpec) + slideInVertically(
+                                                animationSpec = tween(durationMillis = 400),
+                                                initialOffsetY = { slideOffset }
+                                            )).togetherWith(
+                                                fadeOut(animationSpec = animationSpec) + slideOutVertically(
+                                                    animationSpec = tween(durationMillis = 400),
+                                                    targetOffsetY = { slideOffset }
+                                                )
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            .scale(1f - (backProgress.value * 0.05f))
+                                            .alpha(1f - (backProgress.value * 0.3f))
+                                            .progressiveBlur(
+                                                blurRadius = if (isBlurEnabled) 40f else 0f,
+                                                height = with(androidx.compose.ui.platform.LocalDensity.current) { 130.dp.toPx() },
+                                                direction = BlurDirection.BOTTOM
+                                            ),
+                                        label = "SinglePane Transition"
+                                    ) { route ->
+                                        if (route == "main") {
+                                            MainTabsContent(
+                                                currentPage = currentPage,
+                                                tabs = tabs,
+                                                viewModel = viewModel,
+                                                contentPadding = PaddingValues(
+                                                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                                                    bottom = 150.dp,
+                                                    start = 16.dp,
+                                                    end = 16.dp
+                                                ),
+                                                showInstructionsSheet = { showInstructionsSheet = true },
+                                                showNewAutomationSheet = showNewAutomationSheet,
+                                                onDismissNewAutomationSheet = { showNewAutomationSheet = false },
+                                                onNavigate = { featureId, highlight ->
+                                                    navigateToFeature(featureId, highlight)
+                                                },
+                                                selectedFeatureId = selectedFeatureId
+                                            )
+                                        } else {
+                                            val parsed = parseRoute(route)
+                                            if (parsed != null) {
+                                                FeatureSettingsContent(
+                                                    featureId = parsed.featureId,
+                                                    highlightSetting = parsed.highlightSetting,
+                                                    showToolbar = false,
+                                                    onNavigate = { featureId, highlight ->
+                                                        navigateToFeature(featureId, highlight)
+                                                    },
+                                                    onBackClick = handleBack,
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    selectedFeatureId = selectedFeatureId
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+                                val currentTab = remember(tabs, currentPage) {
+                                    tabs.getOrNull(currentPage) ?: tabs.firstOrNull() ?: DIYTabs.ESSENTIALS
+                                }
+
+                                val showTabsToolbar = if (isMultiPane) {
+                                    depth < 2
+                                } else {
+                                    depth == 0
+                                }
 
                                 AnimatedContent(
-                                    targetState = currentPage,
+                                    targetState = showTabsToolbar,
                                     transitionSpec = {
-                                        val animationSpec = tween<Float>(durationMillis = 400)
-                                        val slideOffset = 150
-
-                                        (fadeIn(animationSpec = animationSpec) + slideInVertically(
-                                            animationSpec = tween(durationMillis = 400),
-                                            initialOffsetY = { slideOffset }
-                                        )).togetherWith(
-                                            fadeOut(animationSpec = animationSpec) + slideOutVertically(
-                                                animationSpec = tween(durationMillis = 400),
-                                                targetOffsetY = { slideOffset }
-                                            )
+                                        val animationSpec = tween<Float>(durationMillis = 350)
+                                        (fadeIn(animationSpec) + slideInVertically(tween(350)) { it / 3 }).togetherWith(
+                                            fadeOut(animationSpec) + slideOutVertically(tween(350)) { it / 3 }
                                         )
                                     },
                                     modifier = Modifier
-                                        .scale(1f - (backProgress.value * 0.05f))
-                                        .alpha(1f - (backProgress.value * 0.3f))
-                                        .progressiveBlur(
-                                            blurRadius = if (isBlurEnabled) 40f else 0f,
-                                            height = with(androidx.compose.ui.platform.LocalDensity.current) { 130.dp.toPx() },
-                                            direction = BlurDirection.BOTTOM
-                                        ),
-                                    label = "Tab Transition"
-                                ) { targetPage ->
-                                    val statusBarHeight = WindowInsets.statusBars.asPaddingValues()
-                                        .calculateTopPadding()
-                                    val topContentPadding = statusBarHeight
-                                    val bottomToolbarPadding = 150.dp
-                                    val contentPadding = PaddingValues(
-                                        top = topContentPadding,
-                                        bottom = bottomToolbarPadding,
-                                        start = 16.dp,
-                                        end = 16.dp
-                                    )
+                                        .align(Alignment.BottomCenter)
+                                        .zIndex(1f),
+                                    label = "BottomToolbarTransition"
+                                ) { isTabs ->
+                                    if (isTabs) {
+                                        EssentialsFloatingToolbar(
+                                            modifier = Modifier,
+                                            selectedIndex = currentPage,
+                                            items = tabs.mapIndexed { index, tab ->
+                                                ToolbarItem(
+                                                    iconRes = tab.iconRes,
+                                                    labelRes = tab.title,
+                                                    onClick = {
+                                                        HapticUtil.performUIHaptic(view)
+                                                        currentPage = index
+                                                    },
+                                                    hasBadge = false
+                                                )
+                                            },
+                                            scrollBehavior = exitAlwaysScrollBehavior,
+                                            floatingActionButton = {
+                                                Box {
+                                                    FloatingActionButton(
+                                                        onClick = {
+                                                            HapticUtil.performVirtualKeyHaptic(view)
+                                                            when (currentTab) {
+                                                                DIYTabs.ESSENTIALS -> {
+                                                                    startActivity(
+                                                                        Intent(
+                                                                            context,
+                                                                            SettingsActivity::class.java
+                                                                        )
+                                                                    )
+                                                                }
 
-                                    when (tabs[targetPage]) {
-                                        DIYTabs.ESSENTIALS -> {
-                                            SetupFeatures(
-                                                viewModel = viewModel,
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentPadding = contentPadding,
-                                                onHelpClick = { showInstructionsSheet = true }
-                                            )
-                                        }
+                                                                DIYTabs.FREEZE -> {
+                                                                    navigateToFeature("Freeze", null)
+                                                                }
 
-                                        DIYTabs.FREEZE -> {
-                                            FreezeGridUI(
-                                                viewModel = viewModel,
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentPadding = contentPadding,
-                                                onGetStartedClick = {
-                                                    startActivity(
-                                                        Intent(
-                                                            context,
-                                                            FeatureSettingsActivity::class.java
-                                                        ).apply {
-                                                            putExtra("feature", "Freeze")
-                                                        })
-                                                },
-                                                onSettingsClick = {
-                                                    startActivity(
-                                                        Intent(
-                                                            context,
-                                                            FeatureSettingsActivity::class.java
-                                                        ).apply {
-                                                            putExtra("feature", "Freeze")
-                                                        })
+                                                                DIYTabs.DIY -> {
+                                                                    showNewAutomationSheet = true
+                                                                }
+                                                            }
+                                                        },
+                                                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                        shape = MaterialTheme.shapes.large,
+                                                        elevation = androidx.compose.material3.FloatingActionButtonDefaults.elevation(
+                                                            0.dp, 0.dp, 0.dp, 0.dp
+                                                        )
+                                                    ) {
+                                                        when (currentTab) {
+                                                            DIYTabs.ESSENTIALS -> {
+                                                                Icon(
+                                                                    painter = painterResource(id = R.drawable.rounded_settings_heart_24),
+                                                                    contentDescription = stringResource(R.string.content_desc_settings)
+                                                                )
+                                                            }
+
+                                                            DIYTabs.FREEZE -> {
+                                                                Icon(
+                                                                    painter = painterResource(id = R.drawable.rounded_settings_heart_24),
+                                                                    contentDescription = stringResource(R.string.content_desc_settings)
+                                                                )
+                                                            }
+
+                                                            DIYTabs.DIY -> {
+                                                                Icon(
+                                                                    painter = painterResource(id = R.drawable.rounded_add_24),
+                                                                    contentDescription = stringResource(R.string.diy_editor_new_title)
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        )
+                                    } else {
+                                        val parsed = parseRoute(topRoute)
+                                        if (parsed != null) {
+                                            val featureId = parsed.featureId
+                                            val featureObj = remember(featureId) { FeatureRegistry.ALL_FEATURES.find { it.id == featureId } }
+                                            val pageTitle = if (featureObj != null) stringResource(featureObj.title) else featureId
+                                            val hasMenu = featureObj != null && featureObj.aboutDescription != null
+
+                                            EssentialsFloatingToolbar(
+                                                title = pageTitle,
+                                                isBeta = featureObj?.isBeta ?: false,
+                                                onBackClick = handleBack,
+                                                modifier = Modifier,
+                                                onHelpClick = {
+                                                    if (featureId == "Watch") {
+                                                        showWatchInstallHelpSheet = true
+                                                    } else if (hasMenu) {
+                                                        selectedHelpFeature = featureObj
+                                                        showHelpSheet = true
+                                                    } else {
+                                                        showInstructionsSheet = true
+                                                    }
                                                 }
                                             )
                                         }
-
-                                        DIYTabs.DIY -> {
-                                            DIYScreen(
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentPadding = contentPadding,
-                                                showNewAutomationSheet = showNewAutomationSheet,
-                                                onDismissNewAutomationSheet = {
-                                                    showNewAutomationSheet = false
-                                                },
-                                                onNewAutomationClick = {
-                                                    showNewAutomationSheet = true
-                                                }
-                                            )
-                                        }
-
                                     }
                                 }
                             }
@@ -665,7 +899,7 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         Log.d("MainActivity", "onNewIntent with action: ${intent.action}")
-        handleLocationIntent(intent)
+        handleNavigationIntent(intent)
     }
 
     private fun handleLocationIntent(intent: Intent?) {
@@ -675,6 +909,108 @@ class MainActivity : AppCompatActivity() {
                     putExtra("feature", "Location reached")
                 }
                 startActivity(settingsIntent)
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlaceholderScreen(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainer),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.rounded_settings_heart_24),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(96.dp)
+                    .alpha(0.15f),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = stringResource(R.string.placeholder_select_feature),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
+private fun MainTabsContent(
+    currentPage: Int,
+    tabs: List<DIYTabs>,
+    viewModel: com.sameerasw.essentials.viewmodels.MainViewModel,
+    contentPadding: PaddingValues,
+    showInstructionsSheet: () -> Unit,
+    showNewAutomationSheet: Boolean,
+    onDismissNewAutomationSheet: () -> Unit,
+    onNavigate: (featureId: String, highlight: String?) -> Unit,
+    modifier: Modifier = Modifier,
+    selectedFeatureId: String? = null
+) {
+    androidx.compose.animation.AnimatedContent(
+        targetState = currentPage,
+        transitionSpec = {
+            val animationSpec = tween<Float>(durationMillis = 400)
+            if (targetState > initialState) {
+                (slideInHorizontally(animationSpec = tween(400)) { it } + fadeIn(animationSpec)).togetherWith(
+                    slideOutHorizontally(animationSpec = tween(400)) { -it } + fadeOut(animationSpec)
+                )
+            } else {
+                (slideInHorizontally(animationSpec = tween(400)) { -it } + fadeIn(animationSpec)).togetherWith(
+                    slideOutHorizontally(animationSpec = tween(400)) { it } + fadeOut(animationSpec)
+                )
+            }
+        },
+        modifier = modifier.fillMaxSize(),
+        label = "MainTabsContentTransition"
+    ) { page ->
+        when (tabs[page]) {
+            DIYTabs.ESSENTIALS -> {
+                SetupFeatures(
+                    viewModel = viewModel,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                    onHelpClick = showInstructionsSheet,
+                    onNavigate = onNavigate,
+                    selectedFeatureId = selectedFeatureId
+                )
+            }
+
+            DIYTabs.FREEZE -> {
+                FreezeGridUI(
+                    viewModel = viewModel,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                    onGetStartedClick = {
+                        onNavigate("Freeze", null)
+                    },
+                    onSettingsClick = {
+                        onNavigate("Freeze", null)
+                    }
+                )
+            }
+
+            DIYTabs.DIY -> {
+                DIYScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = contentPadding,
+                    showNewAutomationSheet = showNewAutomationSheet,
+                    onDismissNewAutomationSheet = onDismissNewAutomationSheet,
+                    onNewAutomationClick = {
+                        // Handled internally by showNewAutomationSheet
+                    }
+                )
             }
         }
     }
