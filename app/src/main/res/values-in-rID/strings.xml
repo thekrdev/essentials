@@ -1365,13 +1365,13 @@
     <string name="bug_report_contact_email_label">Contact email</string>
     <string name="action_send_feedback">Send Feedback</string>
     <string name="msg_feedback_sent">Feedback sent successfully! Thanks for helping us improve the app.</string>
-    <string name="label_alternatively">Alternatively</string>
+    <string name="label_alternatively">Alternatif</string>
     <!-- Pixel Diagnostics -->
-    <string name="label_diagnostics">Diagnostics</string>
+    <string name="label_diagnostics">Diagnosis</string>
     <string name="label_device_check">Device Check</string>
     <string name="msg_flashbang">Get ready to be flashbanged!</string>
     <string name="action_abort">Abort</string>
-    <string name="action_continue">Continue</string>
+    <string name="action_continue">Lanjutkan</string>
     <string name="prank_trial_expired_title">Your Essentials trial has expired</string>
     <string name="prank_trial_expired_desc">Your free trial period of Essentials has ended. Access to advanced features like Button Remap, App Freezing, and DIY Automations with Premium.</string>
     <string name="prank_button_premium">What\'s in Premium?</string>
@@ -1419,7 +1419,7 @@
     <string name="shut_up_auto_archive_action_freeze">Freeze now</string>
     <string name="shut_up_auto_archive_action_abort">Abort</string>
     <!-- Lock Screen Clock -->
-    <string name="feat_lock_screen_clock_title">Lock screen clock</string>
+    <string name="feat_lock_screen_clock_title">Jam layar kunci</string>
     <string name="feat_lock_screen_clock_desc">Customize lock screen clock on Pixels</string>
     <string name="about_desc_lock_screen_clock">Change the lock screen clock style on Pixels. Select from the available clock faces provided by the System UI. Some old styles might not be available.</string>
     <string name="lock_screen_clock_bignum">Big Number</string>
@@ -1434,9 +1434,9 @@
     <string name="lock_screen_clock_select_label">Select Clock Style</string>
     <string name="lock_screen_clock_current_label">Current</string>
     <string name="lock_screen_clock_apply_label">Apply</string>
-    <string name="lock_screen_clock_applied_toast">Clock style applied</string>
+    <string name="lock_screen_clock_applied_toast">Gaya jam diterapkan</string>
     <string name="lock_screen_clock_permission_required">Memerlukan perizinan WRITE_SECURE_SETTINGS</string>
-    <string name="lock_screen_clock_default">Default</string>
+    <string name="lock_screen_clock_default">Bawaan</string>
     <string name="label_weight">Weight</string>
     <string name="label_width">Width</string>
     <string name="label_grade">Grade</string>
@@ -1460,7 +1460,7 @@
     <string name="whats_new_specs_desc">Inaccurate GSMArena-powered specifications have been removed to keep device insights clean, fast, and completely reliable.</string>
     <string name="whats_new_apps_title">App Updates Migrated</string>
     <string name="whats_new_apps_desc">The Apps tab is now fully integrated into the Your Android feature, making it easier to manage all your app updates in one cohesive hub.</string>
-    <string name="favorites_widget_name">Favorite Features</string>
+    <string name="favorites_widget_name">Fitur favorit</string>
     <string name="favorites_widget_description">View and launch your favorite features at a glance.</string>
     <string name="favorites_widget_empty_state">No favorite features pinned yet. Open the app to pin some!</string>
 </resources>
