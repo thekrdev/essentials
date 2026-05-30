@@ -1460,4 +1460,7 @@
     <string name="whats_new_specs_desc">GSMArenaによって提供された不正確な仕様を削除することで、デバイスに関する分析結果をより正確で高速かつ完全に信頼できるものにしました。</string>
     <string name="whats_new_apps_title">アプリのアップデートが移行されました</string>
     <string name="whats_new_apps_desc">アプリタブが「Android端末情報」機能に完全に統合され、すべてのアプリのアップデートを一つのまとまった場所で簡単に管理できるようになりました。</string>
+    <string name="favorites_widget_name">Favorite Features</string>
+    <string name="favorites_widget_description">View and launch your favorite features at a glance.</string>
+    <string name="favorites_widget_empty_state">No favorite features pinned yet. Open the app to pin some!</string>
 </resources>

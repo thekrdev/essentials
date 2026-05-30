@@ -393,7 +393,7 @@
     <string name="screen_off_method_accessibility">Erişilebilirlik</string>
     <string name="screen_off_method_input">Girdi</string>
     <string name="screen_off_widget_input_permission_id">Ekran kapalı widget\'ı - Girdi</string>
-    <string name="require_double_tap_title">Require double tap</string>
+    <string name="require_double_tap_title">Çift dokunma gerektirir</string>
     <string name="require_double_tap_desc">Ekranı kapatmak için</string>
     <string name="feat_statusbar_icons_title">Durum çubuğu simgeleri</string>
     <string name="feat_statusbar_icons_desc">Durum çubuğu simgelerinin görünürlüğünü kontrol etme</string>
@@ -1109,7 +1109,7 @@
     <string name="bug_report_option_share_logs_desc">Günlükleri ve ayrıntıları ekleyin</string>
     <string name="bug_report_device_info">Cihaz Bilgisi</string>
     <string name="bug_report_raw_json">Ham Rapor</string>
-    <string name="action_report_github">GitHub\'da Sorun oluştur</string>
+    <string name="action_report_github">GitHub\'ta Sorun oluştur</string>
     <string name="action_report_email">E-posta Raporu</string>
     <string name="action_copy_clipboard">Panoya kopyala</string>
     <string name="bug_report_email_subject">Temel Hata Raporu</string>
@@ -1461,4 +1461,7 @@
     <string name="whats_new_specs_desc">GSMArena tarafından sağlanan hatalı teknik özellikler; cihaz analizlerinin temiz, hızlı ve tamamen güvenilir kalması için kaldırılmıştır.</string>
     <string name="whats_new_apps_title">Uygulama Güncellemeleri Taşındı</string>
     <string name="whats_new_apps_desc">Uygulamalar sekmesi artık Android Cihazınız özelliğine tamamen entegre edildi ve bu sayede tüm uygulama güncellemelerinizi tek bir bütünleşik merkezden yönetmek daha kolay hale geldi.</string>
+    <string name="favorites_widget_name">Favori Özellikler</string>
+    <string name="favorites_widget_description">Favori özelliklerinizi bir bakışta görüntüleyin ve başlatın.</string>
+    <string name="favorites_widget_empty_state">Henüz favori özellik sabitlemedi. Favori özellikler sabitlemek için uygulamayı açın!</string>
 </resources>

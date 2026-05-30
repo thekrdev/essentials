@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="label_customization">Customization</string>
+    <string name="label_customization">التخصيص</string>
     <string name="label_beta">بيتا</string>
-    <string name="shut_up_attempt_shizuku_restart">Attempt Shizuku restart</string>
-    <string name="shut_up_shizuku_restart_warning_title">Shizuku Restart Warning</string>
-    <string name="shut_up_shizuku_restart_warning_message">Since wireless debugging was toggled, Shizuku services might not have started automatically causing freezing to not function. Consider turning on attempt shizuku restart as well</string>
+    <string name="shut_up_attempt_shizuku_restart">محاولة إعادة تشغيل Shizuku</string>
+    <string name="shut_up_shizuku_restart_warning_title">تحذير إعادة تشغيل Shizuku</string>
+    <string name="shut_up_shizuku_restart_warning_message">بما أن خاصية تصحيح الأخطاء اللاسلكية كانت مُفعّلة، فقد لا تكون خدمات Shizuku قد بدأت تلقائيًا، مما تسبب في عدم عمل خاصية التجميد. يُرجى أيضًا تفعيل خيار إعادة تشغيل Shizuku</string>
     <string name="accessibility_service_description"><b>إمكانية الوصول لـ Essentials</b>\n\nتعد هذه الخدمة ضرورية للميزات المتقدمة التالية:\n\n<b>• إعادة تعيين أزرار الجهاز:</b>\nإكتشاف ضغطات أزرار الصوت حتى عندما تكون الشاشة مطفأة لتفعيل إجرائات مثل الكشاف\n\n<b>• إعدادات لكل تطبيق:</b>\nيراقب التطبيق النشط حالياً لتطبيق ملفات تعريف محددة للإضاءة الليلية الديناميكية وإضاءة الإشعارات الملونة وخاصية قفل التطبيقات\n\n<b>• التحكم في الشاشة:</b>\nيسمح للتطبيق بقفل الشاشة (مثلا عبر النقر المزدوج أو الويدجيت) واكتشاف تغيرات حالة االشاشة.\n\n<b>• الأمان:</b>\nيمنع التغييرات غير المصرح بها عن طريق اكتشاف محتوى النافذة عندما يكون الجهاز مقفلا.\n\n<small>لا يتم جمع أو إرسال أي نص مدخل أو بيانات حساسة الخاصّة بالمستخدم.</small></string>
     <string name="freeze_activity_title">تجميد التطبيق</string>
     <string name="freeze_activity_subtitle">قم بتعطيل التطبيقات التي نادراً ما تستخدمها</string>
@@ -65,18 +65,18 @@
     <string name="like_song_toast_enabled">عرض رسالة تنبيه</string>
     <string name="like_song_aod_overlay_title">إظهار التراكب على AOD</string>
     <string name="feat_essentials_on_display_title">Essentials On Display</string>
-    <string name="feat_essentials_on_display_desc">Glance at media and info on AOD</string>
-    <string name="essentials_on_display_docked_mode_title">Docked mode</string>
+    <string name="feat_essentials_on_display_desc">ألقِ نظرة سريعة على الوسائط والمعلومات المتعلقة بـ AOD </string>
+    <string name="essentials_on_display_docked_mode_title">وضع الإرساء</string>
     <string name="essentials_on_display_docked_mode_desc">Keep the overlay visible indefinitely while music is playing on AOD</string>
-    <string name="essentials_on_display_respect_notifications_title">Respect new notifications</string>
-    <string name="essentials_on_display_respect_notifications_desc">Briefly disable for new notifications</string>
-    <string name="essentials_on_display_random_shapes_title">Random shapes</string>
+    <string name="essentials_on_display_respect_notifications_title">احترم الإشعارات الجديدة</string>
+    <string name="essentials_on_display_respect_notifications_desc">قم بتعطيل الإشعارات الجديدة مؤقتًا</string>
+    <string name="essentials_on_display_random_shapes_title">أشكال عشوائية</string>
     <string name="essentials_on_display_random_shapes_desc">Use various Material 3 shapes for the album art</string>
-    <string name="essentials_on_display_album_art_title">Album art</string>
-    <string name="essentials_on_display_clock_title">Clock</string>
-    <string name="essentials_on_display_force_fill_while_charging_title">Always use while charging</string>
-    <string name="essentials_on_display_force_fill_while_charging_desc">Force Fill mode when the device is plugged in regardless of the selected mode</string>
-    <string name="label_size">Size</string>
+    <string name="essentials_on_display_album_art_title">غلاف الألبوم</string>
+    <string name="essentials_on_display_clock_title">الساعة</string>
+    <string name="essentials_on_display_force_fill_while_charging_title">استخدمه دائمًا أثناء الشحن</string>
+    <string name="essentials_on_display_force_fill_while_charging_desc">وضع التعبئة القسرية عند توصيل الجهاز بغض النظر عن الوضع المحدد</string>
+    <string name="label_size">الحجم</string>
     <string name="feat_notification_glance_title">لمحة الإشعارات </string>
     <string name="feat_notification_glance_desc">احتفظ بـ AOD قيد التشغيل أثناء انتظار الإشعارات</string>
     <string name="notification_glance_same_as_lighting_title">نفس التطبيقات التي تعمل مع إضاءة الإشعارات</string>
@@ -138,7 +138,7 @@
     <string name="freeze_mode_description_freeze_warning">لا تقم بتجميد تطبيقات الاتصال </string>
     <string name="freeze_mode_description_suspend_title">ما هو الإيقاف المؤقت؟ </string>
     <string name="freeze_mode_description_suspend_body">كان تعليق التطبيق يُستخدم سابقًا لإيقاف نشاطه ومنع تشغيله في الخلفية، ولكن مع التحديثات الأخيرة لنظام أندرويد، أصبح يقتصر على إيقاف ظهور الإشعارات فقط. مع ذلك، يُمكنك إعادة تشغيل التطبيق من قائمة التطبيقات في المشغل، حيث ستظل أيقونات التطبيقات المتوقفة باللون الرمادي متاحة.</string>
-    <string name="freeze_mode_description_suspend_footer">Should work the same as the native app pause/ focus mode features.</string>
+    <string name="freeze_mode_description_suspend_footer">ينبغي أن تعمل بنفس طريقة ميزات وضع الإيقاف المؤقت/التركيز في التطبيق الأصلي. </string>
     <string name="content_desc_more_options">المزيد من الخيارات</string>
     <string name="action_freeze_all">تجميد جميع التطبيقات</string>
     <string name="action_unfreeze_all">قم بإلغاء تجميد كافة التطبيقات</string>
@@ -1460,4 +1460,7 @@
     <string name="whats_new_specs_desc">Inaccurate GSMArena-powered specifications have been removed to keep device insights clean, fast, and completely reliable.</string>
     <string name="whats_new_apps_title">App Updates Migrated</string>
     <string name="whats_new_apps_desc">The Apps tab is now fully integrated into the Your Android feature, making it easier to manage all your app updates in one cohesive hub.</string>
+    <string name="favorites_widget_name">Favorite Features</string>
+    <string name="favorites_widget_description">View and launch your favorite features at a glance.</string>
+    <string name="favorites_widget_empty_state">No favorite features pinned yet. Open the app to pin some!</string>
 </resources>
