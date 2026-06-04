@@ -60,7 +60,7 @@
     <string name="action_cycle_sound_modes">Ses modlarını değiştir</string>
     <string name="action_circle_to_search">Aramak için Daire</string>
     <string name="action_like_song">Şu anki şarkıyı beğen</string>
-    <string name="like_song_settings_title">Şarkıyı beğenme ayarları</string>
+    <string name="like_song_settings_title">Şarkı beğenme ayarları</string>
     <string name="like_song_settings_desc">Bu özellik, o anda oynatılan medyayı algılamak ve benzer eylemi tetiklemek için bildirim erişimi gerektirir. Lütfen aşağıdan etkinleştirin.</string>
     <string name="like_song_toast_enabled">Tost mesajını göster</string>
     <string name="like_song_aod_overlay_title">AOD\'de kaplamayı göster</string>
@@ -868,7 +868,7 @@
     <string name="label_clear_all">Hepsini temizle</string>
     <string name="perm_device_admin_explanation">Kilit ekranında yetkisiz ağ değişiklikleri yapılmaya çalışıldığında cihazın sabit olarak kilitlenmesi gerekir.</string>
     <string name="biometric_subtitle_access_settings">Ayarlara erişmek için kimlik doğrulaması yapın</string>
-    <string name="biometric_title_settings_format">%1$s Ayarlar</string>
+    <string name="biometric_title_settings_format">%1$s Ayarları</string>
     <string name="keyword_feature">özellik</string>
     <string name="keyword_settings">ayarlar</string>
     <string name="keyword_hide">saklamak</string>
