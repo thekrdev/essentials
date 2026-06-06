@@ -28,7 +28,7 @@
     <string name="app_lock_description">Proteggi le tue app con l\'autenticazione biometrica. Le app bloccate richiederanno l\'autenticazione all\'avvio e rimarranno sbloccate fino allo spegnimento dello schermo.</string>
     <string name="app_lock_warning">Tieni presente che questa non è una soluzione definitiva poiché è solo un\'app di terze parti. Se hai bisogno di una sicurezza elevata, considera l\'utilizzo di Spazio privato o altre funzionalità simili.</string>
     <string name="app_lock_biometric_note">Nota: la richiesta di autenticazione biometrica consente di utilizzare solo metodi di sicurezza di classe FORTE. I metodi di sblocco facciale classificati come DEBOLI, presenti in dispositivi come il Pixel 7, non saranno supportati; in questi casi si potranno utilizzare solo gli altri metodi FORTI disponibili, come l\'impronta digitale o il pin.</string>
-    <string name="setting_use_usage_access_title">Use usage access</string>
+    <string name="setting_use_usage_access_title">Accesso ai dati di utilizzo</string>
     <string name="setting_use_usage_access_desc">In alternativa all\'accessibilità (Congelamento, Blocco app, Luce notturna dinamica)</string>
     <!-- Button Remap -->
     <string name="button_remap_enable_title">Abilita rimappatura pulsanti</string>
@@ -65,7 +65,7 @@
     <string name="like_song_toast_enabled">Mostra messaggio toast</string>
     <string name="like_song_aod_overlay_title">Mostra sovrapposizione su AOD</string>
     <string name="feat_essentials_on_display_title">Essentials On Display</string>
-    <string name="feat_essentials_on_display_desc">Glance at media and info on AOD</string>
+    <string name="feat_essentials_on_display_desc">Dai un\'occhiata ai media e alle info su Display sempre attivo</string>
     <string name="essentials_on_display_docked_mode_title">Modalità dock</string>
     <string name="essentials_on_display_docked_mode_desc">Nessun timeout</string>
     <string name="essentials_on_display_respect_notifications_title">Rispetta le nuove notifiche</string>
@@ -75,7 +75,7 @@
     <string name="essentials_on_display_album_art_title">Copertina album</string>
     <string name="essentials_on_display_clock_title">Orologio</string>
     <string name="essentials_on_display_force_fill_while_charging_title">Usa sempre durante la ricarica</string>
-    <string name="essentials_on_display_force_fill_while_charging_desc">Force Fill mode when the device is plugged in regardless of the selected mode</string>
+    <string name="essentials_on_display_force_fill_while_charging_desc">Forza la modalità riempimento quando il dispositivo è collegato, indipendentemente dalla modalità selezionata</string>
     <string name="label_size">Dimensione</string>
     <string name="feat_notification_glance_title">Anteprima notifiche</string>
     <string name="feat_notification_glance_desc">Mantieni AOD attivo se ci sono notifiche</string>
@@ -391,7 +391,7 @@
     <string name="feat_screen_off_widget_desc">Widget invisibile per spegnere lo schermo</string>
     <string name="screen_off_method_title">Metodo di spegnimento schermo</string>
     <string name="screen_off_method_accessibility">Accessibilità</string>
-    <string name="screen_off_method_input">Input</string>
+    <string name="screen_off_method_input">Ingresso</string>
     <string name="screen_off_widget_input_permission_id">Widget spegnimento schermo - Input</string>
     <string name="require_double_tap_title">Richiedi doppio tocco</string>
     <string name="require_double_tap_desc">Per spegnere lo schermo</string>
@@ -557,8 +557,8 @@
     <string name="search_qs_private_dns_desc">Alterna modalità DNS privato (Disattivato/Automatico/Nome host)</string>
     <string name="search_qs_usb_debugging_title">Debug USB</string>
     <string name="search_qs_usb_debugging_desc">Attiva/disattiva opzione sviluppatore Debug USB</string>
-    <string name="search_qs_refresh_rate_title">Refresh Rate</string>
-    <string name="search_qs_refresh_rate_desc">Cycle between the system default and preset screen refresh rates</string>
+    <string name="search_qs_refresh_rate_title">Frequenza di aggiornamento</string>
+    <string name="search_qs_refresh_rate_desc">Alterna tra le frequenze di aggiornamento predefinite di sistema e preimpostate</string>
     <string name="search_remap_enable_title">Abilita riassegnazione pulsanti</string>
     <string name="search_remap_enable_desc">Interruttore principale riassegnazione pulsanti volume</string>
     <string name="search_remap_haptic_title">Rimappa feedback aptico</string>
@@ -598,7 +598,7 @@
     <string name="perm_default_browser_title">Browser predefinito</string>
     <string name="perm_default_browser_desc">Richiesto per gestire i collegamenti in modo efficiente</string>
     <string name="perm_accessibility_desc_remap">Richiesto per intercettare gli eventi dei pulsanti fisici</string>
-    <string name="perm_accessibility_desc_essentials_on_display">Required to intercept volume key events while the screen is off to trigger the Essentials On Display overlay.</string>
+    <string name="perm_accessibility_desc_essentials_on_display">Richiesto per intercettare la pressione dei tasti del volume a schermo spento per attivare la schermata in sovrimpressione di Essentials On Display.</string>
     <string name="perm_accessibility_desc_night_light">Necessario per monitorare le applicazioni in primo piano.</string>
     <string name="perm_write_secure_title">Scrittura impostazioni protette</string>
     <string name="perm_write_secure_desc_common">Richiesto per le icone della barra di stato e per sicurezza a schermo bloccato</string>
@@ -614,7 +614,7 @@
     <string name="perm_action_check">Controlla</string>
     <string name="perm_action_enable">Abilita nelle impostazioni</string>
     <string name="perm_action_how_to">Come concedere</string>
-    <string name="perm_action_granted">Granted</string>
+    <string name="perm_action_granted">Concesso</string>
     <string name="perm_battery_optimization_title">Ottimizzazione della batteria</string>
     <string name="perm_battery_optimization_desc">Evita la chiusura del servizio da parte del sistema per risparmio energetico.</string>
     <!-- Tabs -->
@@ -663,7 +663,7 @@
     <string name="action_search">Cerca</string>
     <string name="action_stop">Interrompi</string>
     <string name="label_search">Ricerca</string>
-    <string name="search_frozen_apps_placeholder">Search frozen apps</string>
+    <string name="search_frozen_apps_placeholder">Cerca app congelate</string>
     <!-- UI Components General -->
     <string name="action_back">Indietro</string>
     <string name="content_desc_back">Indietro</string>
@@ -679,7 +679,7 @@
     <string name="welcome_subtitle">Uno strumento per Nerd Android</string>
     <string name="welcome_developer_attribution">di sameerasw.com</string>
     <string name="action_lets_begin">Iniziamo</string>
-    <string name="acknowledgement_title">Acknowledgement</string>
+    <string name="acknowledgement_title">Ringraziamenti</string>
     <string name="acknowledgement_desc">Questa applicazione è una raccolta di utility in grado di interagire a fondo con il sistema del tuo dispositivo. L\'uso di alcune funzionalità potrebbe modificare le impostazioni o il comportamento del sistema in modo imprevisto.\n\nÈ necessario concedere solo i permessi richiesti per le funzionalità specifiche che decidi di utilizzare, offrendoti così il pieno controllo sul comportamento dell\'app.\n\nInoltre, l\'applicazione non traccia né memorizza alcuno dei tuoi dati personali, non ne ho bisogno... Restano al sicuro. Puoi fare riferimento al codice sorgente per ulteriori informazioni.\n\nQuesta applicazione è completamente open source ed è, e sarà sempre, gratuita. Non pagare e non installarla da fonti sconosciute.</string>
     <string name="acknowledgement_warning">ATTENZIONE: Procedi con cautela. Lo sviluppatore non si assume alcuna responsabilità per l\'eventuale instabilità del sistema, la perdita di dati o altri problemi causati dall\'uso di questa app. Procedendo, dichiari di essere consapevole di tali rischi.</string>
     <string name="acknowledgement_footer">So che non hai nemmeno letto attentamente questo messaggio ma, se hai bisogno di aiuto, non esitare a contattare lo sviluppatore o la community.</string>
@@ -697,23 +697,23 @@
     <string name="desc_auto_check_updates">Controlla aggiornamenti all\'apertura dell\'app</string>
     <string name="action_all_set">Fatto</string>
     <string name="action_check_whats_new">Cosa c\'è di nuovo?</string>
-    <string name="welcome_back_title">Welcome back to Essentials</string>
-    <string name="action_see_whats_new">See what\'s new</string>
-    <string name="label_mode_default">Default</string>
-    <string name="label_mode_glove">Glove mode</string>
-    <string name="tile_scale_animations">Glove Mode</string>
-    <string name="about_desc_scale_animations_tile">Quickly toggle between Default and Glove mode UI profiles</string>
-    <string name="label_increase_touch_sensitivity">Increase touch sensitivity</string>
-    <string name="desc_increase_touch_sensitivity">Improve touch screen responsiveness when using gloves or screen protectors</string>
-    <string name="label_auto_rotate">Auto rotate</string>
-    <string name="desc_auto_rotate">Automatically rotate the screen when the device is turned</string>
-    <string name="label_screen_timeout">Screen timeout</string>
-    <string name="desc_screen_timeout">How long the screen stays on before turning off automatically</string>
-    <string name="unit_seconds">%d seconds</string>
-    <string name="unit_minute">1 minute</string>
-    <string name="unit_minutes">%d minutes</string>
-    <string name="action_restart_systemui">Restart SystemUI</string>
-    <string name="desc_restart_systemui">Kills and restarts SystemUI process to apply some changes immediately</string>
+    <string name="welcome_back_title">Bentornato in Essentials</string>
+    <string name="action_see_whats_new">Scopri le novità</string>
+    <string name="label_mode_default">Predefinita</string>
+    <string name="label_mode_glove">Modalità guanti</string>
+    <string name="tile_scale_animations">Modalità guanti</string>
+    <string name="about_desc_scale_animations_tile">Passa rapidamente dal profilo UI predefinito a quello per la modalità guanti</string>
+    <string name="label_increase_touch_sensitivity">Aumenta sensibilità del tocco</string>
+    <string name="desc_increase_touch_sensitivity">Migliora la reattività del touch screen quando si usano guanti o pellicole protettive</string>
+    <string name="label_auto_rotate">Rotazione automatica</string>
+    <string name="desc_auto_rotate">Ruota automaticamente lo schermo quando il dispositivo viene girato</string>
+    <string name="label_screen_timeout">Spegnimento dello schermo</string>
+    <string name="desc_screen_timeout">Durata di accensione dello schermo prima dello spegnimento automatico</string>
+    <string name="unit_seconds">%d secondi</string>
+    <string name="unit_minute">1 minuto</string>
+    <string name="unit_minutes">%d minuti</string>
+    <string name="action_restart_systemui">Riavvia SystemUI</string>
+    <string name="desc_restart_systemui">Termina e riavvia il processo SystemUI per applicare immediatamente alcune modifiche</string>
     <string name="msg_error_load_release_notes">Couldn\'t load the release note</string>
     <string name="action_view_on_web">View on web</string>
     <string name="action_done">Fatto</string>
