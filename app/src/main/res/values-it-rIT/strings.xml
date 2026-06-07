@@ -725,7 +725,7 @@
     <string name="about_desc_essentials_on_display">Essentials on Display mostra un elemento in sovrimpressione In riproduzione sulla schermata di blocco quando c\'è della musica in riproduzione e cambia il brano.\n\nSe il tuo dispositivo non supporta gli elementi in sovrimpressione sul Display sempre attivo, puoi scegliere come alternativa il salvaschermo, aggiunto nelle impostazioni di Android, durante la ricarica.</string>
     <string name="about_desc_notification_lighting">Illuminazione di notifica aggiunge uno splendido effetto di luce lungo i bordi quando ricevi delle notifiche.\n\nPuoi personalizzare lo stile dell\'animazione, i colori e il comportamento. Funziona sia a schermo spento (a seconda del produttore) sia sopra l\'applicazione corrente. Scegli le app, la priorità delle notifiche o il tipo di comportamento da attivare tramite i controlli dedicati. Se il produttore del tuo dispositivo non supporta gli elementi in sovrimpressione sul Display sempre attivo, usa l\'opzione Display ambient disponibile qui sotto.</string>
     <string name="about_desc_screen_off_widget">Spegni facilmente lo schermo con un tocco su un widget ridimensionabile trasparente che non aggiunge icone o elementi inutili alla schermata iniziale.</string>
-    <string name="about_desc_statusbar_icons">Assumi il pieno controllo sulle icone della barra di stato.\n\nNascondi icone specifiche come WiFi, Bluetooth o dati cellulare per mantenere pulita la barra di stato. Puoi anche personalizzare il formato dell\'orologio e l\'indicatore della batteria con alcuni controlli intelligenti. Questo è l\'elenco dei controlli AOSP disponibili, quindi il sistema operativo del tuo dispositivo potrebbe non rispettare tutti i controlli.</string>
+    <string name="about_desc_statusbar_icons">Assumi il pieno controllo sulle icone della barra di stato.\n\nNascondi icone specifiche come Wi-Fi, Bluetooth o dati mobili per mantenere pulita la barra di stato. Puoi anche personalizzare il formato dell\'orologio e l\'indicatore della batteria con alcuni controlli intelligenti. Questo è l\'elenco dei controlli AOSP disponibili, quindi il sistema operativo del tuo dispositivo potrebbe non rispettare tutti i controlli.</string>
     <string name="about_desc_caffeinate">Caffeina impedisce allo schermo di spegnersi automaticamente.\n\nMantieni lo schermo attivo per una durata specifica o indefinitamente. Utile quando leggi articoli lunghi o consulti una ricetta.</string>
     <string name="about_desc_maps_power_saving">Ottieni l\'esclusiva modalità Risparmio energetico Maps della serie Pixel 10 con lo sfondo nero assoluto minimalista, da visualizzare sopra la schermata di blocco su qualsiasi dispositivo Android. Avvia una sessione di navigazione, spegni lo schermo e riaccendilo. </string>
     <string name="about_desc_flashlight_pulse">Fai pulsare il flash quando ricevi una notifica.\n\nSui dispositivi che supportano la regolazione dell\'intensità del flash a livello hardware, la pulsazione presenterà un\'animazione fluida.</string>
@@ -744,7 +744,7 @@
     <string name="location_reached_cancel_btn">Annulla</string>
     <string name="location_reached_resolving">Rilevamento posizione…</string>
     <string name="location_reached_last_trip">Ultimo viaggio</string>
-    <string name="location_reached_saved_destinations">Destinazione salvate</string>
+    <string name="location_reached_saved_destinations">Destinazioni salvate</string>
     <string name="location_reached_no_saved_dest">Nessuna destinazione ancora salvata.</string>
     <string name="location_reached_delete">Elimina destinazione</string>
     <string name="location_reached_tracking_now">In tracciamento</string>
@@ -810,7 +810,7 @@
     <string name="diy_action_low_power_off">Disattiva risparmio energetico</string>
     <string name="diy_action_dim_wallpaper">Attenua sfondo</string>
     <string name="diy_dim_wallpaper_desc">Questa azione richiede che Shizuku o Root regolino l\'attenuazione dello sfondo di sistema.</string>
-    <string name="diy_select_trigger">Seleziona attivazione</string>
+    <string name="diy_select_trigger">Seleziona evento</string>
     <string name="diy_create_app_title">App</string>
     <string name="diy_create_app_desc">Automatizza in base all\'app aperta</string>
     <string name="diy_select_state">Seleziona stato</string>
@@ -868,8 +868,8 @@
     <string name="label_clear_all">Cancella tutto</string>
     <string name="perm_device_admin_explanation">Richiesto per bloccare il dispositivo quando vengono tentate modifiche di rete non autorizzate nella schermata di blocco.</string>
     <string name="biometric_subtitle_access_settings">Autenticati per accedere alle impostazioni</string>
-    <string name="biometric_title_settings_format">%1$s Impostazioni</string>
-    <string name="keyword_feature">caratteristica</string>
+    <string name="biometric_title_settings_format">Impostazioni %1$s</string>
+    <string name="keyword_feature">funzione</string>
     <string name="keyword_settings">impostazioni</string>
     <string name="keyword_hide">nascondi</string>
     <string name="keyword_show">mostra</string>
@@ -883,7 +883,7 @@
     <string-array name="keywords_network_visibility">
         <item>rete</item>
         <item>visibilità</item>
-        <item>automatico</item>
+        <item>auto</item>
         <item>nascondi</item>
     </string-array>
     <string-array name="keywords_restore_default">
@@ -894,18 +894,18 @@
     <string-array name="keywords_keyboard">
         <item>tastiera</item>
         <item>altezza</item>
-        <item>spaziatura interna</item>
+        <item>spaziatura</item>
         <item>aptico</item>
         <item>ingresso</item>
     </string-array>
     <string-array name="keywords_flashlight">
-        <item>illuminazione</item>
+        <item>luce</item>
         <item>torcia</item>
     </string-array>
     <string-array name="keywords_flashlight_pulse">
         <item>illuminazione</item>
         <item>torcia</item>
-        <item>impulso</item>
+        <item>flash</item>
         <item>notifica</item>
     </string-array>
     <string-array name="keywords_qs_stay_awake">
@@ -939,7 +939,7 @@
     <string-array name="keywords_timeout">
         <item>rimani</item>
         <item>acceso</item>
-        <item>tempo scaduto</item>
+        <item>timeout</item>
     </string-array>
     <string-array name="keywords_wake_display">
         <item>tocco</item>
@@ -973,7 +973,7 @@
     </string-array>
     <string-array name="keywords_automation_lock">
         <item>automazione</item>
-        <item>automatico</item>
+        <item>auto</item>
         <item>blocco</item>
     </string-array>
     <string-array name="keywords_adb_debug">
@@ -989,7 +989,7 @@
     <string-array name="keywords_float_window">
         <item>fluttua</item>
         <item>finestra</item>
-        <item>sovrapposizione</item>
+        <item>overlay</item>
     </string-array>
     <string-array name="keywords_always_display">
         <item>sempre</item>
@@ -1004,7 +1004,7 @@
     <string-array name="keywords_blue_filter">
         <item>blu</item>
         <item>filtro</item>
-        <item>automatico</item>
+        <item>auto</item>
     </string-array>
     <string-array name="keywords_app_freezing">
         <item>congela</item>
@@ -1095,7 +1095,7 @@
     <string name="instruction_section_statusbar_desc">Potresti notare che anche dopo aver reimpostato le icone della barra di stato, alcune icone come la rotazione del dispositivo e le icone delle cuffie cablate potrebbero rimanere visibili. Ciò è dovuto al modo in cui la lista nera della barra degli statubar è implementata in Android e al modo in cui il tuo OEM potrebbe averla personalizzata. \nPotresti aver bisogno di ulteriori modifiche. \n\nInoltre, non tutte le opzioni di visibilità delle icone potrebbero funzionare poiché dipendono dalle implementazioni e dalla disponibilità dell\'OEM.</string>
     <string name="instruction_section_lighting_title">Illuminazione di notifica non funziona</string>
     <string name="instruction_section_lighting_desc">Dipende dal produttore. Alcune interfacce, come OneUI, sembrano non consentire gli elementi in sovrimpressione sul Display sempre attivo, impedendo la visualizzazione degli effetti di luce. In questo caso, prova a usare Display ambient come soluzione alternativa. </string>
-    <string name="instruction_section_button_title">La rimappatura dei pulsanti non funziona mentre il display è spento</string>
+    <string name="instruction_section_button_title">La riassegnazione dei pulsanti non funziona mentre il display è spento</string>
     <string name="instruction_section_button_desc">Alcuni produttori limitano i report del servizio di accessibilità una volta che lo schermo è completamente spento, ma potrebbero comunque funzionare mentre il Display sempre attivo è in funziond.\n\nIn questo caso, potresti essere in grado di utilizzare la riassegnazione dei pulsanti con il Display sempre attivo in funzione, ma non quando è spento.\n\nCome soluzione alternativa, dovrai utilizzare i permessi di Shizuku e attivare l\'opzione \'Usa Shizuku o Root\' nelle impostazioni di riassegnazione dei pulsanti, che identifica e rileva gli eventi di input hardware.\nNon è garantito che questo funzioni su tutti i dispositivi ed è necessario fare dei test.\n\nE anche se attiva, la modalità Shizuku verrà utilizzata solo quando necessario. In caso contrario, verrà sempre ripristinato il Servizio di accessibilità, che gestisce anche il blocco dell\'input effettivo durante la pressione prolungata.</string>
     <string name="instruction_section_flashlight_title">La luminosità della torcia non funziona</string>
     <string name="instruction_section_flashlight_desc">Solo un numero limitato di dispositivi ha il supporto hardware e software per la regolazione dell\'intensità della torcia. \n\n\'La versione minima di Android è 13 (SDK33).\nIl controllo della luminosità della torcia supporta solo HAL versione 3.8 e successive, quindi tra i dispositivi supportati, quelli più recenti (ad esempio Pixel 6/7, Samsung S23, ecc.)\'\npolodarb/Flashlight-Tiramisù</string>
@@ -1109,10 +1109,10 @@
     <string name="bug_report_device_info">Informazioni sul dispositivo</string>
     <string name="bug_report_raw_json">Rapporto grezzo</string>
     <string name="action_report_github">Apri il problema di GitHub</string>
-    <string name="action_report_email">Rapporto e-mail</string>
+    <string name="action_report_email">Invia rapporto via e-mail</string>
     <string name="action_copy_clipboard">Copia negli appunti</string>
     <string name="bug_report_email_subject">Segnalazione bug di Essentials</string>
-    <string name="bug_report_send_via">Invia tramite</string>
+    <string name="bug_report_send_via">Abilita l\'invio dei rapporti sui crash in quanto consentirà di segnalare automaticamente i dettagli utili a risolvere i problemi.</string>
     <!-- Location Reached -->
     <string name="feat_location_reached_title">Siamo già arrivati?</string>
     <string name="feat_location_reached_desc">Avvisi di destinazione nelle vicinanze</string>
@@ -1120,33 +1120,33 @@
     <string name="location_reached_radius_title">Raggio di avviso: %d m</string>
     <string name="perm_location_title">Posizione</string>
     <string name="perm_location_desc">Utilizzato per rilevare l\'arrivo a destinazione.</string>
-    <string name="perm_bg_location_title">Posizione dello sfondo</string>
-    <string name="perm_bg_location_desc">Necessario per monitorare il tuo arrivo mentre l\'app è chiusa o lo schermo è spento.</string>
+    <string name="perm_bg_location_title">Posizione in background</string>
+    <string name="perm_bg_location_desc">Richiesto per monitorare il tuo arrivo quando l\'app è chiusa o lo schermo è spento.</string>
     <string name="location_reached_notification_title">Destinazione raggiunta!</string>
     <string name="location_reached_notification_desc">Sei arrivato a destinazione.</string>
-    <string name="location_reached_processing">Luogo del trattamento...</string>
+    <string name="location_reached_processing">Elaborazione posizione…</string>
     <string name="location_reached_dist_remaining">DISTANZA RESIDUA</string>
     <string name="location_reached_calculating">Calcolo…</string>
-    <string name="location_reached_stop_tracking">Interrompi il monitoraggio</string>
+    <string name="location_reached_stop_tracking">Interrompi</string>
     <string name="location_reached_dest_ready">Destinazione pronta</string>
-    <string name="location_reached_start_tracking">Inizia il monitoraggio</string>
+    <string name="location_reached_start_tracking">Avvia tracciamento</string>
     <string name="location_reached_view_map">Visualizza mappa</string>
     <string name="location_reached_clear">Chiaro</string>
     <string name="location_reached_no_dest">Nessuna destinazione</string>
-    <string name="location_reached_open_maps">Apri Mappe</string>
-    <string name="location_reached_fsi_title">Autorizzazione allarme a schermo intero</string>
-    <string name="location_reached_fsi_desc">Necessario per riattivare il dispositivo all\'arrivo. Tocca per concedere.</string>
+    <string name="location_reached_open_maps">Apri Maps</string>
+    <string name="location_reached_fsi_title">Autorizzazione notifiche a schermo intero</string>
+    <string name="location_reached_fsi_desc">Richiesto per riattivare il dispositivo all\'arrivo. Tocca per concedere.</string>
     <string name="location_reached_dist_m">%1$d M</string>
     <string name="location_reached_dist_km">%1$.1f km</string>
-    <string name="location_reached_service_title">Allarme di viaggio attivo</string>
+    <string name="location_reached_service_title">In viaggio verso %1$s</string>
     <string name="location_reached_service_remaining">%1$s rimanente (%2$d%%)</string>
     <string name="location_reached_channel_name">Progresso del viaggio</string>
     <string name="location_reached_channel_desc">Mostra la distanza in tempo reale dalla destinazione</string>
     <string name="location_reached_alarm_title">Destinazione nelle vicinanze</string>
     <string name="location_reached_alarm_subtitle">Preparati a scendere</string>
-    <string name="location_reached_dismiss">Congedare</string>
+    <string name="location_reached_dismiss">Ignora</string>
     <string name="location_reached_toast_set">Destinazione impostata: %1$.4f, %2$.4f</string>
-    <string name="setting_use_root_title">Usa Radice</string>
+    <string name="setting_use_root_title">Usa Root</string>
     <string name="setting_use_root_desc">Invece di Shizuku</string>
     <string name="root_not_available_toast">Accesso root non disponibile. Controlla il tuo root manager.</string>
     <!-- System Keyboard -->
@@ -1155,22 +1155,22 @@
     <string name="feat_system_keyboard_desc">Personalizza layout e comportamento</string>
     <string name="search_keyboard_height_title">Altezza della tastiera</string>
     <string name="search_keyboard_height_desc">Regola la dimensione verticale totale della tastiera</string>
-    <string name="search_keyboard_padding_title">Imbottitura inferiore</string>
+    <string name="search_keyboard_padding_title">Spaziatura inferiore</string>
     <string name="search_keyboard_padding_desc">Aggiungi spazio sotto la tastiera</string>
-    <string name="search_keyboard_haptics_title">Feedback tattile</string>
+    <string name="search_keyboard_haptics_title">Feedback aptico</string>
     <string name="search_keyboard_haptics_desc">Vibra alla pressione di un tasto</string>
     <string name="test_keyboard_hint">Prova la tastiera</string>
     <string name="label_keyboard_height">Altezza della tastiera</string>
-    <string name="label_keyboard_bottom_padding">Imbottitura inferiore</string>
-    <string name="label_keyboard_haptics">Feedback tattile</string>
-    <string name="label_keyboard_roundness">Rotondità chiave</string>
+    <string name="label_keyboard_bottom_padding">Spaziatura inferiore</string>
+    <string name="label_keyboard_haptics">Feedback aptico</string>
+    <string name="label_keyboard_roundness">Arrotondamento tasti</string>
     <string name="label_keyboard_functions_bottom">Sposta le funzioni in basso</string>
-    <string name="label_keyboard_functions_padding">Funzioni imbottitura laterale</string>
-    <string name="label_keyboard_haptic_strength">Forza del feedback tattile</string>
+    <string name="label_keyboard_functions_padding">Spaziatura laterale funzioni</string>
+    <string name="label_keyboard_haptic_strength">Forza del feedback aptico</string>
     <string name="label_keyboard_shape">Forma della tastiera</string>
-    <string name="shape_round">Girare</string>
-    <string name="shape_flat">Piatto</string>
-    <string name="shape_inverse">Inverso</string>
+    <string name="shape_round">Arrotondata</string>
+    <string name="shape_flat">Piatta</string>
+    <string name="shape_inverse">Inversa</string>
     <string name="feat_batteries_title">Batterie</string>
     <string name="feat_batteries_desc">Monitora i livelli della batteria del tuo dispositivo</string>
     <string name="batteries_widget_label">Stato della batteria</string>
@@ -1187,12 +1187,12 @@
     <string name="perm_nearby_devices_title">Dispositivi vicini</string>
     <string name="perm_nearby_devices_desc">Necessario per rilevare e recuperare informazioni sulla batteria dagli accessori Bluetooth</string>
     <!-- GitHub Auth -->
-    <string name="auth_copy_code">Copia il codice</string>
+    <string name="auth_copy_code">Copia codice</string>
     <string name="auth_open_login_page">Apri la pagina di accesso</string>
     <string name="auth_sign_in_rationale">Accedi per estendere i limiti delle chiamate API</string>
     <string name="auth_waiting_for_authorization">In attesa di autorizzazione...</string>
     <string name="action_sign_in_github">Accedi con GitHub</string>
-    <string name="action_sign_out">disconnessione</string>
+    <string name="action_sign_out">Disconnetti</string>
     <string name="action_profile">Profilo</string>
     <!-- App Updates / Repos -->
     <string name="label_release_notes">Note sulla versione</string>
@@ -1205,7 +1205,7 @@
     <string name="yesterday">Ieri</string>
     <string name="time_min_ago">%1$dm fa</string>
     <string name="time_hour_ago">%1$dh fa</string>
-    <string name="time_day_ago">%1$dd fa</string>
+    <string name="time_day_ago">%1$dg fa</string>
     <string name="time_days_ago">%1$d giorni fa</string>
     <string name="time_weeks_ago">%1$d settimane fa</string>
     <string name="time_month_ago">%1$dmo fa</string>
@@ -1217,23 +1217,23 @@
     <string name="auth_copy_code_instruction">1. Copia il tuo codice:</string>
     <string name="auth_paste_code_instruction">2. Incolla il codice su GitHub:</string>
     <string name="label_found_apks">APK trovati</string>
-    <string name="label_readme">LEGGIMI</string>
+    <string name="label_readme">README</string>
     <string name="action_refresh">Aggiorna</string>
     <!-- Added Missing Group Strings -->
-    <string name="feat_sound_modes_title">Riquadro della modalità audio</string>
-    <string name="feat_sound_modes_desc">Riquadro impostazioni rapide per attivare o disattivare la modalità audio</string>
+    <string name="feat_sound_modes_title">Riquadro modalità audio</string>
+    <string name="feat_sound_modes_desc">Riquadro delle impostazioni rapide per attivare o disattivare la modalità audio</string>
     <string name="search_sound_mode_show_slider_title">Mostra dispositivo di scorrimento</string>
     <string name="search_sound_mode_show_slider_desc">Mostra il cursore del volume nel riquadro</string>
     <string name="search_sound_mode_behavior_title">Comportamento del ciclo</string>
-    <string name="search_sound_mode_behavior_desc">Scegli le modalità da scorrere</string>
-    <string name="feat_sound_haptics_title">Suono e tattilità</string>
-    <string name="feat_sound_haptics_desc">Caratteristiche di volume e tattili</string>
+    <string name="search_sound_mode_behavior_desc">Scegli le modalità da includere nel ciclo</string>
+    <string name="feat_sound_haptics_title">Suono e feedback aptico</string>
+    <string name="feat_sound_haptics_desc">Funzionalità volume e feedback aptico</string>
     <string name="feat_security_privacy_title">Sicurezza e privacy</string>
-    <string name="feat_security_privacy_desc">Proteggi e proteggi il tuo dispositivo</string>
+    <string name="feat_security_privacy_desc">Proteggi e metti in sicurezza il tuo dispositivo</string>
     <string name="feat_notifications_alerts_title">Notifiche e avvisi</string>
     <string name="feat_notifications_alerts_desc">Non perdere mai le tue priorità</string>
     <string name="feat_input_actions_title">Input e azioni</string>
-    <string name="feat_input_actions_desc">Controlla il tuo dispositivo con facilità</string>
+    <string name="feat_input_actions_desc">Controlla il dispositivo con facilità</string>
     <string name="feat_widgets_title">Widget</string>
     <string name="feat_widgets_desc">A colpo d\'occhio sulla schermata iniziale</string>
     <string name="feat_display_visuals_title">Schermo</string>
@@ -1242,7 +1242,7 @@
     <string name="feat_watch_desc">Integrazioni con WearOS</string>
     <string name="watch_no_companion_title">Nessun orologio rilevato</string>
     <string name="watch_no_companion_desc">Sembra che tu non abbia l\'app complementare Essentials Wear installata sul tuo orologio.</string>
-    <string name="watch_install_companion_action">Installa Compagno</string>
+    <string name="watch_install_companion_action">Installa app Companion</string>
     <string name="action_download_from_github">Scarica da GitHub</string>
     <string name="watch_help_title">Installa sull\'orologio</string>
     <string name="watch_help_description">Per utilizzare le funzionalità dell\'orologio, devi installare l\'app complementare Essentials sul tuo orologio Wear OS. Tocca il pulsante qui sotto per aprire il Play Store direttamente sul tuo orologio.</string>
@@ -1298,8 +1298,8 @@
     <string name="kaomoji_cat_winking">Occhiolino</string>
     <string name="kaomoji_cat_writing">Scrittura</string>
     <string name="msg_restrict_own_app_repo">Ehi! Puoi controllare gli aggiornamenti nelle impostazioni dell\'app, non è necessario aggiungerli qui XD</string>
-    <string name="action_export">Esportare</string>
-    <string name="action_import">Importare</string>
+    <string name="action_export">Esporta</string>
+    <string name="action_import">Importa</string>
     <string name="msg_export_success">Repository esportati correttamente</string>
     <string name="msg_export_failed">Impossibile esportare i repository</string>
     <string name="msg_import_success">Repository importati correttamente</string>
@@ -1312,11 +1312,11 @@
     <string name="settings_section_text">Testo</string>
     <string name="label_font_scale">Scala dei caratteri</string>
     <string name="label_font_weight">Peso del carattere</string>
-    <string name="label_reset_default">Reset</string>
+    <string name="label_reset_default">Ripristina</string>
     <string name="settings_section_scale">Scala</string>
     <string name="label_smallest_width">Larghezza minima</string>
     <string name="msg_shizuku_permission_required">È necessaria l\'autorizzazione di Shizuku per regolare la scala</string>
-    <string name="label_grant_permission">Concedere l\'autorizzazione</string>
+    <string name="label_grant_permission">Concedi autorizzazione</string>
     <string name="settings_section_animations">Animazioni</string>
     <string name="label_animator_duration_scale">Scala di durata dell\'animatore</string>
     <string name="label_transition_animation_scale">Scala di animazione della transizione</string>
@@ -1350,10 +1350,10 @@
     <string name="feat_auto_accessibility_desc">Concede automaticamente l\'autorizzazione di accessibilità all\'avvio dell\'app se manca utilizzando WRITE_SECURE_SETTINGS.</string>
     <string name="label_help_guide">Aiuto e guide</string>
     <string name="tab_your_android">Il tuo Android</string>
-    <string name="label_device_storage">Magazzinaggio</string>
+    <string name="label_device_storage">Archiviazione</string>
     <string name="label_device_ram">Memoria</string>
-    <string name="label_use_blur">Usa la sfocatura</string>
-    <string name="desc_use_blur">Abilita gli elementi di sfocatura progressiva nell\'interfaccia utente</string>
+    <string name="label_use_blur">Usa sfocatura</string>
+    <string name="desc_use_blur">Abilita gli elementi con sfocatura progressiva nell\'interfaccia</string>
     <string name="msg_blur_compatibility_error">La sfocatura è disabilitata su questo dispositivo per prevenire un noto bug di visualizzazione sui dispositivi Samsung con Android 15 o versioni precedenti.</string>
     <!-- Empty State Actions -->
     <string name="msg_no_apps_frozen">Nessuna app da congelare selezionata.</string>
@@ -1425,9 +1425,9 @@
     <string name="lock_screen_clock_bignum">Numero grande</string>
     <string name="lock_screen_clock_calligraphy">Calligrafia</string>
     <string name="lock_screen_clock_flex">Flex</string>
-    <string name="lock_screen_clock_growth">Growth</string>
+    <string name="lock_screen_clock_growth">Espansione</string>
     <string name="lock_screen_clock_handwritten">Scritto a mano</string>
-    <string name="lock_screen_clock_inflate">Gonfia</string>
+    <string name="lock_screen_clock_inflate">Rigonfiamento</string>
     <string name="lock_screen_clock_metro">Metro</string>
     <string name="lock_screen_clock_numoverlap">Numero sovrapposto</string>
     <string name="lock_screen_clock_weather">Meteo</string>
@@ -1440,7 +1440,7 @@
     <string name="label_weight">Peso</string>
     <string name="label_width">Larghezza</string>
     <string name="label_grade">Grado</string>
-    <string name="label_roundness">Rotondità</string>
+    <string name="label_roundness">Arrotondamento</string>
     <string name="label_color_tone">Luminosità</string>
     <string name="label_variation">Variazione</string>
     <string name="label_color">Colore</string>
