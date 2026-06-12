@@ -232,7 +232,7 @@
     <string name="input_method_label">Keyboard Essentials</string>
     <string name="subtype_en_us">Inggris (US)</string>
     <string name="tile_active">Aktif</string>
-    <string name="tile_inactive">Tidak aktif </string>
+    <string name="tile_inactive">Tidak aktif</string>
     <string name="tile_developer_options">Opsi developer</string>
     <string name="about_desc_developer_options">Toggle system Developer Options from a QS tile easily. This may reset some of the developer settings you have modified.</string>
     <string name="tile_refresh_rate">Refresh Rate</string>
@@ -383,7 +383,7 @@
     <string name="cat_system">System</string>
     <!-- UI Elements -->
     <string name="search_placeholder">Search Essentials</string>
-    <string name="search_no_results">Tudak ditemukan untuk \"%1$s\"</string>
+    <string name="search_no_results">Tidak ditemukan untuk \"%1$s\"</string>
     <string name="search_results_title">Hasil pencarian</string>
     <string name="requires_following_permissions">%1$s requires following permissions</string>
     <!-- Features -->
@@ -1396,27 +1396,27 @@
     <string name="btn_apply">Terapkan</string>
     <string name="add_video">Tambah video</string>
     <string name="custom_video">Custom video</string>
-    <string name="about_desc_live_wallpaper">Set your favorite video as your home screen wallpaper. Choose between triggering the animation upon unlocking or simply whenever the screen turns on for a dynamic experience.</string>
+    <string name="about_desc_live_wallpaper">Atur video favorit Anda sebagai wallpaper layar beranda. Pilih antara memicu animasi saat membuka kunci atau setiap kali layar menyala untuk pengalaman yang dinamis.</string>
     <!-- Shut-Up! Feature -->
     <string name="feat_shut_up_title">Shut-Up!</string>
     <string name="feat_shut_up_desc">Aku tau apa yang kulakukan</string>
-    <string name="shut_up_description">Shut-Up! bypasses app restrictions and checks for developer options, accessibility and debugging by dynamically hiding them when you launch sensitive apps. \n\nUse the custom shortcuts to ensure settings are hidden before the app launches.</string>
-    <string name="shut_up_select_apps_title">Select Apps</string>
-    <string name="shut_up_select_apps_desc">Choose apps to apply Shut-Up! logic</string>
-    <string name="shut_up_settings_title">Shut-Up! Settings</string>
-    <string name="shut_up_per_app_settings">Shut-Up! Features</string>
-    <string name="shut_up_disable_dev_options">Disable Developer Options</string>
-    <string name="shut_up_disable_usb_debugging">Disable USB Debugging</string>
-    <string name="shut_up_disable_wireless_debugging">Disable Wireless Debugging</string>
-    <string name="shut_up_disable_accessibility">Disable Accessibility Services</string>
-    <string name="shut_up_shortcut_created">Shortcut created for %s</string>
-    <string name="feat_disable_rotation_suggestion_title">Disable rotation suggestion</string>
-    <string name="feat_disable_rotation_suggestion_desc">Do not show the rotation button when auto-rotate is off</string>
+    <string name="shut_up_description">Shut-Up! melewati pembatasan aplikasi dan pemeriksaan opsi pengembang, aksesibilitas, dan debugging dengan menyembunyikannya secara dinamis saat Anda meluncurkan aplikasi sensitif. \n\nGunakan pintasan khusus untuk memastikan pengaturan disembunyikan sebelum aplikasi diluncurkan.</string>
+    <string name="shut_up_select_apps_title">Pilih aplikasi</string>
+    <string name="shut_up_select_apps_desc">Pilih aplikasi untuk menerapkan logika Shut-Up!</string>
+    <string name="shut_up_settings_title">Pengaturan Shut-Up!</string>
+    <string name="shut_up_per_app_settings">Fitur Shut-Up!</string>
+    <string name="shut_up_disable_dev_options">Matikan opsi developer</string>
+    <string name="shut_up_disable_usb_debugging">Matikan Debugging USB</string>
+    <string name="shut_up_disable_wireless_debugging">Matikan Debugging nirkabel</string>
+    <string name="shut_up_disable_accessibility">Matikan layanan aksesibilitas</string>
+    <string name="shut_up_shortcut_created">Pintasan dibuat untuk %s</string>
+    <string name="feat_disable_rotation_suggestion_title">Matikan saran rotasi</string>
+    <string name="feat_disable_rotation_suggestion_desc">Jangan perlihatkan tombol rotasi ketika rotasi otomatis mati</string>
     <string name="shut_up_toast_active">App got shut up</string>
-    <string name="shut_up_toast_restored">Shut up features returned</string>
-    <string name="shut_up_auto_archive_notif_title">Auto Freeze</string>
-    <string name="shut_up_auto_archive_notif_text">%1$s will be archived in %2$d seconds</string>
-    <string name="shut_up_auto_archive_action_freeze">Freeze now</string>
+    <string name="shut_up_toast_restored">Fitur Shut-Up! Dikembalikan</string>
+    <string name="shut_up_auto_archive_notif_title">Bekukan otomatis</string>
+    <string name="shut_up_auto_archive_notif_text">%1$s akan diarsipkan dalam %2$d detik</string>
+    <string name="shut_up_auto_archive_action_freeze">Bekukan Sekarang</string>
     <string name="shut_up_auto_archive_action_abort">Abort</string>
     <!-- Lock Screen Clock -->
     <string name="feat_lock_screen_clock_title">Jam layar kunci</string>
@@ -1456,11 +1456,11 @@
     <string name="color_pink">Pink</string>
     <string name="color_teal">Teal</string>
     <!-- What's New -->
-    <string name="whats_new_specs_title">Device Specs Retired</string>
-    <string name="whats_new_specs_desc">Inaccurate GSMArena-powered specifications have been removed to keep device insights clean, fast, and completely reliable.</string>
-    <string name="whats_new_apps_title">App Updates Migrated</string>
-    <string name="whats_new_apps_desc">The Apps tab is now fully integrated into the Your Android feature, making it easier to manage all your app updates in one cohesive hub.</string>
+    <string name="whats_new_specs_title">Spesifikasi perangkat dihentikan</string>
+    <string name="whats_new_specs_desc">Spesifikasi yang tidak akurat dari GSMArena telah dihapus untuk menjaga agar informasi perangkat tetap bersih, cepat, dan sepenuhnya andal.</string>
+    <string name="whats_new_apps_title">Pembaruan aplikasi dimigrasikan</string>
+    <string name="whats_new_apps_desc">Tab Aplikasi kini terintegrasi penuh ke dalam fitur Android Anda, sehingga memudahkan Anda untuk mengelola semua pembaruan aplikasi Anda dalam satu pusat terpadu.</string>
     <string name="favorites_widget_name">Fitur favorit</string>
-    <string name="favorites_widget_description">View and launch your favorite features at a glance.</string>
-    <string name="favorites_widget_empty_state">No favorite features pinned yet. Open the app to pin some!</string>
+    <string name="favorites_widget_description">Lihat dan luncurkan fitur favorit Anda secara sekilas.</string>
+    <string name="favorites_widget_empty_state">Belum ada fitur favorit yang disematkan. Buka aplikasi untuk menyematkan beberapa!</string>
 </resources>

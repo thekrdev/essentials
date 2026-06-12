@@ -661,7 +661,7 @@
     <string name="tile_adaptive_brightness">Uyarlanabilir Parlaklık</string>
     <string name="tile_maps_power_saving">Haritalar Güç Tasarrufu</string>
     <string name="action_search">Ara</string>
-    <string name="action_stop">Durmak</string>
+    <string name="action_stop">Durdur</string>
     <string name="label_search">Arama</string>
     <string name="search_frozen_apps_placeholder">Dondurulmuş uygulamaları ara</string>
     <!-- UI Components General -->
@@ -784,7 +784,7 @@
     <string name="about_desc_usb_debugging">USB Hata Ayıklamayı açın/kapatın.\n\nADB hata ayıklama erişimini doğrudan hızlı ayarlardan etkinleştirin veya devre dışı bırakın.</string>
     <string name="about_desc_color_picker">Android 17 BETA 2\'de sunulan renkleri seçmek için göz damlası aracını başlatın</string>
     <string name="about_desc_charge_optimization">Maksimum şarjı sınırlayarak veya uyarlanabilir şarjı kullanarak pil ömrünüzü optimize edin. Bu, uzun ömür ve sağlıklı şarj döngüleri sağlamak amacıyla Pixel cihazları için özel olarak tasarlanmıştır.\n\nKrediler: TebbeUbben/ChargeQuickTile</string>
-    <string name="action_download">İndirmek</string>
+    <string name="action_download">İndir</string>
     <!-- DIY Section -->
     <string name="diy_trigger_screen_off">Ekran Kapalı</string>
     <string name="diy_trigger_screen_on">Ekran Açık</string>
@@ -1041,7 +1041,7 @@
     <!-- Updates -->
     <string name="status_up_to_date">Güncelsiniz</string>
     <string name="warning_pre_release">Bu, yayın öncesi bir sürümdür ve kararsız olabilir.</string>
-    <string name="release_notes_format">Sürüm Notları %1$s</string>
+    <string name="release_notes_format">%1$s Sürüm Notları</string>
     <string name="action_view_on_github">GitHub\'ta görüntüle</string>
     <string name="action_download_apk">APK\'yi indir</string>
     <!-- Haptic Types -->
