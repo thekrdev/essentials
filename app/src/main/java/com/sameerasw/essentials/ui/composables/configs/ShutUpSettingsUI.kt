@@ -27,6 +27,7 @@ import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.components.menus.SegmentedDropdownMenuItem
 import com.sameerasw.essentials.ui.components.sheets.AppSelectionSheet
 import com.sameerasw.essentials.ui.components.sheets.ShutUpPerAppSettingsSheet
+import com.sameerasw.essentials.ui.components.sliders.ConfigSliderItem
 import com.sameerasw.essentials.utils.AppUtil
 import com.sameerasw.essentials.viewmodels.MainViewModel
 
@@ -63,6 +64,17 @@ fun ShutUpSettingsUI(
                 hasMoreSettings = true,
                 onToggle = {},
                 onClick = { isAppSelectionSheetOpen = true }
+            )
+
+            ConfigSliderItem(
+                title = stringResource(R.string.shut_up_restore_delay_title),
+                value = viewModel.shutUpRestoreDelay.intValue.toFloat(),
+                onValueChange = { viewModel.setShutUpRestoreDelay(it.toInt()) },
+                valueRange = 2f..60f,
+                increment = 1f,
+                valueFormatter = { "${it.toInt()}s" },
+                iconRes = R.drawable.rounded_timer_24,
+                subtitle = stringResource(R.string.shut_up_restore_delay_desc)
             )
         }
 

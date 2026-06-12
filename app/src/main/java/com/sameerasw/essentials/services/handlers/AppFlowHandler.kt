@@ -623,7 +623,8 @@ class AppFlowHandler(
 
         scope.launch {
             // Delay to ensure the app has fully settled before restoring system settings
-            delay(2000)
+            val delaySeconds = repository.getShutUpRestoreDelay()
+            delay(delaySeconds * 1000L)
 
             val canWriteSecure =
                 com.sameerasw.essentials.utils.PermissionUtils.canWriteSecureSettings(context)

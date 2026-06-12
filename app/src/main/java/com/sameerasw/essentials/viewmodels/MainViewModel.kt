@@ -160,6 +160,7 @@ class MainViewModel : ViewModel() {
         mutableStateOf<List<com.sameerasw.essentials.domain.model.ShutUpAppConfig>>(emptyList())
     val isShutUpLoading = mutableStateOf(false)
     val isShutUpAttemptShizukuRestart = mutableStateOf(true)
+    val shutUpRestoreDelay = mutableIntStateOf(10)
 
 
     data class CalendarAccount(
@@ -633,6 +634,11 @@ class MainViewModel : ViewModel() {
                             settingsRepository.isShutUpAttemptShizukuRestartEnabled()
                     }
 
+                    SettingsRepository.KEY_SHUT_UP_RESTORE_DELAY -> {
+                        shutUpRestoreDelay.intValue =
+                            settingsRepository.getShutUpRestoreDelay()
+                    }
+
                     SettingsRepository.KEY_DISABLE_ROTATION_SUGGESTION -> {
                         isDisableRotationSuggestionEnabled.value =
                             settingsRepository.getBoolean(key)
@@ -677,6 +683,11 @@ class MainViewModel : ViewModel() {
     fun setShutUpAttemptShizukuRestartEnabled(enabled: Boolean) {
         isShutUpAttemptShizukuRestart.value = enabled
         settingsRepository.setShutUpAttemptShizukuRestartEnabled(enabled)
+    }
+
+    fun setShutUpRestoreDelay(delaySeconds: Int) {
+        shutUpRestoreDelay.intValue = delaySeconds
+        settingsRepository.setShutUpRestoreDelay(delaySeconds)
     }
 
     fun saveShutUpSelectedApps(context: Context, apps: List<AppSelection>) {
@@ -778,6 +789,8 @@ class MainViewModel : ViewModel() {
 
         isShutUpAttemptShizukuRestart.value =
             settingsRepository.isShutUpAttemptShizukuRestartEnabled()
+        shutUpRestoreDelay.intValue =
+            settingsRepository.getShutUpRestoreDelay()
         isDisableRotationSuggestionEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_DISABLE_ROTATION_SUGGESTION, false)
         lockScreenClockId.value = readCurrentLockScreenClockId(context)

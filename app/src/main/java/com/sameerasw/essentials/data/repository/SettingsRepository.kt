@@ -236,6 +236,7 @@ class SettingsRepository(private val context: Context) {
         const val KEY_SHUT_UP_SELECTED_APPS = "shut_up_selected_apps"
         const val KEY_SHUT_UP_ORIGINAL_SETTINGS = "shut_up_original_settings"
         const val KEY_SHUT_UP_ATTEMPT_SHIZUKU_RESTART = "shut_up_attempt_shizuku_restart"
+        const val KEY_SHUT_UP_RESTORE_DELAY = "shut_up_restore_delay"
         const val KEY_DISABLE_ROTATION_SUGGESTION = "disable_rotation_suggestion"
 
         const val KEY_LOCK_SCREEN_CLOCK_WEIGHT = "lock_screen_clock_weight"
@@ -859,6 +860,12 @@ class SettingsRepository(private val context: Context) {
 
     fun setShutUpAttemptShizukuRestartEnabled(enabled: Boolean) =
         putBoolean(KEY_SHUT_UP_ATTEMPT_SHIZUKU_RESTART, enabled)
+
+    fun getShutUpRestoreDelay(): Int =
+        getInt(KEY_SHUT_UP_RESTORE_DELAY, 10)
+
+    fun setShutUpRestoreDelay(delaySeconds: Int) =
+        putInt(KEY_SHUT_UP_RESTORE_DELAY, delaySeconds)
 
     fun removeTrackedRepo(fullName: String) {
         val current = getTrackedRepos().toMutableList()
