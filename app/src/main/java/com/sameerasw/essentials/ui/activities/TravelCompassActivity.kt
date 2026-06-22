@@ -19,9 +19,15 @@ import com.sameerasw.essentials.utils.HapticUtil
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.Icon
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
+import com.sameerasw.essentials.R
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -146,6 +152,8 @@ private fun CompassScreen(
     val repository = remember { LocationReachedRepository(context) }
     val fusedLocation = remember { LocationServices.getFusedLocationProviderClient(context) }
     val is24h = remember { DateFormat.is24HourFormat(context) }
+    val sharedPrefs = remember { context.getSharedPreferences("essentials_prefs", android.content.Context.MODE_PRIVATE) }
+    var useIcon by remember { mutableStateOf(sharedPrefs.getBoolean("location_reached_compass_use_icon", false)) }
 
     var currentTime by remember { mutableStateOf("") }
     var distanceText by remember { mutableStateOf("") }
@@ -245,10 +253,16 @@ private fun CompassScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) { onDismiss() },
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = { onDismiss() },
+                    onLongPress = {
+                        HapticUtil.performHeavyHaptic(view)
+                        useIcon = !useIcon
+                        sharedPrefs.edit().putBoolean("location_reached_compass_use_icon", useIcon).apply()
+                    }
+                )
+            },
         contentAlignment = Alignment.Center
     ) {
         // Pure black background
@@ -267,9 +281,10 @@ private fun CompassScreen(
                 .padding(top = 80.dp)
         )
 
-        // Arrow shape — center, rotated to destination
-        ArrowShapeCanvas(
+        // Arrow container (shape or drawable) — center, rotated to destination
+        CompassArrowContainer(
             rotationDegrees = animatedRotation,
+            useIcon = useIcon,
             color = primaryColor,
             modifier = Modifier
                 .size(220.dp)
@@ -290,16 +305,57 @@ private fun CompassScreen(
 }
 
 @Composable
-private fun ArrowShapeCanvas(
+private fun CompassArrowContainer(
     rotationDegrees: Float,
+    useIcon: Boolean,
     color: Color,
     modifier: Modifier = Modifier
 ) {
-    Canvas(
+    val shapeAlpha by animateFloatAsState(
+        targetValue = if (useIcon) 0f else 1f,
+        animationSpec = tween(durationMillis = 300),
+        label = "shapeAlpha"
+    )
+    val iconAlpha by animateFloatAsState(
+        targetValue = if (useIcon) 1f else 0f,
+        animationSpec = tween(durationMillis = 300),
+        label = "iconAlpha"
+    )
+
+    Box(
         modifier = modifier.graphicsLayer {
             rotationZ = rotationDegrees
-        }
+        },
+        contentAlignment = Alignment.Center
     ) {
+        if (shapeAlpha > 0.01f) {
+            ArrowShapeCanvas(
+                color = color,
+                alpha = shapeAlpha,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
+        if (iconAlpha > 0.01f) {
+            Icon(
+                painter = painterResource(id = R.drawable.round_arrow_upward_24),
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer { alpha = iconAlpha }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ArrowShapeCanvas(
+    color: Color,
+    alpha: Float,
+    modifier: Modifier = Modifier
+) {
+    Canvas(modifier = modifier) {
         val size = min(this.size.width, this.size.height)
         val polygon = androidx.compose.material3.MaterialShapes.Arrow
 
@@ -322,7 +378,7 @@ private fun ArrowShapeCanvas(
 
         drawPath(
             path = composePath,
-            color = color,
+            color = color.copy(alpha = alpha),
             style = Stroke(width = 6.dp.toPx())
         )
     }
