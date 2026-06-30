@@ -477,6 +477,19 @@ object FeatureRegistry {
         },
 
         object : Feature(
+            id = "Flashlight",
+            title = R.string.feat_flashlight_title,
+            iconRes = R.drawable.rounded_flashlight_on_24,
+            category = R.string.cat_interaction,
+            description = R.string.feat_flashlight_desc,
+            parentFeatureId = "Input",
+            showToggle = false
+        ) {
+            override fun isEnabled(viewModel: MainViewModel) = true
+            override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {}
+        },
+
+        object : Feature(
             id = "Snooze system notifications",
             title = R.string.feat_snooze_notifications_title,
             iconRes = R.drawable.rounded_snooze_24,

@@ -71,6 +71,16 @@ fun FlashlightPulseSettingsUI(
                     modifier = Modifier.highlight(highlightSetting == "flashlight_pulse_facedown" || highlightSetting == "flashlight_pulse_facedown_only")
                 )
 
+                IconToggleItem(
+                    iconRes = R.drawable.rounded_do_not_disturb_on_24,
+                    title = stringResource(R.string.flashlight_pulse_disable_on_dnd_title),
+                    isChecked = viewModel.isFlashlightPulseDisableOnDnd.value,
+                    onCheckedChange = { checked ->
+                        viewModel.setFlashlightPulseDisableOnDnd(checked, context)
+                    },
+                    modifier = Modifier.highlight(highlightSetting == "flashlight_pulse_disable_on_dnd")
+                )
+
                 ConfigSliderItem(
                     title = stringResource(R.string.flashlight_pulse_max_brightness),
                     value = viewModel.flashlightPulseMaxIntensity.floatValue,

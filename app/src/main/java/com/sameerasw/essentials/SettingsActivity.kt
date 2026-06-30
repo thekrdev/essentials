@@ -45,7 +45,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -208,7 +213,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsContent(
     viewModel: MainViewModel,
@@ -243,6 +248,7 @@ fun SettingsContent(
     val isRootPermissionGranted by viewModel.isRootPermissionGranted
     val isDeveloperModeEnabled by viewModel.isDeveloperModeEnabled
     var showInstructionsSheet by remember { mutableStateOf(false) }
+    var showShizukuHelpBottomSheet by remember { mutableStateOf(false) }
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/json")
@@ -296,6 +302,41 @@ fun SettingsContent(
         )
     }
 
+    if (showShizukuHelpBottomSheet) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        ModalBottomSheet(
+            onDismissRequest = { showShizukuHelpBottomSheet = false },
+            sheetState = sheetState,
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 32.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Shizuku Auth Token",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "In shizuku, in the 'Control Shizuku with automation apps' section, Open 'View intents' and copy and paste the auth token from 'Extras' section.\n\nThis allows Essentials to automate and re-start Shizuku on demand in features such as Shut-Up",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Button(
+                    onClick = { showShizukuHelpBottomSheet = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Got it")
+                }
+            }
+        }
+    }
+
 
     val sentryMode by viewModel.sentryReportMode
 
@@ -307,6 +348,8 @@ fun SettingsContent(
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalAlignment = Alignment.Start
     ) {
+        val view = LocalView.current
+
         // Help Section
         RoundedCardContainer {
             IconToggleItem(
@@ -339,6 +382,7 @@ fun SettingsContent(
                 selectedLanguageCode = appLanguage,
                 onLanguageSelected = { viewModel.setAppLanguage(it) }
             )
+
             IconToggleItem(
                 iconRes = R.drawable.rounded_mobile_vibrate_24,
                 title = "Haptic Feedback",
@@ -348,6 +392,7 @@ fun SettingsContent(
                     HapticUtil.saveAppHapticsEnabled(context, isChecked)
                 }
             )
+
             IconToggleItem(
                 iconRes = R.drawable.rounded_invert_colors_24,
                 title = stringResource(R.string.setting_pitch_black_theme_title),
@@ -356,6 +401,7 @@ fun SettingsContent(
                 onCheckedChange = { viewModel.setPitchBlackThemeEnabled(it, context) }
             )
             val isBlurProblematic = remember { DeviceUtils.isBlurProblematicDevice() }
+
             IconToggleItem(
                 iconRes = R.drawable.rounded_blur_on_24,
                 title = stringResource(R.string.label_use_blur),
@@ -368,6 +414,25 @@ fun SettingsContent(
                 onCheckedChange = { viewModel.setBlurEnabled(it, context) },
                 enabled = !isBlurProblematic
             )
+
+            CrashReportingPicker(
+                selectedMode = sentryMode,
+                onModeSelected = { viewModel.setSentryReportMode(it, context) }
+            )
+
+            val defaultTab by viewModel.defaultTab
+
+            val availableTabs = remember { DIYTabs.entries }
+            DefaultTabPicker(
+                selectedTab = defaultTab,
+                onTabSelected = { viewModel.setDefaultTab(it, context) },
+                options = availableTabs
+            )
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        RoundedCardContainer {
             IconToggleItem(
                 iconRes = R.drawable.rounded_numbers_24,
                 title = stringResource(R.string.setting_use_root_title),
@@ -375,17 +440,61 @@ fun SettingsContent(
                 isChecked = viewModel.isRootEnabled.value,
                 onCheckedChange = { viewModel.setRootEnabled(it, context) }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val view = LocalView.current
+                var tokenText by remember { mutableStateOf(viewModel.shizukuAuthToken.value) }
+
+                OutlinedTextField(
+                    value = tokenText,
+                    onValueChange = { tokenText = it },
+                    label = { Text("Shizuku auth token") },
+                    modifier = Modifier.weight(1f),
+                    shape = MaterialTheme.shapes.large,
+                    singleLine = true
+                )
+
+                Button(
+                    onClick = {
+                        viewModel.setShizukuAuthToken(tokenText)
+                        HapticUtil.performUIHaptic(view)
+                        Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show()
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.rounded_save_24),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = {
+                        HapticUtil.performUIHaptic(view)
+                        showShizukuHelpBottomSheet = true
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.rounded_help_24),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
             IconToggleItem(
                 iconRes = R.drawable.rounded_data_usage_24,
                 title = stringResource(R.string.setting_use_usage_access_title),
                 description = stringResource(R.string.setting_use_usage_access_desc),
                 isChecked = viewModel.isUseUsageAccess.value,
                 onCheckedChange = { viewModel.setUseUsageAccess(it, context) }
-            )
-
-            CrashReportingPicker(
-                selectedMode = sentryMode,
-                onModeSelected = { viewModel.setSentryReportMode(it, context) }
             )
         }
 
@@ -400,18 +509,6 @@ fun SettingsContent(
                 showToggle = false,
                 onClick = { viewModel.restartSystemUI() },
                 iconRes = R.drawable.rounded_refresh_24
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        val defaultTab by viewModel.defaultTab
-        RoundedCardContainer {
-            val availableTabs = remember { DIYTabs.entries }
-            DefaultTabPicker(
-                selectedTab = defaultTab,
-                onTabSelected = { viewModel.setDefaultTab(it, context) },
-                options = availableTabs
             )
         }
 
@@ -719,28 +816,39 @@ fun SettingsContent(
                 isChecked = isUpdateNotificationEnabled,
                 onCheckedChange = { viewModel.setUpdateNotificationEnabled(it, context) }
             )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+
+                // Check for updates button
+                Button(
+                    onClick = {
+                        HapticUtil.performVirtualKeyHaptic(view)
+                        viewModel.checkForUpdates(context, manual = true)
+                        showUpdateSheet = true
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(6.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.rounded_mobile_arrow_down_24),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Check for updates", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                }
+
+            }
         }
 
-        // Check for updates button
-        val view = LocalView.current
-        Button(
-            onClick = {
-                HapticUtil.performVirtualKeyHaptic(view)
-                viewModel.checkForUpdates(context, manual = true)
-                showUpdateSheet = true
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.rounded_mobile_arrow_down_24),
-                contentDescription = null,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Check for updates", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

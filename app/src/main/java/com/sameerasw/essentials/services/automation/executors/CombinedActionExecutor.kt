@@ -1,10 +1,24 @@
 package com.sameerasw.essentials.services.automation.executors
 
+import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.os.Build
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.provider.Settings
+import android.view.KeyEvent
+import android.widget.Toast
 import com.sameerasw.essentials.domain.diy.Action
+import com.sameerasw.essentials.domain.ScreenOffMethod
+import com.sameerasw.essentials.domain.HapticFeedbackType
+import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
+import com.sameerasw.essentials.utils.ShellUtils
+import com.sameerasw.essentials.utils.performHapticFeedback
+import rikka.shizuku.ShizukuBinderWrapper
+import rikka.shizuku.SystemServiceHelper
 
 object CombinedActionExecutor {
 
@@ -193,6 +207,195 @@ object CombinedActionExecutor {
                         audioManager.ringerMode = ringerMode
                     } catch (e: Exception) {
                         e.printStackTrace()
+                    }
+                }
+
+                is Action.ScreenOff -> {
+                    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val manager =
+                            context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as android.os.VibratorManager
+                        manager.defaultVibrator
+                    } else {
+                        @Suppress("DEPRECATION")
+                        context.getSystemService(Context.VIBRATOR_SERVICE) as android.os.Vibrator
+                    }
+                    if (action.haptic != HapticFeedbackType.NONE) {
+                        performHapticFeedback(vibrator, action.haptic)
+                    }
+
+                    when (action.method) {
+                        ScreenOffMethod.ACCESSIBILITY -> {
+                            val enabledServices = Settings.Secure.getString(
+                                context.contentResolver,
+                                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+                            )
+                            val hasAccess = enabledServices?.contains("com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService") == true
+                            if (hasAccess) {
+                                val serviceIntent = Intent(context, ScreenOffAccessibilityService::class.java).apply {
+                                    this.action = "LOCK_SCREEN"
+                                }
+                                context.startService(serviceIntent)
+                            } else {
+                                Toast.makeText(context, "Missing Accessibility permission", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        ScreenOffMethod.INPUT -> {
+                            if (ShellUtils.hasPermission(context)) {
+                                ShellUtils.runCommand(context, "input keyevent ${KeyEvent.KEYCODE_POWER}")
+                            } else {
+                                Toast.makeText(context, "Missing Shizuku/Root permission", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+
+                is Action.MediaPlayPause -> {
+                    val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
+                }
+
+                is Action.MediaNext -> {
+                    val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT))
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT))
+                }
+
+                is Action.MediaPrevious -> {
+                    val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
+                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
+                }
+
+                is Action.AIAssistant -> {
+                    try {
+                        val intent = Intent(Intent.ACTION_ASSIST).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        }
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+                is Action.TakeScreenshot -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val serviceInst = ScreenOffAccessibilityService.instance
+                        if (serviceInst != null) {
+                            serviceInst.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
+                        } else {
+                            Toast.makeText(context, "Accessibility service is not running", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                is Action.ToggleMediaVolume -> {
+                    val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    val currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC)
+                    val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
+
+                    if (currentVolume > 0) {
+                        prefs.edit().putInt("last_media_volume", currentVolume).apply()
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_SHOW_UI)
+                    } else {
+                        val lastVolume = prefs.getInt(
+                            "last_media_volume",
+                            am.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2
+                        )
+                        am.setStreamVolume(AudioManager.STREAM_MUSIC, lastVolume, AudioManager.FLAG_SHOW_UI)
+                    }
+                }
+
+                is Action.LikeCurrentSong -> {
+                    context.sendBroadcast(
+                        Intent("com.sameerasw.essentials.ACTION_LIKE_CURRENT_SONG").setPackage(
+                            context.packageName
+                        )
+                    )
+                }
+
+                is Action.CircleToSearch -> {
+                    com.sameerasw.essentials.utils.OmniTriggerUtil.trigger(context)
+                }
+
+                is Action.PinApp -> {
+                    try {
+                        val useActivityTask = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+                        val serviceName = if (useActivityTask) "activity_task" else Context.ACTIVITY_SERVICE
+                        val stubClassName = if (useActivityTask) "android.app.IActivityTaskManager\$Stub" else "android.app.IActivityManager\$Stub"
+                        val interfaceClassName = if (useActivityTask) "android.app.IActivityTaskManager" else "android.app.IActivityManager"
+
+                        val binder = SystemServiceHelper.getSystemService(serviceName)
+                        val stubClass = Class.forName(stubClassName)
+                        val interfaceClass = Class.forName(interfaceClassName)
+
+                        val serviceInstance = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(stubClass, null, "asInterface", ShizukuBinderWrapper(binder))
+                        } else {
+                            val asInterfaceMethod = stubClass.getMethod("asInterface", android.os.IBinder::class.java)
+                            asInterfaceMethod.invoke(null, ShizukuBinderWrapper(binder))
+                        }
+
+                        val tasks = if (useActivityTask) {
+                            org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(
+                                interfaceClass,
+                                serviceInstance,
+                                "getTasks",
+                                5,
+                                false,
+                                false,
+                                0
+                            ) as List<*>
+                        } else {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(
+                                    interfaceClass,
+                                    serviceInstance,
+                                    "getTasks",
+                                    5,
+                                    0
+                                ) as List<*>
+                            } else {
+                                val getTasksMethod = interfaceClass.getMethod("getTasks", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType)
+                                getTasksMethod.invoke(serviceInstance, 5, 0) as List<*>
+                            }
+                        }
+                        
+                        var targetTaskId = -1
+                        for (task in tasks) {
+                            val taskInfo = task as? ActivityManager.RunningTaskInfo ?: continue
+                            val topActivity = taskInfo.topActivity
+                            if (topActivity != null && topActivity.packageName != context.packageName) {
+                                targetTaskId = taskInfo.id
+                                break
+                            }
+                        }
+                        
+                        if (targetTaskId == -1 && tasks.isNotEmpty()) {
+                            val firstTask = tasks.firstOrNull() as? ActivityManager.RunningTaskInfo
+                            if (firstTask != null) {
+                                targetTaskId = firstTask.id
+                            }
+                        }
+
+                        if (targetTaskId != -1) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(
+                                    interfaceClass,
+                                    serviceInstance,
+                                    "startSystemLockTaskMode",
+                                    targetTaskId
+                                )
+                            } else {
+                                val startLockTaskMethod = interfaceClass.getMethod("startSystemLockTaskMode", Int::class.javaPrimitiveType)
+                                startLockTaskMethod.invoke(serviceInstance, targetTaskId)
+                            }
+                        } else {
+                            Toast.makeText(context, "No active foreground task found", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(context, "Failed to pin app: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -30,22 +30,16 @@ import com.sameerasw.essentials.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun CrashReportingPicker(
+fun RestoreModePicker(
     selectedMode: String,
     onModeSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
-    iconRes: Int = R.drawable.rounded_bug_report_24
+    options: List<String> = listOf("Auto", "Notify")
 ) {
-    val options = listOf("off", "auto")
-    val labels = listOf(
-        R.string.sentry_mode_off,
-        R.string.sentry_mode_auto
-    )
-
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall),
+            .background(MaterialTheme.colorScheme.surfaceBright),
         verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
         ListItem(
@@ -53,7 +47,7 @@ fun CrashReportingPicker(
             modifier = Modifier.fillMaxWidth(),
             leadingContent = {
                 Icon(
-                    painter = painterResource(id = iconRes),
+                    painter = painterResource(id = R.drawable.rounded_timer_24),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = MaterialTheme.colorScheme.primary
@@ -69,7 +63,7 @@ fun CrashReportingPicker(
             ),
             content = {
                 Text(
-                    text = stringResource(R.string.sentry_report_mode_title),
+                    text = stringResource(R.string.label_restore_mode),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -83,13 +77,13 @@ fun CrashReportingPicker(
                 .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
         ) {
-            options.forEachIndexed { index, option ->
-                val isChecked = selectedMode == option
+            options.forEachIndexed { index, mode ->
+                val isChecked = selectedMode == mode
 
                 ToggleButton(
                     checked = isChecked,
                     onCheckedChange = {
-                        onModeSelected(option)
+                        onModeSelected(mode)
                     },
                     modifier = Modifier
                         .weight(1f)
@@ -101,7 +95,7 @@ fun CrashReportingPicker(
                     },
                 ) {
                     Text(
-                        text = stringResource(labels[index]),
+                        text = mode,
                         style = MaterialTheme.typography.labelLarge,
                         fontWeight = if (isChecked) FontWeight.Bold else FontWeight.Normal,
                         maxLines = 1

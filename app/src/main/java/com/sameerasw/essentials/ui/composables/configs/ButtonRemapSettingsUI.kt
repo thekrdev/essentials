@@ -243,28 +243,6 @@ fun ButtonRemapSettingsUI(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 // Flashlight Options
-                Text(
-                    text = stringResource(R.string.settings_section_flashlight),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 16.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                RoundedCardContainer(spacing = 0.dp) {
-                    FeatureCard(
-                        title = stringResource(R.string.flashlight_options_title),
-                        description = stringResource(R.string.flashlight_options_desc),
-                        iconRes = R.drawable.rounded_flashlight_on_24,
-                        isEnabled = true,
-                        showToggle = false,
-                        hasMoreSettings = true,
-                        onToggle = {},
-                        onClick = {
-                            HapticUtil.performUIHaptic(view)
-                            showFlashlightOptions = true
-                        },
-                        modifier = Modifier.highlight(highlightSetting == "flashlight_options")
-                    )
-                }
 
                 // Haptic Feedback (Common)
                 Text(
@@ -464,9 +442,8 @@ fun ButtonRemapSettingsUI(
                     .padding(bottom = 32.dp, start = 16.dp, end = 16.dp, top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
                 Text(
-                    text = stringResource(R.string.flashlight_intensity_title),
+                    text = stringResource(R.string.flashlight_options_title),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -480,52 +457,13 @@ fun ButtonRemapSettingsUI(
                         isChecked = viewModel.isFlashlightFadeEnabled.value,
                         onCheckedChange = { viewModel.setFlashlightFadeEnabled(it, context) }
                     )
-                    IconToggleItem(
-                        iconRes = R.drawable.rounded_globe_24,
-                        title = stringResource(R.string.flashlight_global_title),
-                        description = stringResource(R.string.flashlight_global_desc),
-                        isChecked = viewModel.isFlashlightGlobalEnabled.value,
-                        onCheckedChange = { viewModel.setFlashlightGlobalEnabled(it, context) }
-                    )
-
-                    IconToggleItem(
-                        iconRes = R.drawable.rounded_upcoming_24,
-                        title = stringResource(R.string.flashlight_adjust_intensity_title),
-                        description = stringResource(R.string.flashlight_adjust_intensity_desc),
-                        isChecked = viewModel.isFlashlightAdjustEnabled.value,
-                        onCheckedChange = { viewModel.setFlashlightAdjustEnabled(it, context) }
-                    )
-                    IconToggleItem(
-                        iconRes = R.drawable.rounded_flashlight_on_24,
-                        title = stringResource(R.string.flashlight_live_update_title),
-                        description = stringResource(R.string.flashlight_live_update_desc),
-                        isChecked = viewModel.isFlashlightLiveUpdateEnabled.value,
-                        onCheckedChange = { viewModel.setFlashlightLiveUpdateEnabled(it, context) }
-                    )
-                }
-
-
-                Text(
-                    text = stringResource(R.string.settings_section_other),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 8.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-
-                RoundedCardContainer(spacing = 2.dp) {
 
                     IconToggleItem(
                         iconRes = R.drawable.rounded_flashlight_on_24,
                         title = stringResource(R.string.flashlight_always_off_title),
                         description = stringResource(R.string.flashlight_always_off_desc),
                         isChecked = viewModel.isFlashlightAlwaysTurnOffEnabled.value,
-                        onCheckedChange = {
-                            viewModel.setFlashlightAlwaysTurnOffEnabled(
-                                it,
-                                context
-                            )
-                        }
+                        onCheckedChange = { viewModel.setFlashlightAlwaysTurnOffEnabled(it, context) }
                     )
                 }
 
@@ -543,8 +481,9 @@ fun ButtonRemapSettingsUI(
                 }
             }
         }
-
     }
+
+
 }
 
 @Composable

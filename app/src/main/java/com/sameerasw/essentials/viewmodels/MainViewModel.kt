@@ -113,6 +113,7 @@ class MainViewModel : ViewModel() {
     val isFlashlightPulseFacedownOnly = mutableStateOf(true)
     val isFlashlightPulseUseLightingApps = mutableStateOf(true)
     val flashlightPulseMaxIntensity = mutableFloatStateOf(0.5f)
+    val isFlashlightPulseDisableOnDnd = mutableStateOf(true)
     val isLocationPermissionGranted = mutableStateOf(false)
     val isBackgroundLocationPermissionGranted = mutableStateOf(false)
     val isFullScreenIntentPermissionGranted = mutableStateOf(false)
@@ -161,6 +162,8 @@ class MainViewModel : ViewModel() {
     val isShutUpLoading = mutableStateOf(false)
     val isShutUpAttemptShizukuRestart = mutableStateOf(true)
     val shutUpRestoreDelay = mutableIntStateOf(10)
+    val shutUpRestoreMode = mutableStateOf("Auto")
+    val shizukuAuthToken = mutableStateOf("")
     val edgeLightingSweepSelectedShapes = mutableStateOf<Set<String>>(emptySet())
 
 
@@ -640,6 +643,16 @@ class MainViewModel : ViewModel() {
                             settingsRepository.getShutUpRestoreDelay()
                     }
 
+                    SettingsRepository.KEY_SHUT_UP_RESTORE_MODE -> {
+                        shutUpRestoreMode.value =
+                            settingsRepository.getShutUpRestoreMode()
+                    }
+
+                    SettingsRepository.KEY_SHIZUKU_AUTH_TOKEN -> {
+                        shizukuAuthToken.value =
+                            settingsRepository.getShizukuAuthToken()
+                    }
+
                     SettingsRepository.KEY_EDGE_LIGHTING_SWEEP_SELECTED_SHAPES -> {
                         edgeLightingSweepSelectedShapes.value =
                             settingsRepository.getEdgeLightingSweepSelectedShapes()
@@ -694,6 +707,16 @@ class MainViewModel : ViewModel() {
     fun setShutUpRestoreDelay(delaySeconds: Int) {
         shutUpRestoreDelay.intValue = delaySeconds
         settingsRepository.setShutUpRestoreDelay(delaySeconds)
+    }
+
+    fun setShutUpRestoreMode(mode: String) {
+        shutUpRestoreMode.value = mode
+        settingsRepository.setShutUpRestoreMode(mode)
+    }
+
+    fun setShizukuAuthToken(token: String) {
+        shizukuAuthToken.value = token
+        settingsRepository.setShizukuAuthToken(token)
     }
 
     fun saveShutUpSelectedApps(context: Context, apps: List<AppSelection>) {
@@ -797,6 +820,10 @@ class MainViewModel : ViewModel() {
             settingsRepository.isShutUpAttemptShizukuRestartEnabled()
         shutUpRestoreDelay.intValue =
             settingsRepository.getShutUpRestoreDelay()
+        shutUpRestoreMode.value =
+            settingsRepository.getShutUpRestoreMode()
+        shizukuAuthToken.value =
+            settingsRepository.getShizukuAuthToken()
         edgeLightingSweepSelectedShapes.value =
             settingsRepository.getEdgeLightingSweepSelectedShapes()
         isDisableRotationSuggestionEnabled.value =
@@ -1172,6 +1199,10 @@ class MainViewModel : ViewModel() {
         flashlightPulseMaxIntensity.floatValue = settingsRepository.getFloat(
             SettingsRepository.KEY_FLASHLIGHT_PULSE_MAX_INTENSITY,
             0.5f
+        )
+        isFlashlightPulseDisableOnDnd.value = settingsRepository.getBoolean(
+            SettingsRepository.KEY_FLASHLIGHT_PULSE_DISABLE_ON_DND,
+            true
         )
         isPitchBlackThemeEnabled.value =
             settingsRepository.getBoolean(SettingsRepository.KEY_PITCH_BLACK_THEME_ENABLED)
@@ -2571,6 +2602,14 @@ class MainViewModel : ViewModel() {
         settingsRepository.putFloat(
             SettingsRepository.KEY_FLASHLIGHT_PULSE_MAX_INTENSITY,
             intensity
+        )
+    }
+
+    fun setFlashlightPulseDisableOnDnd(enabled: Boolean, context: Context) {
+        isFlashlightPulseDisableOnDnd.value = enabled
+        settingsRepository.putBoolean(
+            SettingsRepository.KEY_FLASHLIGHT_PULSE_DISABLE_ON_DND,
+            enabled
         )
     }
 

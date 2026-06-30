@@ -372,6 +372,11 @@ class FlashlightHandler(
         if (!ignoreChecks) {
             val pulseEnabled = prefs.getBoolean("flashlight_pulse_enabled", false)
             if (!pulseEnabled) return
+
+            val disableOnDnd = prefs.getBoolean("flashlight_pulse_disable_on_dnd", true)
+            if (disableOnDnd && isDndActive(service)) return
+
+            if (isBedtimeModeActive(service)) return
         }
 
         val cameraId = getCameraId() ?: return
@@ -622,6 +627,21 @@ class FlashlightHandler(
                 performHapticFeedback(vibrator, specificType ?: type)
             }
         } catch (_: Exception) {
+        }
+    }
+
+    private fun isDndActive(context: Context): Boolean {
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+        return nm?.currentInterruptionFilter?.let {
+            it != NotificationManager.INTERRUPTION_FILTER_ALL
+        } ?: false
+    }
+
+    private fun isBedtimeModeActive(context: Context): Boolean {
+        return try {
+            android.provider.Settings.Global.getInt(context.contentResolver, "bedtime_mode", 0) == 1
+        } catch (e: Exception) {
+            false
         }
     }
 }

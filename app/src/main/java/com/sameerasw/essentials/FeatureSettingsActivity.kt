@@ -63,6 +63,7 @@ import com.sameerasw.essentials.ui.composables.configs.CalendarSyncSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.DynamicNightLightSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.EssentialsOnDisplaySettingsUI
 import com.sameerasw.essentials.ui.composables.configs.FlashlightPulseSettingsUI
+import com.sameerasw.essentials.ui.composables.configs.FlashlightSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.FreezeSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.KeyboardSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.LiveWallpaperSettingsUI
@@ -599,6 +600,14 @@ class FeatureSettingsActivity : AppCompatActivity() {
 
                                     "Button remap" -> {
                                         ButtonRemapSettingsUI(
+                                            viewModel = viewModel,
+                                            modifier = Modifier.padding(top = 16.dp),
+                                            highlightSetting = highlightSetting
+                                        )
+                                    }
+
+                                    "Flashlight" -> {
+                                        FlashlightSettingsUI(
                                             viewModel = viewModel,
                                             modifier = Modifier.padding(top = 16.dp),
                                             highlightSetting = highlightSetting

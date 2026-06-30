@@ -71,6 +71,7 @@ import com.sameerasw.essentials.ui.components.menus.SegmentedDropdownMenu
 import com.sameerasw.essentials.ui.components.menus.SegmentedDropdownMenuItem
 import com.sameerasw.essentials.ui.components.pickers.SegmentedPicker
 import com.sameerasw.essentials.ui.components.sheets.DimWallpaperSettingsSheet
+import com.sameerasw.essentials.ui.components.sheets.ScreenOffSettingsSheet
 import com.sameerasw.essentials.ui.components.sheets.SoundModeSettingsSheet
 import com.sameerasw.essentials.ui.theme.EssentialsTheme
 import com.sameerasw.essentials.utils.AppUtil
@@ -124,6 +125,7 @@ class AutomationEditorActivity : ComponentActivity() {
 
         val titleRes = when (automationType) {
             Automation.Type.TRIGGER -> if (isEditMode) R.string.diy_editor_edit_title else R.string.diy_editor_new_title
+            Automation.Type.ACTION_SHORTCUT -> if (isEditMode) R.string.diy_editor_edit_title else R.string.diy_editor_new_title
             Automation.Type.STATE -> if (isEditMode) R.string.diy_editor_edit_title else R.string.diy_editor_new_title
             Automation.Type.APP -> if (isEditMode) R.string.diy_editor_edit_title else R.string.diy_create_app_title
         }
@@ -221,14 +223,15 @@ class AutomationEditorActivity : ComponentActivity() {
 
                 // Config Sheets
                 var showDimSettings by remember { mutableStateOf(false) }
+                var showScreenOffSettings by remember { mutableStateOf(false) }
                 var showDeviceEffectsSettings by remember { mutableStateOf(false) }
                 var showSoundModeSettings by remember { mutableStateOf(false) }
                 var showTimeSettings by remember { mutableStateOf(false) }
                 var configAction by remember { mutableStateOf<Action?>(null) } // Generic config action
 
-                // Validation
                 val isValid = when (automationType) {
                     Automation.Type.TRIGGER -> selectedTrigger != null && selectedAction != null
+                    Automation.Type.ACTION_SHORTCUT -> selectedAction != null
                     Automation.Type.STATE -> selectedState != null && (selectedInAction != null || selectedOutAction != null)
                     Automation.Type.APP -> selectedApps.isNotEmpty() && (selectedInAction != null || selectedOutAction != null)
                 }
@@ -431,6 +434,32 @@ class AutomationEditorActivity : ComponentActivity() {
                                                 }
                                             }
                                         }
+                                    } else if (automationType == Automation.Type.ACTION_SHORTCUT) {
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .verticalScroll(rememberScrollState())
+                                                .padding(16.dp),
+                                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                                        ) {
+                                            Text(
+                                                text = stringResource(R.string.diy_select_trigger),
+                                                style = MaterialTheme.typography.titleLarge,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurface,
+                                                modifier = Modifier.padding(horizontal = 12.dp)
+                                            )
+
+                                            RoundedCardContainer(spacing = 2.dp) {
+                                                EditorActionItem(
+                                                    title = stringResource(R.string.diy_create_action_shortcut_title),
+                                                    iconRes = R.drawable.rounded_rocket_launch_24,
+                                                    isSelected = true,
+                                                    isConfigurable = false,
+                                                    onClick = {}
+                                                )
+                                            }
+                                        }
                                     } else {
                                         Column(
                                             modifier = Modifier
@@ -556,9 +585,19 @@ class AutomationEditorActivity : ComponentActivity() {
                                                 Action.ToggleFlashlight,
                                                 Action.HapticVibration,
                                                 Action.DimWallpaper(),
+                                                Action.ScreenOff(),
                                                 Action.SoundMode(),
                                                 Action.TurnOnLowPower,
-                                                Action.TurnOffLowPower
+                                                Action.TurnOffLowPower,
+                                                Action.MediaPlayPause,
+                                                Action.MediaNext,
+                                                Action.MediaPrevious,
+                                                Action.AIAssistant,
+                                                Action.TakeScreenshot,
+                                                Action.ToggleMediaVolume,
+                                                Action.LikeCurrentSong,
+                                                Action.CircleToSearch,
+                                                Action.PinApp
                                             )
                                             // Only show Device Effects on Android 15+ 
                                             actions.add(Action.DeviceEffects())
@@ -566,6 +605,7 @@ class AutomationEditorActivity : ComponentActivity() {
 
                                             val currentSelection = when (automationType) {
                                                 Automation.Type.TRIGGER -> selectedAction
+                                                Automation.Type.ACTION_SHORTCUT -> selectedAction
                                                 Automation.Type.STATE -> if (selectedActionTab == 0) selectedInAction else selectedOutAction
                                                 Automation.Type.APP -> if (selectedActionTab == 0) selectedInAction else selectedOutAction
                                             }
@@ -578,6 +618,8 @@ class AutomationEditorActivity : ComponentActivity() {
                                                 onClick = {
                                                     when (automationType) {
                                                         Automation.Type.TRIGGER -> selectedAction =
+                                                            null
+                                                        Automation.Type.ACTION_SHORTCUT -> selectedAction =
                                                             null
 
                                                         Automation.Type.STATE, Automation.Type.APP -> {
@@ -603,6 +645,8 @@ class AutomationEditorActivity : ComponentActivity() {
                                                         when (automationType) {
                                                             Automation.Type.TRIGGER -> selectedAction =
                                                                 resolvedAction
+                                                            Automation.Type.ACTION_SHORTCUT -> selectedAction =
+                                                                resolvedAction
 
                                                             Automation.Type.STATE, Automation.Type.APP -> {
                                                                 if (selectedActionTab == 0) selectedInAction =
@@ -626,14 +670,16 @@ class AutomationEditorActivity : ComponentActivity() {
                                                         }
                                                     },
                                                     onSettingsClick = {
-                                                        configAction = resolvedAction
-                                                        if (resolvedAction is Action.DimWallpaper) {
-                                                            showDimSettings = true
-                                                        } else if (resolvedAction is Action.DeviceEffects) {
-                                                            showDeviceEffectsSettings = true
-                                                        } else if (resolvedAction is Action.SoundMode) {
-                                                            showSoundModeSettings = true
-                                                        }
+                                                         configAction = resolvedAction
+                                                         if (resolvedAction is Action.DimWallpaper) {
+                                                             showDimSettings = true
+                                                         } else if (resolvedAction is Action.ScreenOff) {
+                                                             showScreenOffSettings = true
+                                                         } else if (resolvedAction is Action.DeviceEffects) {
+                                                             showDeviceEffectsSettings = true
+                                                         } else if (resolvedAction is Action.SoundMode) {
+                                                             showSoundModeSettings = true
+                                                         }
                                                     }
                                                 )
                                             }
@@ -668,6 +714,26 @@ class AutomationEditorActivity : ComponentActivity() {
                                     // Update the selection with configured action
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT -> selectedAction = newAction
+                                        Automation.Type.STATE, Automation.Type.APP -> {
+                                            if (selectedActionTab == 0) selectedInAction = newAction
+                                            else selectedOutAction = newAction
+                                        }
+                                    }
+                                    configAction = null
+                                }
+                            )
+                        }
+
+                        if (showScreenOffSettings && configAction is Action.ScreenOff) {
+                            ScreenOffSettingsSheet(
+                                initialAction = configAction as Action.ScreenOff,
+                                onDismiss = { showScreenOffSettings = false },
+                                onSave = { newAction ->
+                                    showScreenOffSettings = false
+                                    when (automationType) {
+                                        Automation.Type.TRIGGER -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT -> selectedAction = newAction
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -686,6 +752,7 @@ class AutomationEditorActivity : ComponentActivity() {
                                     showDeviceEffectsSettings = false
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT -> selectedAction = newAction
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -704,6 +771,7 @@ class AutomationEditorActivity : ComponentActivity() {
                                     showSoundModeSettings = false
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT -> selectedAction = newAction
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -751,6 +819,16 @@ class AutomationEditorActivity : ComponentActivity() {
                                                 .toString(),
                                             type = Automation.Type.TRIGGER,
                                             trigger = selectedTrigger,
+                                            actions = listOfNotNull(selectedAction)
+                                        )
+                                        if (isEditMode) DIYRepository.updateAutomation(newAutomation) else DIYRepository.addAutomation(
+                                            newAutomation
+                                        )
+                                    } else if (automationType == Automation.Type.ACTION_SHORTCUT) {
+                                        val newAutomation = Automation(
+                                            id = if (isEditMode) existingAutomation.id else java.util.UUID.randomUUID()
+                                                .toString(),
+                                            type = Automation.Type.ACTION_SHORTCUT,
                                             actions = listOfNotNull(selectedAction)
                                         )
                                         if (isEditMode) DIYRepository.updateAutomation(newAutomation) else DIYRepository.addAutomation(

@@ -29,6 +29,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -90,6 +91,13 @@ fun PrivateDnsSettingsOverlay(onDismiss: () -> Unit) {
         Settings.Global.getString(context.contentResolver, PRIVATE_DNS_SPECIFIER) ?: ""
     }
 
+    val settingsRepository = remember {
+        com.sameerasw.essentials.data.repository.SettingsRepository(context)
+    }
+    var cycleAuto by remember {
+        mutableStateOf(settingsRepository.getBoolean("private_dns_cycle_auto", true))
+    }
+
     var selectedMode by remember { mutableStateOf(currentMode) }
     var customHostname by remember { mutableStateOf(currentHostname) }
 
@@ -142,6 +150,15 @@ fun PrivateDnsSettingsOverlay(onDismiss: () -> Unit) {
                     onClick = {
                         selectedMode = "opportunistic"
                         HapticUtil.performUIHaptic(view)
+                    },
+                    trailingContent = {
+                        Switch(
+                            checked = cycleAuto,
+                            onCheckedChange = { checked ->
+                                cycleAuto = checked
+                                HapticUtil.performUIHaptic(view)
+                            }
+                        )
                     }
                 )
                 DnsSegmentedItem(
@@ -304,6 +321,7 @@ fun PrivateDnsSettingsOverlay(onDismiss: () -> Unit) {
                                     customHostname
                                 )
                             }
+                            settingsRepository.putBoolean("private_dns_cycle_auto", cycleAuto)
                             HapticUtil.performHeavyHaptic(view)
                             onDismiss()
                         } catch (e: Exception) {
@@ -326,7 +344,8 @@ fun PrivateDnsSettingsOverlay(onDismiss: () -> Unit) {
 fun DnsSegmentedItem(
     label: String,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    trailingContent: @Composable (() -> Unit)? = null
 ) {
     Card(
         modifier = Modifier
@@ -339,15 +358,25 @@ fun DnsSegmentedItem(
     ) {
         Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            RadioButton(selected = isSelected, onClick = onClick)
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(start = 12.dp)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                RadioButton(selected = isSelected, onClick = onClick)
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
+            if (trailingContent != null) {
+                trailingContent()
+            }
         }
     }
 }

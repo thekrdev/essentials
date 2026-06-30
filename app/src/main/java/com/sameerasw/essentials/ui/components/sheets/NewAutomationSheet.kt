@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.diy.Automation
+import com.sameerasw.essentials.domain.diy.DIYRepository
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.utils.HapticUtil
 
@@ -37,6 +39,12 @@ fun NewAutomationSheet(
     onDismiss: () -> Unit,
     onOptionSelected: (Automation.Type) -> Unit
 ) {
+    val hasActionShortcut = remember {
+        DIYRepository.automations.value.any {
+            it.type == Automation.Type.ACTION_SHORTCUT
+        }
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -97,6 +105,15 @@ fun NewAutomationSheet(
                     iconRes = R.drawable.rounded_apps_24,
                     onClick = { onOptionSelected(Automation.Type.APP) }
                 )
+
+                // Action Shortcut Option
+                AutomationTypeOption(
+                    title = stringResource(R.string.diy_create_action_shortcut_title),
+                    description = stringResource(R.string.diy_create_action_shortcut_desc),
+                    iconRes = R.drawable.rounded_rocket_launch_24,
+                    enabled = !hasActionShortcut,
+                    onClick = { onOptionSelected(Automation.Type.ACTION_SHORTCUT) }
+                )
             }
         }
     }
@@ -107,19 +124,22 @@ private fun AutomationTypeOption(
     title: String,
     description: String,
     iconRes: Int,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
     val view = LocalView.current
     Surface(
-        color = MaterialTheme.colorScheme.surfaceContainerHighest,
+        color = if (enabled) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.surfaceContainerHighest.copy(alpha = 0.5f),
         shape = RoundedCornerShape(4.dp),
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                HapticUtil.performUIHaptic(view)
-                onClick()
-            }
+            .then(
+                if (enabled) Modifier.clickable {
+                    HapticUtil.performUIHaptic(view)
+                    onClick()
+                } else Modifier
+            )
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
@@ -130,7 +150,7 @@ private fun AutomationTypeOption(
                 painter = painterResource(id = iconRes),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -138,12 +158,12 @@ private fun AutomationTypeOption(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -153,6 +173,7 @@ private fun AutomationTypeOption(
                 modifier = Modifier
                     .padding(end = 4.dp)
                     .size(24.dp),
+                tint = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
             )
         }
     }

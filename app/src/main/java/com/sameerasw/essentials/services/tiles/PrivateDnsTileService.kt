@@ -8,6 +8,7 @@ import android.service.quicksettings.Tile
 import androidx.annotation.RequiresApi
 import com.sameerasw.essentials.FeatureSettingsActivity
 import com.sameerasw.essentials.R
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.utils.PermissionUtils
 
 @RequiresApi(Build.VERSION_CODES.N)
@@ -44,7 +45,7 @@ class PrivateDnsTileService : BaseTileService() {
                 val hostname = getPrivateDnsHostname()
                 if (!hostname.isNullOrEmpty()) {
                     val settingsRepository =
-                        com.sameerasw.essentials.data.repository.SettingsRepository(this)
+                        SettingsRepository(this)
                     val preset =
                         settingsRepository.getPrivateDnsPresets().find { it.hostname == hostname }
                     preset?.name ?: hostname
@@ -74,15 +75,29 @@ class PrivateDnsTileService : BaseTileService() {
     }
 
     override fun onTileClick() {
+        val settingsRepository = SettingsRepository(this)
+        val cycleAuto = settingsRepository.getBoolean("private_dns_cycle_auto", true)
         val currentMode = getPrivateDnsMode()
-        val nextMode = when (currentMode) {
-            MODE_OFF -> MODE_AUTO
-            MODE_AUTO -> {
-                if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
+        val nextMode = if (cycleAuto) {
+            when (currentMode) {
+                MODE_OFF -> MODE_AUTO
+                MODE_AUTO -> {
+                    if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
+                }
+                MODE_HOSTNAME -> MODE_OFF
+                else -> MODE_OFF
             }
-
-            MODE_HOSTNAME -> MODE_OFF
-            else -> MODE_OFF
+        } else {
+            when (currentMode) {
+                MODE_OFF -> {
+                    if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
+                }
+                MODE_AUTO -> {
+                    if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
+                }
+                MODE_HOSTNAME -> MODE_OFF
+                else -> MODE_OFF
+            }
         }
 
         try {

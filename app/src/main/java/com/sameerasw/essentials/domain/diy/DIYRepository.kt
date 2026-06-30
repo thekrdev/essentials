@@ -61,7 +61,10 @@ object DIYRepository {
         }
     }
 
+    private var appContext: Context? = null
+
     fun init(context: Context) {
+        appContext = context.applicationContext
         if (prefs != null) return
         prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         reloadAutomations()
@@ -80,6 +83,7 @@ object DIYRepository {
             emptyList()
         }
         _automations.value = loadedList
+        updateActionShortcutLauncherState()
     }
 
     private fun saveToPrefs() {
@@ -92,6 +96,7 @@ object DIYRepository {
         current.add(automation)
         _automations.value = current
         saveToPrefs()
+        updateActionShortcutLauncherState()
     }
 
     fun updateAutomation(automation: Automation) {
@@ -101,6 +106,7 @@ object DIYRepository {
             current[index] = automation
             _automations.value = current
             saveToPrefs()
+            updateActionShortcutLauncherState()
         }
     }
 
@@ -109,9 +115,33 @@ object DIYRepository {
         current.removeAll { it.id == id }
         _automations.value = current
         saveToPrefs()
+        updateActionShortcutLauncherState()
     }
 
     fun getAutomation(id: String): Automation? {
         return _automations.value.find { it.id == id }
+    }
+
+    private fun updateActionShortcutLauncherState() {
+        val context = appContext ?: return
+        val showLauncher = _automations.value.any { it.type == Automation.Type.ACTION_SHORTCUT && it.isEnabled }
+        val componentName = android.content.ComponentName(context, "com.sameerasw.essentials.ActionShortcutLauncher")
+        try {
+            val targetState = if (showLauncher) {
+                android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            } else {
+                android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            }
+            val currentState = context.packageManager.getComponentEnabledSetting(componentName)
+            if (currentState != targetState) {
+                context.packageManager.setComponentEnabledSetting(
+                    componentName,
+                    targetState,
+                    android.content.pm.PackageManager.DONT_KILL_APP
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }

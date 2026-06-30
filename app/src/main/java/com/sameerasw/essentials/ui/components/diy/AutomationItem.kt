@@ -151,6 +151,7 @@ fun AutomationItem(
                 ) {
                     val icon = when (automation.type) {
                         Automation.Type.TRIGGER -> automation.trigger?.icon
+                        Automation.Type.ACTION_SHORTCUT -> R.drawable.rounded_rocket_launch_24
                         Automation.Type.STATE -> automation.state?.icon
                         Automation.Type.APP -> R.drawable.rounded_apps_24
                     }
@@ -161,7 +162,7 @@ fun AutomationItem(
                                 it
                             )
                         }
-
+                        Automation.Type.ACTION_SHORTCUT -> stringResource(R.string.diy_create_action_shortcut_title)
                         Automation.Type.STATE -> automation.state?.title?.let { stringResource(it) }
                         Automation.Type.APP -> stringResource(R.string.diy_create_app_title) + " (${automation.selectedApps.size})"
                     }
@@ -208,7 +209,7 @@ fun AutomationItem(
                 }
 
 
-                if (automation.type == Automation.Type.TRIGGER) {
+                if (automation.type == Automation.Type.TRIGGER || automation.type == Automation.Type.ACTION_SHORTCUT) {
                     // Separator Icon
                     Box(
                         modifier = Modifier
@@ -272,7 +273,7 @@ fun AutomationItem(
                     modifier = Modifier
                         .weight(1f),
                 ) {
-                    if (automation.type == Automation.Type.TRIGGER) {
+                    if (automation.type == Automation.Type.TRIGGER || automation.type == Automation.Type.ACTION_SHORTCUT) {
                         automation.actions.forEach { action ->
                             ActionItem(action = action)
                         }

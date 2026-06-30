@@ -24,6 +24,9 @@ data class Automation(
         STATE,
 
         @SerializedName("APP")
-        APP
+        APP,
+
+        @SerializedName("ACTION_SHORTCUT")
+        ACTION_SHORTCUT
     }
 }

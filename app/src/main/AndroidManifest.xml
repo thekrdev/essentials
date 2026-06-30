@@ -36,6 +36,19 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <permission android:name="com.sameerasw.permission.ESSENTIALS_AIRSYNC_BRIDGE" android:protectionLevel="signature" />
     <uses-permission android:name="com.sameerasw.permission.ESSENTIALS_AIRSYNC_BRIDGE" />
+    
+    <permission-group
+        android:name="com.sameerasw.essentials.permission-group.EXTERNAL_CONTROL"
+        android:label="@string/perm_external_control_label"
+        android:description="@string/perm_external_control_desc"
+        android:icon="@drawable/app_logo" />
+
+    <permission android:name="com.sameerasw.essentials.permission.EXTERNAL_CONTROL"
+        android:permissionGroup="com.sameerasw.essentials.permission-group.EXTERNAL_CONTROL"
+        android:protectionLevel="dangerous"
+        android:label="@string/perm_external_control_label"
+        android:description="@string/perm_external_control_desc"
+        android:icon="@drawable/app_logo" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
 
@@ -129,6 +142,12 @@
             android:launchMode="singleInstance"
             android:theme="@style/Theme.Essentials.FullScreenAlarm" />
 
+        <activity
+            android:name=".ui.activities.TravelCompassActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.Essentials" />
+
 
         <activity
             android:name=".ui.activities.AutomationEditorActivity"
@@ -158,6 +177,29 @@
             android:exported="true"
             android:icon="@drawable/rounded_mode_cool_24"
             android:label="@string/freeze_shortcut_short_label"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity
+            android:name=".ui.activities.ActionShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/rounded_rocket_launch_24"
+            android:label="@string/action_shortcut_short_label"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.sameerasw.essentials.action" />
+
+        <activity-alias
+            android:name=".ActionShortcutLauncher"
+            android:targetActivity=".ui.activities.ActionShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/rounded_rocket_launch_24"
+            android:label="@string/action_shortcut_short_label"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -339,6 +381,18 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/screen_off_widget_info" />
         </receiver>
+
+        <activity
+            android:name=".ui.activities.ScreenOffWidgetConfigureActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Essentials.Translucent">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".services.widgets.BatteriesWidgetReceiver"
@@ -902,6 +956,21 @@
                 android:name="android.service.quicksettings.TILE_CATEGORY"
                 android:value="android.service.quicksettings.CATEGORY_DISPLAY" />
         </service>
+
+        <provider
+            android:name=".external.ExternalControlProvider"
+            android:authorities="${applicationId}.external"
+            android:exported="true"
+            android:permission="com.sameerasw.essentials.permission.EXTERNAL_CONTROL" />
+
+        <receiver
+            android:name=".external.ExternalActionReceiver"
+            android:exported="true"
+            android:permission="com.sameerasw.essentials.permission.EXTERNAL_CONTROL">
+            <intent-filter>
+                <action android:name="com.sameerasw.essentials.action.EXTERNAL_CONTROL" />
+            </intent-filter>
+        </receiver>
 
     </application>
 

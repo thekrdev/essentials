@@ -108,6 +108,7 @@ class SettingsRepository(private val context: Context) {
         const val KEY_FLASHLIGHT_PULSE_ENABLED = "flashlight_pulse_enabled"
         const val KEY_FLASHLIGHT_PULSE_FACEDOWN_ONLY = "flashlight_pulse_facedown_only"
         const val KEY_FLASHLIGHT_PULSE_MAX_INTENSITY = "flashlight_pulse_max_intensity"
+        const val KEY_FLASHLIGHT_PULSE_DISABLE_ON_DND = "flashlight_pulse_disable_on_dnd"
 
         const val KEY_SCREEN_LOCKED_SECURITY_ENABLED = "screen_locked_security_enabled"
         const val KEY_HIDE_SYSTEM_ICONS = "hide_system_icons"
@@ -237,6 +238,8 @@ class SettingsRepository(private val context: Context) {
         const val KEY_SHUT_UP_ORIGINAL_SETTINGS = "shut_up_original_settings"
         const val KEY_SHUT_UP_ATTEMPT_SHIZUKU_RESTART = "shut_up_attempt_shizuku_restart"
         const val KEY_SHUT_UP_RESTORE_DELAY = "shut_up_restore_delay"
+        const val KEY_SHUT_UP_RESTORE_MODE = "shut_up_restore_mode"
+        const val KEY_SHIZUKU_AUTH_TOKEN = "shizuku_auth_token"
         const val KEY_EDGE_LIGHTING_SWEEP_SELECTED_SHAPES = "edge_lighting_sweep_selected_shapes"
         const val KEY_DISABLE_ROTATION_SUGGESTION = "disable_rotation_suggestion"
 
@@ -867,6 +870,18 @@ class SettingsRepository(private val context: Context) {
 
     fun setShutUpRestoreDelay(delaySeconds: Int) =
         putInt(KEY_SHUT_UP_RESTORE_DELAY, delaySeconds)
+
+    fun getShutUpRestoreMode(): String =
+        prefs.getString(KEY_SHUT_UP_RESTORE_MODE, "Auto") ?: "Auto"
+
+    fun setShutUpRestoreMode(mode: String) =
+        putString(KEY_SHUT_UP_RESTORE_MODE, mode)
+
+    fun getShizukuAuthToken(): String =
+        prefs.getString(KEY_SHIZUKU_AUTH_TOKEN, "") ?: ""
+
+    fun setShizukuAuthToken(token: String) =
+        putString(KEY_SHIZUKU_AUTH_TOKEN, token)
 
     fun getEdgeLightingSweepSelectedShapes(): Set<String> {
         val defaultShapes = com.sameerasw.essentials.utils.AmbientMusicShapeHelper.allShapesWithNames.map { it.first }.toSet()

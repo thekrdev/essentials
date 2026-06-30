@@ -76,6 +76,7 @@ class ScreenOffAccessibilityService : AccessibilityService() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
 
         // Initialize Handlers
         flashlightHandler = FlashlightHandler(this, serviceScope)
@@ -214,6 +215,7 @@ class ScreenOffAccessibilityService : AccessibilityService() {
         serviceScope.cancel()
         getSharedPreferences("essentials_prefs", MODE_PRIVATE)
             .unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+        instance = null
         super.onDestroy()
     }
 
@@ -370,5 +372,9 @@ class ScreenOffAccessibilityService : AccessibilityService() {
         } catch (e: Exception) {
             // Ignore
         }
+    }
+
+    companion object {
+        var instance: ScreenOffAccessibilityService? = null
     }
 }

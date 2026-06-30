@@ -5,6 +5,8 @@ import androidx.annotation.Keep
 import androidx.annotation.StringRes
 import com.google.gson.annotations.SerializedName
 import com.sameerasw.essentials.R
+import com.sameerasw.essentials.domain.ScreenOffMethod
+import com.sameerasw.essentials.domain.HapticFeedbackType
 
 @Keep
 sealed interface Action {
@@ -115,5 +117,74 @@ sealed interface Action {
     data object TurnOffLowPower : Action {
         override val title: Int = R.string.diy_action_low_power_off
         override val icon: Int = R.drawable.rounded_battery_android_frame_shield_24
+    }
+
+    @Keep
+    data class ScreenOff(
+        @SerializedName("method") val method: ScreenOffMethod = ScreenOffMethod.ACCESSIBILITY,
+        @SerializedName("haptic") val haptic: HapticFeedbackType = HapticFeedbackType.NONE
+    ) : Action {
+        override val title: Int get() = R.string.diy_action_screen_off
+        override val icon: Int get() = R.drawable.rounded_mobile_off_24
+        override val isConfigurable: Boolean = true
+        override val permissions: List<String>
+            get() = if (method == ScreenOffMethod.INPUT) listOf("shizuku", "root") else emptyList()
+    }
+
+    @Keep
+    data object MediaPlayPause : Action {
+        override val title: Int = R.string.diy_action_media_play_pause
+        override val icon: Int = R.drawable.round_play_arrow_24
+    }
+
+    @Keep
+    data object MediaNext : Action {
+        override val title: Int = R.string.diy_action_media_next
+        override val icon: Int = R.drawable.rounded_skip_next_24
+    }
+
+    @Keep
+    data object MediaPrevious : Action {
+        override val title: Int = R.string.diy_action_media_previous
+        override val icon: Int = R.drawable.rounded_skip_previous_24
+    }
+
+    @Keep
+    data object AIAssistant : Action {
+        override val title: Int = R.string.diy_action_ai_assistant
+        override val icon: Int = R.drawable.google
+    }
+
+    @Keep
+    data object TakeScreenshot : Action {
+        override val title: Int = R.string.diy_action_take_screenshot
+        override val icon: Int = R.drawable.rounded_screenshot_region_24
+        override val permissions: List<String> = listOf("accessibility")
+    }
+
+    @Keep
+    data object ToggleMediaVolume : Action {
+        override val title: Int = R.string.diy_action_toggle_media_volume
+        override val icon: Int = R.drawable.rounded_mobile_sound_24
+    }
+
+    @Keep
+    data object LikeCurrentSong : Action {
+        override val title: Int = R.string.diy_action_like_current_song
+        override val icon: Int = R.drawable.rounded_favorite_24
+    }
+
+    @Keep
+    data object CircleToSearch : Action {
+        override val title: Int = R.string.diy_action_circle_to_search
+        override val icon: Int = R.drawable.rounded_search_24
+        override val permissions: List<String> = listOf("shizuku", "root")
+    }
+
+    @Keep
+    data object PinApp : Action {
+        override val title: Int = R.string.diy_action_pin_app
+        override val icon: Int = R.drawable.rounded_shield_lock_24
+        override val permissions: List<String> = listOf("shizuku", "root")
     }
 }

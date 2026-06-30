@@ -44,6 +44,7 @@ fun ShutUpPerAppSettingsSheet(
     isFrozen: Boolean,
     viewModel: MainViewModel = viewModel()
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var currentConfig by remember(config) { mutableStateOf(config) }
     var showShizukuRestartWarning by remember { mutableStateOf(false) }
@@ -133,6 +134,13 @@ fun ShutUpPerAppSettingsSheet(
                         isChecked = isAttemptShizukuRestart,
                         onCheckedChange = {
                             viewModel.setShutUpAttemptShizukuRestartEnabled(it)
+                            if (it && viewModel.shizukuAuthToken.value.isEmpty()) {
+                                android.widget.Toast.makeText(
+                                    context,
+                                    "Please enter the Shizuku auth token in Essentials settings",
+                                    android.widget.Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
                     )
                 }

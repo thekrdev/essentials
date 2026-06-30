@@ -111,6 +111,10 @@ object AutomationManager {
                 Automation.Type.APP -> {
                     // Handled by AppFlowHandler
                 }
+
+                Automation.Type.ACTION_SHORTCUT -> {
+                    // Triggered manually via ActionShortcutActivity
+                }
             }
         }
 
