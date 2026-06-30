@@ -427,6 +427,8 @@
     <string name="diy_editor_edit_title">オートメーションの編集</string>
     <string name="feat_link_actions_title">リンクアクション</string>
     <string name="feat_link_actions_desc">リンクの処理を複数のアプリで行う</string>
+    <string name="feat_flashlight_title">Flashlight</string>
+    <string name="feat_flashlight_desc">Improve flashlight behavior</string>
     <string name="feat_snooze_notifications_title">システム通知をスヌーズ</string>
     <string name="feat_snooze_notifications_desc">持続的な通知をスヌーズする</string>
     <string name="feat_qs_tiles_title">クイック設定タイル</string>
