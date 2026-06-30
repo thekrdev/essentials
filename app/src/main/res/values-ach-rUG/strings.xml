@@ -180,6 +180,7 @@
     <string name="flashlight_pulse_facedown_title">Ka ineno piny keken</string>
     <string name="flashlight_pulse_same_as_lighting_title">App acel ki lok ma nyutu ngec</string>
     <string name="flashlight_pulse_max_brightness">Max brightness</string>
+    <string name="flashlight_pulse_disable_on_dnd_title">Do not trigger on DND</string>
     <string name="flashlight_pulse_preview">Preview pulse</string>
     <string name="settings_section_style">Cital</string>
     <string name="notification_lighting_stroke_adjustment_section">Alokaloka me ngwec</string>
