@@ -245,6 +245,7 @@ class SettingsRepository(private val context: Context) {
         const val KEY_PIXEL_SEARCHBAR = "pixel_searchbar"
         const val KEY_PIXEL_SEARCHBAR_TYPE = "pixel_searchbar_type"
         const val KEY_PIXEL_SEARCHBAR_DATE_FORMAT = "pixel_searchbar_date_format"
+        const val KEY_PIXEL_SEARCHBAR_BACKGROUND_PILL = "pixel_searchbar_background_pill"
 
         const val KEY_LOCK_SCREEN_CLOCK_WEIGHT = "lock_screen_clock_weight"
         const val KEY_LOCK_SCREEN_CLOCK_WIDTH = "lock_screen_clock_width"
@@ -897,6 +898,12 @@ class SettingsRepository(private val context: Context) {
 
     fun setPixelSearchbarDateFormat(format: String) =
         putString(KEY_PIXEL_SEARCHBAR_DATE_FORMAT, format)
+
+    fun getPixelSearchbarBackgroundPill(): Boolean =
+        prefs.getBoolean(KEY_PIXEL_SEARCHBAR_BACKGROUND_PILL, false)
+
+    fun setPixelSearchbarBackgroundPill(enabled: Boolean) =
+        putBoolean(KEY_PIXEL_SEARCHBAR_BACKGROUND_PILL, enabled)
 
     fun getEdgeLightingSweepSelectedShapes(): Set<String> {
         val defaultShapes = com.sameerasw.essentials.utils.AmbientMusicShapeHelper.allShapesWithNames.map { it.first }.toSet()

@@ -17,6 +17,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.TextAlign
+import androidx.glance.appwidget.cornerRadius
 import com.sameerasw.essentials.data.repository.SettingsRepository
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -42,6 +43,7 @@ class PixelSearchbarWidget : GlanceAppWidget() {
                     }
                     else -> { // Default / "date"
                         val dateFormat = settingsRepository.getPixelSearchbarDateFormat()
+                        val hasPill = settingsRepository.getPixelSearchbarBackgroundPill()
                         val dateStr = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
                         Box(
                             modifier = GlanceModifier
@@ -50,16 +52,37 @@ class PixelSearchbarWidget : GlanceAppWidget() {
                                 .padding(horizontal = 16.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = dateStr,
-                                style = TextStyle(
-                                    color = GlanceTheme.colors.onSurface,
-                                    fontSize = 20.sp,
-                                    fontWeight = FontWeight.Medium,
-                                    fontFamily = androidx.glance.text.FontFamily("google_sans_flex_round"),
-                                    textAlign = TextAlign.Center
+                            if (hasPill) {
+                                Box(
+                                    modifier = GlanceModifier
+                                        .background(GlanceTheme.colors.background)
+                                        .cornerRadius(28.dp)
+                                        .padding(horizontal = 24.dp, vertical = 12.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = dateStr,
+                                        style = TextStyle(
+                                            color = GlanceTheme.colors.onSecondaryContainer,
+                                            fontSize = 20.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = androidx.glance.text.FontFamily("google_sans_flex_round"),
+                                            textAlign = TextAlign.Center
+                                        )
+                                    )
+                                }
+                            } else {
+                                Text(
+                                    text = dateStr,
+                                    style = TextStyle(
+                                        color = GlanceTheme.colors.onSurface,
+                                        fontSize = 20.sp,
+                                        fontWeight = FontWeight.Medium,
+                                        fontFamily = androidx.glance.text.FontFamily("google_sans_flex_round"),
+                                        textAlign = TextAlign.Center
+                                    )
                                 )
-                            )
+                            }
                         }
                     }
                 }

@@ -61,6 +61,7 @@ import androidx.compose.runtime.mutableStateOf
 import com.sameerasw.essentials.domain.model.Feature
 import com.sameerasw.essentials.ui.components.sheets.FeatureHelpBottomSheet
 import android.content.Context
+import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.navigationBars
@@ -139,7 +140,7 @@ class PixelSearchbarSettingsActivity : ComponentActivity() {
 
                             PixelSearchbarSettingsUI(
                                 viewModel = viewModel,
-                                modifier = Modifier.padding(top = 16.dp)
+                                modifier = Modifier.padding(top = 4.dp)
                             )
 
                             Spacer(
@@ -196,12 +197,6 @@ fun PixelSearchbarSettingsUI(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(
-            text = stringResource(R.string.pixel_searchbar_settings_title),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
 
         RoundedCardContainer(spacing = 0.dp) {
             Column(
@@ -301,6 +296,27 @@ fun PixelSearchbarSettingsUI(
                     .padding(top = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
+                Text(
+                    text = "Background Pill",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                RoundedCardContainer {
+                    IconToggleItem(
+                        iconRes = R.drawable.rounded_rounded_corner_24,
+                        title = stringResource(R.string.pixel_searchbar_background_pill_title),
+                        description = stringResource(R.string.pixel_searchbar_background_pill_desc),
+                        isChecked = viewModel.pixelSearchbarBackgroundPill.value,
+                        onCheckedChange = { enabled ->
+                            viewModel.setPixelSearchbarBackgroundPill(enabled, context)
+                        }
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
                 Text(
                     text = "Date Format",
                     style = MaterialTheme.typography.titleMedium,
