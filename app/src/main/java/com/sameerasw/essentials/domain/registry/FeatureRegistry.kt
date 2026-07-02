@@ -1113,6 +1113,30 @@ object FeatureRegistry {
             }
         },
 
+        object : Feature(
+            id = "Sync sound mode",
+            title = R.string.feat_sync_sound_mode_title,
+            iconRes = R.drawable.rounded_volume_up_24,
+            category = R.string.cat_tools,
+            description = R.string.feat_sync_sound_mode_desc,
+            parentFeatureId = "Watch",
+            hasMoreSettings = false,
+            showToggle = true
+        ) {
+            override fun isEnabled(viewModel: MainViewModel): Boolean {
+                val context = EssentialsApp.context
+                val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
+                return prefs.getBoolean("watch_sync_sound_mode_enabled", false)
+            }
+
+            override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
+                val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
+                prefs.edit().putBoolean("watch_sync_sound_mode_enabled", enabled).apply()
+                // Force sync to sync new sound mode status to watch if enabled
+                com.sameerasw.essentials.services.DeviceInfoSyncManager.forceSync(context)
+            }
+        },
+
 
         object : Feature(
             id = "App updates",

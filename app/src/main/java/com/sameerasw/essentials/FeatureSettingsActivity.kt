@@ -221,10 +221,15 @@ class FeatureSettingsActivity : AppCompatActivity() {
                     var watchAdbWifiEnabled by remember {
                         mutableStateOf(prefs.getBoolean("watch_adb_wifi_enabled", false))
                     }
+                    var watchSyncSoundModeEnabled by remember {
+                        mutableStateOf(prefs.getBoolean("watch_sync_sound_mode_enabled", false))
+                    }
                     androidx.compose.runtime.DisposableEffect(prefs) {
                         val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { p, key ->
                             if (key == "watch_adb_wifi_enabled") {
                                 watchAdbWifiEnabled = p.getBoolean(key, false)
+                            } else if (key == "watch_sync_sound_mode_enabled") {
+                                watchSyncSoundModeEnabled = p.getBoolean(key, false)
                             }
                         }
                         prefs.registerOnSharedPreferenceChangeListener(listener)
@@ -537,7 +542,11 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                             title = child.title,
                                             description = child.description,
                                             iconRes = child.iconRes,
-                                            isEnabled = if (child.id == "Watch Wireless Debugging") watchAdbWifiEnabled else child.isEnabled(viewModel),
+                                            isEnabled = when (child.id) {
+                                                "Watch Wireless Debugging" -> watchAdbWifiEnabled
+                                                "Sync sound mode" -> watchSyncSoundModeEnabled
+                                                else -> child.isEnabled(viewModel)
+                                            },
                                             isToggleEnabled = child.isToggleEnabled(
                                                 viewModel,
                                                 context

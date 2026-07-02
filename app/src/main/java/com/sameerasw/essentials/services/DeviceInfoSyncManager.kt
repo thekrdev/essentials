@@ -116,7 +116,7 @@ object DeviceInfoSyncManager {
         // Sync on preference change (flashlight pulse, glance, watch controls)
         val p = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
         prefChangeListener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == "flashlight_pulse_enabled" || key == "notification_glance_enabled" || key == "watch_controls_layout") {
+            if (key == "flashlight_pulse_enabled" || key == "notification_glance_enabled" || key == "watch_controls_layout" || key == "watch_sync_sound_mode_enabled") {
                 syncDeviceInfo(context)
             }
         }
@@ -185,6 +185,7 @@ object DeviceInfoSyncManager {
         val watchControlsLayout = prefs.getString("watch_controls_layout", "LOCK,SOUND,FLASHLIGHT,FLASHLIGHT_PULSE,AOD") ?: "LOCK,SOUND,FLASHLIGHT,FLASHLIGHT_PULSE,AOD"
 
         val tapToWakeEnabled = android.provider.Settings.Secure.getInt(context.contentResolver, "doze_tap_gesture", 1) == 1
+        val watchSyncSoundModeEnabled = prefs.getBoolean("watch_sync_sound_mode_enabled", false)
 
         val dataMap = putDataMapReq.dataMap
         dataMap.putInt("battery_level", batteryPct)
@@ -199,6 +200,7 @@ object DeviceInfoSyncManager {
         dataMap.putInt("aod_state", aodState)
         dataMap.putBoolean("tap_to_wake_enabled", tapToWakeEnabled)
         dataMap.putString("watch_controls_layout", watchControlsLayout)
+        dataMap.putBoolean("watch_sync_sound_mode_enabled", watchSyncSoundModeEnabled)
         
         dataMap.putBoolean("travel_active", travelActive)
         dataMap.putString("travel_name", travelName)
