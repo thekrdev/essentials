@@ -151,7 +151,7 @@ fun WallpaperScreen(
                 .align(Alignment.TopCenter)
                 .padding(top = statusBarHeight + 16.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.8f),
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
                     shape = CircleShape
                 )
                 .padding(6.dp)
@@ -363,7 +363,7 @@ fun WallpaperScreen(
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh.copy(alpha = 0.9f)
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -417,6 +417,8 @@ fun WallpaperScreen(
                                         repository.saveLiveWallpaperPlaybackTrigger(option.first)
                                     },
                                     labelProvider = { it.second },
+                                    containerColor = Color.Transparent,
+                                    contentPadding = PaddingValues(0.dp),
                                     modifier = Modifier.fillMaxWidth()
                                 )
                             }
