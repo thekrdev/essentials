@@ -1,8 +1,6 @@
 package com.sameerasw.essentials.ui.components.sheets
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -135,7 +135,9 @@ fun WatchInstallHelpBottomSheet(
             Text(
                 text = "Watch ADB Permissions",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.align(Alignment.Start).padding(start = 8.dp)
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(start = 8.dp)
             )
 
             val context = LocalContext.current
@@ -204,10 +206,15 @@ private fun AdbCommandCard(
                 androidx.compose.material3.IconButton(
                     onClick = {
                         HapticUtil.performUIHaptic(view)
-                        val clipboard = context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                        val clipboard =
+                            context.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
                         val clip = android.content.ClipData.newPlainText("adb_command", command)
                         clipboard.setPrimaryClip(clip)
-                        android.widget.Toast.makeText(context, "Command copied", android.widget.Toast.LENGTH_SHORT).show()
+                        android.widget.Toast.makeText(
+                            context,
+                            "Command copied",
+                            android.widget.Toast.LENGTH_SHORT
+                        ).show()
                     }
                 ) {
                     Icon(

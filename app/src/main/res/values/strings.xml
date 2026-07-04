@@ -295,8 +295,8 @@
     <string name="screen_locked_security_auth_enable">Authenticate to enable this feature</string>
     <string name="screen_locked_security_auth_disable">Authenticate to disable this feature</string>
     <string name="screen_locked_security_desc">Disable quick setting tiles when the device is locked</string>
-<string name="search_disable_qs_locked_title">Disable QS Locked</string>
-<string name="search_disable_qs_locked_desc">Prevent expanding Quick Settings when device is locked</string>
+    <string name="search_disable_qs_locked_title">Disable QS Locked</string>
+    <string name="search_disable_qs_locked_desc">Prevent expanding Quick Settings when device is locked</string>
     <!-- Sound Mode -->
     <string name="sound_mode_reorder_title">Re-order modes</string>
     <string name="sound_mode_long_press_hint">Long press to toggle</string>
@@ -347,7 +347,7 @@
     <string name="icon_samsung_smart">Samsung Smart Features</string>
     <string name="icon_samsung_services">Samsung Services</string>
     <string name="icon_ethernet">Ethernet</string>
-    
+
     <!-- Status Bar Settings -->
     <string name="stb_clock_seconds">Show Seconds in Clock</string>
     <string name="stb_battery_percentage">Battery Percentage</string>
@@ -865,7 +865,7 @@
     <string name="diy_start_time_label">Start Time</string>
     <string name="diy_end_time_label">End Time</string>
     <string name="diy_repeat_days_label">Repeat on</string>
-    
+
     <string name="diy_state_charging">Charging</string>
     <string name="diy_state_screen_on">Screen On</string>
 
@@ -902,7 +902,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_enable">Enable</string>
     <string name="action_disable">Disable</string>
-    
+
     <string name="automation_service_channel_name">Automation Service</string>
     <string name="automation_service_running_title">Automations Active</string>
     <string name="automation_service_running_desc">Monitoring system events for your automations</string>
@@ -1218,7 +1218,7 @@
 
     <string name="instruction_section_about_title">What the hell is this app?</string>
     <string name="instruction_section_about_desc">Good question,\n\nI always wanted to extract the most out of my devices as I\'ve been a rooted user for ever since I got my first Project Treble device. And I\'ve been loving the Tasker app which is like the god when comes automation and utilizing every possible API and internal features of Android.\n\nSo I am not unrooted and back on stock Android beta experience and wanted to get the most out from what is possible with given privileges. Might as well share them. So with my beginner knowledge in Kotlin Jetpack and with the support of many research and assist tools and also the great community, I built an all-in-one app containing everything I wanted to be in my Android with given permissions. And here it is.\n\nFeature requests are welcome, I will consider and see if they are achievable with available permissions and my skills. Nowadays what is not possible. :)\n\nWhy not on Play Store?\nI don\'t wanna risk getting my Developer account banned due to the highly sensitive and internal permissions and APIs being used in the app. But with the way Android sideloading is headed, let\'s see what we have to do. I do understand the concerns of sideloaded apps being malicious.\nWhile we are at the topic, Checkout my other app AirSync if you are a mac + Android user. *shameless plug*\n\nEnjoy, Keep building! (っ◕‿◕)っ</string>
-    
+
     <!-- Bug Reporting -->
     <string name="toast_bug_report_copied">Bug report copied to clipboard</string>
     <string name="bug_report_title">Bug report</string>
@@ -1273,7 +1273,8 @@
     <string name="feat_system_keys">Keys</string>
     <string name="feat_system_keyboard_desc">Customize layout and behavior</string>
     <string name="search_keyboard_height_title">Keyboard Height</string>
-    <string name="search_keyboard_height_desc">Adjust the total vertical size of the keyboard</string>>
+    <string name="search_keyboard_height_desc">Adjust the total vertical size of the keyboard</string>
+    >
     <string name="search_keyboard_padding_title">Bottom Padding</string>
     <string name="search_keyboard_padding_desc">Add space below the keyboard</string>
     <string name="search_keyboard_haptics_title">Haptic Feedback</string>
@@ -1353,26 +1354,26 @@
     <string name="search_sound_mode_show_slider_desc">Show volume slider in tile</string>
     <string name="search_sound_mode_behavior_title">Cycle Behavior</string>
     <string name="search_sound_mode_behavior_desc">Choose modes to cycle through</string>
-    
-    
+
+
     <string name="feat_sound_haptics_title">Sound and Haptics</string>
     <string name="feat_sound_haptics_desc">Volume and haptic features</string>
-    
+
     <string name="feat_security_privacy_title">Security and Privacy</string>
     <string name="feat_security_privacy_desc">Protect and secure your device</string>
-    
+
     <string name="feat_notifications_alerts_title">Notifications and Alerts</string>
     <string name="feat_notifications_alerts_desc">Never miss your priorities</string>
-    
+
     <string name="feat_input_actions_title">Input and Actions</string>
     <string name="feat_input_actions_desc">Control your device with ease</string>
-    
+
     <string name="feat_widgets_title">Widgets</string>
     <string name="feat_widgets_desc">At a glance on your home screen</string>
-    
+
     <string name="feat_display_visuals_title">Display</string>
     <string name="feat_display_visuals_desc">Visuals to enhance your experience</string>
-    
+
     <string name="feat_watch_title">Watch</string>
     <string name="feat_watch_desc">Integrations with WearOS</string>
     <string name="watch_no_companion_title">No Watch detected</string>
@@ -1528,7 +1529,7 @@
     <string name="prank_button_premium">What\'s in Premium?</string>
     <string name="prank_reveal_title">April Fools!</string>
     <string name="prank_reveal_desc">Just kidding, Essentials is and will always be free and open source. Enjoy! (っ◕‿◕)っ</string>
-    
+
     <string name="notification_lighting_style_system">System</string>
     <string name="notification_lighting_system_mode_title">Ripple Animation</string>
     <string name="notification_lighting_system_mode_charging_ripple">Bottom</string>
@@ -1611,7 +1612,7 @@
     <string name="color_purple">Purple</string>
     <string name="color_pink">Pink</string>
     <string name="color_teal">Teal</string>
-    
+
     <!-- What's New -->
     <string name="whats_new_specs_title">Device Specs Retired</string>
     <string name="whats_new_specs_desc">Inaccurate GSMArena-powered specifications have been removed to keep device insights clean, fast, and completely reliable.</string>
@@ -1658,7 +1659,7 @@
     <string name="pocket_mode_use_light_desc">Use ambient light level in addition to proximity for better accuracy</string>
     <string name="pocket_mode_active">Pocket mode active</string>
     <string name="pocket_mode_dismiss_hint">Press any volume key to dismiss</string>
-    <string name="pocket_mode_warning">Warning: On some devices with missing sensors, enabling Pocket Mode may break deep sleep and cause higher battery drain. \This is not necessary for Google Pixel devices as they already got the feature built-in.</string>
+    <string name="pocket_mode_warning">Warning: On some devices with missing sensors, enabling Pocket Mode may break deep sleep and cause higher battery drain</string>
     <string name="pocket_mode_exclude_apps_title">Exclude apps</string>
     <string name="pocket_mode_exclude_apps_desc">Choose apps where Pocket Mode should not trigger. Pocket mode will not work when streaming or gaming by default</string>
     <string name="pocket_mode_trigger_delay_title">Trigger delay</string>

@@ -20,7 +20,10 @@ class ExternalActionReceiver : BroadcastReceiver() {
         val action = intent.getStringExtra(EXTRA_ACTION)
         val value = intent.getStringExtra(EXTRA_VALUE)
 
-        Log.d("ExternalActionReceiver", "Received external control request: path=$path, action=$action, value=$value")
+        Log.d(
+            "ExternalActionReceiver",
+            "Received external control request: path=$path, action=$action, value=$value"
+        )
 
         if (action == "update") {
             ExternalRouter.update(context, path, value, intent.extras)

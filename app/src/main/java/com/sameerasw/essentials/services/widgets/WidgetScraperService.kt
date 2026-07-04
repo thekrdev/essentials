@@ -17,7 +17,6 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.RemoteViews
 import com.sameerasw.essentials.data.repository.SettingsRepository
@@ -33,7 +32,7 @@ import java.io.FileOutputStream
 class WidgetScraperService : Service() {
 
     private inner class ScrapingHostView(context: Context) : AppWidgetHostView(context) {
-        
+
         private val drawListener = ViewTreeObserver.OnDrawListener {
             notifyWidgetChanged()
         }
@@ -70,7 +69,8 @@ class WidgetScraperService : Service() {
         }
     }
 
-    private inner class ScrapingWidgetHost(context: Context, hostId: Int) : AppWidgetHost(context, hostId) {
+    private inner class ScrapingWidgetHost(context: Context, hostId: Int) :
+        AppWidgetHost(context, hostId) {
         override fun onCreateView(
             context: Context,
             appWidgetId: Int,
@@ -108,14 +108,16 @@ class WidgetScraperService : Service() {
         override fun onMetadataChanged(metadata: MediaMetadata?) {
             updateMediaMetadata(currentController)
         }
+
         override fun onPlaybackStateChanged(state: PlaybackState?) {
             updateMediaMetadata(currentController)
         }
     }
 
-    private val activeSessionsListener = MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
-        updateActiveSession(controllers)
-    }
+    private val activeSessionsListener =
+        MediaSessionManager.OnActiveSessionsChangedListener { controllers ->
+            updateActiveSession(controllers)
+        }
 
     override fun onCreate() {
         super.onCreate()
@@ -139,7 +141,9 @@ class WidgetScraperService : Service() {
         cleanupMediaListener()
 
         val widgetId = settingsRepository.getPixelSearchbarWidgetId()
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) { stopSelf(); return }
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            stopSelf(); return
+        }
 
         val awm = AppWidgetManager.getInstance(this)
         val host = ScrapingWidgetHost(this, HOST_ID)
@@ -164,7 +168,8 @@ class WidgetScraperService : Service() {
                 updateActiveSession(initialSessions)
                 manager.addOnActiveSessionsChangedListener(activeSessionsListener, componentName)
             }
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
 
         // Dynamically register the MusicBroadcastReceiver
         try {
@@ -192,12 +197,13 @@ class WidgetScraperService : Service() {
                     androidx.core.content.ContextCompat.RECEIVER_EXPORTED
                 )
             }
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     private fun updateActiveSession(controllers: List<MediaController>?) {
         val active = controllers?.sortedWith(
-            compareByDescending<MediaController> { 
+            compareByDescending<MediaController> {
                 val state = it.playbackState?.state
                 state == PlaybackState.STATE_PLAYING || state == PlaybackState.STATE_BUFFERING
             }.thenByDescending {
@@ -231,7 +237,8 @@ class WidgetScraperService : Service() {
                 FileOutputStream(filesDirFile).use { out ->
                     artwork.compress(Bitmap.CompressFormat.PNG, 100, out)
                 }
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
         } else {
             if (filesDirFile.exists()) filesDirFile.delete()
         }
@@ -251,14 +258,15 @@ class WidgetScraperService : Service() {
     private fun notifyWidgetChanged() {
         if (updatePending) return
         updatePending = true
-        
+
         handler.postDelayed({
             updatePending = false
             settingsRepository.incrementPixelSearchbarWidgetRevision()
 
             serviceScope.launch {
                 runCatching {
-                    val manager = androidx.glance.appwidget.GlanceAppWidgetManager(this@WidgetScraperService)
+                    val manager =
+                        androidx.glance.appwidget.GlanceAppWidgetManager(this@WidgetScraperService)
                     val widget = PixelSearchbarWidget()
                     val glanceIds = manager.getGlanceIds(PixelSearchbarWidget::class.java)
                     for (glanceId in glanceIds) widget.update(this@WidgetScraperService, glanceId)
@@ -276,7 +284,8 @@ class WidgetScraperService : Service() {
     private fun cleanupMediaListener() {
         try {
             mediaSessionManager?.removeOnActiveSessionsChangedListener(activeSessionsListener)
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
         currentController?.unregisterCallback(mediaCallback)
         currentController = null
         mediaSessionManager = null
@@ -287,7 +296,8 @@ class WidgetScraperService : Service() {
                 unregisterReceiver(it)
             }
             musicBroadcastReceiver = null
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     override fun onDestroy() {

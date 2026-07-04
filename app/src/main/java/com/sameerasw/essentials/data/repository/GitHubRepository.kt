@@ -135,7 +135,8 @@ class GitHubRepository {
         inputs: Map<String, String>
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            val url = URL("https://api.github.com/repos/$owner/$repo/actions/workflows/$workflowFile/dispatches")
+            val url =
+                URL("https://api.github.com/repos/$owner/$repo/actions/workflows/$workflowFile/dispatches")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.doOutput = true
@@ -143,10 +144,12 @@ class GitHubRepository {
             connection.setRequestProperty("Accept", "application/vnd.github+json")
             connection.setRequestProperty("Content-Type", "application/json")
 
-            val payload = gson.toJson(mapOf(
-                "ref" to ref,
-                "inputs" to inputs
-            ))
+            val payload = gson.toJson(
+                mapOf(
+                    "ref" to ref,
+                    "inputs" to inputs
+                )
+            )
 
             connection.outputStream.use { os ->
                 os.write(payload.toByteArray(Charsets.UTF_8))

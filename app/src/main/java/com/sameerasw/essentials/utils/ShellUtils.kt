@@ -42,11 +42,19 @@ object ShellUtils {
             RootUtils.runCommand(command)
         } else {
             if (!ShizukuUtils.isShizukuAvailable()) {
-                notifyShizukuError(context, "Shizuku is not running", "Please start Shizuku from its app to enable features.")
+                notifyShizukuError(
+                    context,
+                    "Shizuku is not running",
+                    "Please start Shizuku from its app to enable features."
+                )
                 return
             }
             if (!ShizukuUtils.hasPermission()) {
-                notifyShizukuError(context, "Shizuku permission missing", "Please grant Shizuku permission for Essentials.")
+                notifyShizukuError(
+                    context,
+                    "Shizuku permission missing",
+                    "Please grant Shizuku permission for Essentials."
+                )
                 return
             }
             ShizukuUtils.runCommand(command)
@@ -67,17 +75,29 @@ object ShellUtils {
             RootUtils.newProcess(command)
         } else {
             if (!ShizukuUtils.isShizukuAvailable()) {
-                notifyShizukuError(context, "Shizuku is not running", "Please start Shizuku to enable features.")
+                notifyShizukuError(
+                    context,
+                    "Shizuku is not running",
+                    "Please start Shizuku to enable features."
+                )
                 return null
             }
             if (!ShizukuUtils.hasPermission()) {
-                notifyShizukuError(context, "Shizuku permission missing", "Please grant Shizuku permission for Essentials.")
+                notifyShizukuError(
+                    context,
+                    "Shizuku permission missing",
+                    "Please grant Shizuku permission for Essentials."
+                )
                 return null
             }
             try {
                 com.sameerasw.essentials.shizuku.ShizukuProcessHelper.newProcess(command)
             } catch (e: Exception) {
-                notifyShizukuError(context, "Shizuku execution error", "An error occurred while running command: ${e.localizedMessage}")
+                notifyShizukuError(
+                    context,
+                    "Shizuku execution error",
+                    "An error occurred while running command: ${e.localizedMessage}"
+                )
                 null
             }
         }
@@ -110,7 +130,10 @@ object ShellUtils {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val restartIntent = Intent(context, com.sameerasw.essentials.services.receivers.ShizukuActionReceiver::class.java).apply {
+        val restartIntent = Intent(
+            context,
+            com.sameerasw.essentials.services.receivers.ShizukuActionReceiver::class.java
+        ).apply {
             action = "com.sameerasw.essentials.ACTION_RESTART_SHIZUKU"
         }
         val restartPendingIntent = PendingIntent.getBroadcast(

@@ -1,6 +1,5 @@
 package com.sameerasw.essentials.ui.composables.configs
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

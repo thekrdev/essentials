@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -42,21 +43,18 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.TextButton
-import androidx.compose.ui.text.font.FontWeight
-import android.net.Uri
-import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,6 +68,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.core.app.ActivityCompat
@@ -472,7 +471,10 @@ fun SettingsContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceBright,
+                        shape = MaterialTheme.shapes.extraSmall
+                    )
                     .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -863,7 +865,10 @@ fun SettingsContent(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                    .background(
+                        MaterialTheme.colorScheme.surfaceBright,
+                        shape = MaterialTheme.shapes.extraSmall
+                    )
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -886,7 +891,10 @@ fun SettingsContent(
                         modifier = Modifier.size(24.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Check for updates", fontWeight = androidx.compose.ui.text.font.FontWeight.Bold)
+                    Text(
+                        "Check for updates",
+                        fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                    )
                 }
 
             }
@@ -1065,7 +1073,7 @@ fun SettingsContent(
                             )
 
                             val workflowAuthState by viewModel.workflowAuthState
-                            
+
                             when (workflowAuthState) {
                                 is com.sameerasw.essentials.viewmodels.AuthState.Idle -> {
                                     Button(
@@ -1077,6 +1085,7 @@ fun SettingsContent(
                                         Text("Grant Workflow Access")
                                     }
                                 }
+
                                 is com.sameerasw.essentials.viewmodels.AuthState.Loading -> {
                                     Box(
                                         modifier = Modifier.fillMaxWidth(),
@@ -1085,8 +1094,10 @@ fun SettingsContent(
                                         CircularProgressIndicator(modifier = Modifier.size(24.dp))
                                     }
                                 }
+
                                 is com.sameerasw.essentials.viewmodels.AuthState.CodeReceived -> {
-                                    val codeData = workflowAuthState as com.sameerasw.essentials.viewmodels.AuthState.CodeReceived
+                                    val codeData =
+                                        workflowAuthState as com.sameerasw.essentials.viewmodels.AuthState.CodeReceived
                                     Column(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -1098,7 +1109,9 @@ fun SettingsContent(
                                         )
                                         Text(
                                             text = codeData.userCode,
-                                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                                            style = MaterialTheme.typography.headlineMedium.copy(
+                                                fontWeight = FontWeight.Bold
+                                            ),
                                             color = MaterialTheme.colorScheme.primary
                                         )
                                         Text(
@@ -1106,13 +1119,16 @@ fun SettingsContent(
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
-                                        
+
                                         Row(
                                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                                         ) {
                                             Button(
                                                 onClick = {
-                                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(codeData.verificationUri))
+                                                    val intent = Intent(
+                                                        Intent.ACTION_VIEW,
+                                                        Uri.parse(codeData.verificationUri)
+                                                    )
                                                     context.startActivity(intent)
                                                 }
                                             ) {
@@ -1128,8 +1144,10 @@ fun SettingsContent(
                                         }
                                     }
                                 }
+
                                 is com.sameerasw.essentials.viewmodels.AuthState.Error -> {
-                                    val err = workflowAuthState as com.sameerasw.essentials.viewmodels.AuthState.Error
+                                    val err =
+                                        workflowAuthState as com.sameerasw.essentials.viewmodels.AuthState.Error
                                     Column(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -1149,6 +1167,7 @@ fun SettingsContent(
                                         }
                                     }
                                 }
+
                                 is com.sameerasw.essentials.viewmodels.AuthState.Authenticated -> {
                                     // Handled by token recomposition
                                 }
@@ -1211,14 +1230,14 @@ fun SettingsContent(
                             val triggerState by viewModel.wallpaperTriggerState
                             if (triggerState != null) {
                                 Text(
-                                    text = when(triggerState) {
+                                    text = when (triggerState) {
                                         "loading" -> "Sending trigger request..."
                                         "success" -> "Trigger sent successfully!"
                                         "error" -> "Failed to send trigger."
                                         else -> ""
                                     },
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = when(triggerState) {
+                                    color = when (triggerState) {
                                         "success" -> MaterialTheme.colorScheme.primary
                                         "error" -> MaterialTheme.colorScheme.error
                                         else -> MaterialTheme.colorScheme.onSurfaceVariant

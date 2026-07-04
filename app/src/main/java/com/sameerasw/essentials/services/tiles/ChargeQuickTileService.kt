@@ -2,9 +2,7 @@ package com.sameerasw.essentials.services.tiles
 
 import android.content.Intent
 import android.graphics.drawable.Icon
-import android.os.Build
 import android.service.quicksettings.Tile
-import androidx.annotation.RequiresApi
 import com.sameerasw.essentials.FeatureSettingsActivity
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.utils.DeviceUtils

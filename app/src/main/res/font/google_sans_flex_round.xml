@@ -4,19 +4,19 @@
     <font
         android:font="@font/google_sans_flex"
         android:fontStyle="normal"
+        android:fontVariationSettings="&apos;ROND&apos; 100"
         android:fontWeight="400"
-        app:fontVariationSettings="&apos;ROND&apos; 100"
-        android:fontVariationSettings="&apos;ROND&apos; 100" />
+        app:fontVariationSettings="&apos;ROND&apos; 100" />
     <font
         android:font="@font/google_sans_flex"
         android:fontStyle="normal"
+        android:fontVariationSettings="&apos;ROND&apos; 100"
         android:fontWeight="500"
-        app:fontVariationSettings="&apos;ROND&apos; 100"
-        android:fontVariationSettings="&apos;ROND&apos; 100" />
+        app:fontVariationSettings="&apos;ROND&apos; 100" />
     <font
         android:font="@font/google_sans_flex"
         android:fontStyle="normal"
+        android:fontVariationSettings="&apos;ROND&apos; 100"
         android:fontWeight="700"
-        app:fontVariationSettings="&apos;ROND&apos; 100"
-        android:fontVariationSettings="&apos;ROND&apos; 100" />
+        app:fontVariationSettings="&apos;ROND&apos; 100" />
 </font-family>

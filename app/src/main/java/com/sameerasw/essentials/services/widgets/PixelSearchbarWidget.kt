@@ -2,17 +2,20 @@ package com.sameerasw.essentials.services.widgets
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.widget.RemoteViews
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.Color
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.AndroidRemoteViews
+import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -21,22 +24,18 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
-import androidx.glance.text.Text
-import androidx.glance.text.TextStyle
 import androidx.glance.text.FontWeight
+import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
-import androidx.glance.appwidget.cornerRadius
+import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.sameerasw.essentials.data.repository.SettingsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.glance.action.clickable
-import androidx.glance.action.actionStartActivity
-import androidx.glance.appwidget.action.actionRunCallback
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class PixelSearchbarWidget : GlanceAppWidget() {
     override val sizeMode = androidx.glance.appwidget.SizeMode.Exact
@@ -183,7 +182,8 @@ class PixelSearchbarWidget : GlanceAppWidget() {
                     else -> { // "date" (default)
                         val dateFormat = settingsRepository.getPixelSearchbarDateFormat()
                         val hasPill = settingsRepository.getPixelSearchbarBackgroundPill()
-                        val dateStr = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
+                        val dateStr =
+                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date())
                         Box(
                             modifier = boxModifier,
                             contentAlignment = Alignment.Center

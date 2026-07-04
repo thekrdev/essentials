@@ -8,7 +8,11 @@ import androidx.glance.appwidget.action.ActionCallback
 import com.sameerasw.essentials.data.repository.SettingsRepository
 
 class MusicClickActionCallback : ActionCallback {
-    override suspend fun onAction(context: Context, glanceId: GlanceId, parameters: ActionParameters) {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
         val settings = SettingsRepository(context)
         val packageName = settings.getPixelSearchbarMusicPackage()
         if (packageName.isNotEmpty()) {
@@ -18,7 +22,8 @@ class MusicClickActionCallback : ActionCallback {
                     launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(launchIntent)
                 }
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.ContentObserver
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -48,7 +49,6 @@ import com.sameerasw.essentials.domain.model.SearchableItem
 import com.sameerasw.essentials.domain.model.UpdateInfo
 import com.sameerasw.essentials.domain.registry.SearchRegistry
 import com.sameerasw.essentials.services.CaffeinateWakeLockService
-import com.sameerasw.essentials.services.widgets.FavoritesWidgetReceiver
 import com.sameerasw.essentials.services.NotificationLightingService
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
 import com.sameerasw.essentials.services.receivers.SecurityDeviceAdminReceiver
@@ -58,18 +58,17 @@ import com.sameerasw.essentials.utils.DeviceUtils
 import com.sameerasw.essentials.utils.PermissionUtils
 import com.sameerasw.essentials.utils.RefreshRateUtils
 import com.sameerasw.essentials.utils.RootUtils
-import java.io.File
-import java.io.FileOutputStream
-import android.graphics.Bitmap
 import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.utils.ShizukuUtils
 import com.sameerasw.essentials.utils.UpdateNotificationHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 class MainViewModel : ViewModel() {
     val isAccessibilityEnabled = mutableStateOf(false)
@@ -155,7 +154,8 @@ class MainViewModel : ViewModel() {
     val pixelSearchbarType = mutableStateOf("empty")
     val pixelSearchbarDateFormat = mutableStateOf("EEEE, MMMM d")
     val pixelSearchbarBackgroundPill = mutableStateOf(false)
-    val pixelSearchbarWidgetId = mutableIntStateOf(android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID)
+    val pixelSearchbarWidgetId =
+        mutableIntStateOf(android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID)
     val pixelSearchbarWidgetProvider = mutableStateOf<String?>(null)
     val pixelSearchbarScrapedLine1 = mutableStateOf("")
     val pixelSearchbarScrapedLine2 = mutableStateOf("")
@@ -326,7 +326,8 @@ class MainViewModel : ViewModel() {
     val gitHubToken = mutableStateOf<String?>(null)
     val gitHubWorkflowToken = mutableStateOf<String?>(null)
     val wallpaperTriggerState = mutableStateOf<String?>(null)
-    val workflowAuthState = mutableStateOf<com.sameerasw.essentials.viewmodels.AuthState>(com.sameerasw.essentials.viewmodels.AuthState.Idle)
+    val workflowAuthState =
+        mutableStateOf<com.sameerasw.essentials.viewmodels.AuthState>(com.sameerasw.essentials.viewmodels.AuthState.Idle)
     private var workflowPollingJob: kotlinx.coroutines.Job? = null
     val gitHubUser = mutableStateOf<com.sameerasw.essentials.domain.model.github.GitHubUser?>(null)
 
@@ -468,7 +469,8 @@ class MainViewModel : ViewModel() {
                         settingsRepository.getBoolean(key)
 
                     SettingsRepository.KEY_ENABLE_UNSUPPORTED_FEATURES -> {
-                        isEnableUnsupportedFeatures.value = settingsRepository.isEnableUnsupportedFeatures()
+                        isEnableUnsupportedFeatures.value =
+                            settingsRepository.isEnableUnsupportedFeatures()
                         if (searchQuery.value.isNotBlank()) {
                             appContext?.let { onSearchQueryChanged(searchQuery.value, it) }
                         }
@@ -930,7 +932,8 @@ class MainViewModel : ViewModel() {
         loadShutUpConfigs()
         recentSearches.value = settingsRepository.getRecentSearches()
         loadCachedWallpaper()
-        isDailyWallpaperAutoUpdateEnabled.value = settingsRepository.getBoolean(SettingsRepository.KEY_DAILY_WALLPAPER_AUTO_UPDATE, false)
+        isDailyWallpaperAutoUpdateEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_DAILY_WALLPAPER_AUTO_UPDATE, false)
         if (isDailyWallpaperAutoUpdateEnabled.value) {
             schedulePeriodicWallpaperCheck(context)
         }
@@ -1195,7 +1198,8 @@ class MainViewModel : ViewModel() {
         MapsState.isEnabled = isMapsPowerSavingEnabled.value
         hapticFeedbackType.value = settingsRepository.getHapticFeedbackType()
         defaultTab.value = settingsRepository.getDIYTab()
-        isSwipeTabsEnabled.value = settingsRepository.getBoolean(SettingsRepository.KEY_SWIPE_TABS, true)
+        isSwipeTabsEnabled.value =
+            settingsRepository.getBoolean(SettingsRepository.KEY_SWIPE_TABS, true)
         sentryReportMode.value =
             settingsRepository.getString(SettingsRepository.KEY_SENTRY_REPORT_MODE, "auto")
                 ?: "auto"
@@ -1609,13 +1613,15 @@ class MainViewModel : ViewModel() {
             val authRepo = com.sameerasw.essentials.data.repository.GitHubAuthRepository()
             val response = authRepo.requestDeviceCodeWithWorkflow()
             if (response != null) {
-                workflowAuthState.value = com.sameerasw.essentials.viewmodels.AuthState.CodeReceived(
-                    userCode = response.userCode,
-                    verificationUri = response.verificationUri
-                )
+                workflowAuthState.value =
+                    com.sameerasw.essentials.viewmodels.AuthState.CodeReceived(
+                        userCode = response.userCode,
+                        verificationUri = response.verificationUri
+                    )
                 startWorkflowPolling(response.deviceCode, response.interval, context)
             } else {
-                workflowAuthState.value = com.sameerasw.essentials.viewmodels.AuthState.Error("Failed to request device code")
+                workflowAuthState.value =
+                    com.sameerasw.essentials.viewmodels.AuthState.Error("Failed to request device code")
             }
         }
     }
@@ -1632,24 +1638,33 @@ class MainViewModel : ViewModel() {
                 if (tokenResponse != null) {
                     when {
                         tokenResponse.accessToken != null -> {
-                            workflowAuthState.value = com.sameerasw.essentials.viewmodels.AuthState.Authenticated(tokenResponse.accessToken)
+                            workflowAuthState.value =
+                                com.sameerasw.essentials.viewmodels.AuthState.Authenticated(
+                                    tokenResponse.accessToken
+                                )
                             settingsRepository.saveGitHubWorkflowToken(tokenResponse.accessToken)
                             workflowPollingJob?.cancel()
                             return@launch
                         }
+
                         tokenResponse.error == "authorization_pending" -> {
                             // continue
                         }
+
                         tokenResponse.error == "slow_down" -> {
                             currentInterval += 5000L
                         }
+
                         tokenResponse.error == "expired_token" -> {
-                            workflowAuthState.value = com.sameerasw.essentials.viewmodels.AuthState.Error("Code expired. Please try again.")
+                            workflowAuthState.value =
+                                com.sameerasw.essentials.viewmodels.AuthState.Error("Code expired. Please try again.")
                             workflowPollingJob?.cancel()
                             return@launch
                         }
+
                         else -> {
-                            workflowAuthState.value = com.sameerasw.essentials.viewmodels.AuthState.Error("Authentication failed: ${tokenResponse.error}")
+                            workflowAuthState.value =
+                                com.sameerasw.essentials.viewmodels.AuthState.Error("Authentication failed: ${tokenResponse.error}")
                             workflowPollingJob?.cancel()
                             return@launch
                         }
@@ -2092,7 +2107,12 @@ class MainViewModel : ViewModel() {
         pixelSearchbarWidgetProvider.value = null
         settingsRepository.setPixelSearchbarWidgetId(android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID)
         settingsRepository.setPixelSearchbarWidgetProvider(null)
-        context.stopService(android.content.Intent(context, com.sameerasw.essentials.services.widgets.WidgetScraperService::class.java))
+        context.stopService(
+            android.content.Intent(
+                context,
+                com.sameerasw.essentials.services.widgets.WidgetScraperService::class.java
+            )
+        )
         updatePixelSearchbarWidget(context)
     }
 
@@ -2122,7 +2142,12 @@ class MainViewModel : ViewModel() {
         updatePixelSearchbarWidget(context)
     }
 
-    fun updatePixelSearchbarMusic(title: String, artist: String, packageName: String, context: Context) {
+    fun updatePixelSearchbarMusic(
+        title: String,
+        artist: String,
+        packageName: String,
+        context: Context
+    ) {
         pixelSearchbarMusicTitle.value = title
         pixelSearchbarMusicArtist.value = artist
         pixelSearchbarMusicPackage.value = packageName
@@ -2135,11 +2160,16 @@ class MainViewModel : ViewModel() {
 
     fun updateMediaFromActiveSession(context: Context) {
         try {
-            val manager = context.getSystemService(Context.MEDIA_SESSION_SERVICE) as? android.media.session.MediaSessionManager ?: return
-            val componentName = android.content.ComponentName(context, com.sameerasw.essentials.services.NotificationListener::class.java)
+            val manager =
+                context.getSystemService(Context.MEDIA_SESSION_SERVICE) as? android.media.session.MediaSessionManager
+                    ?: return
+            val componentName = android.content.ComponentName(
+                context,
+                com.sameerasw.essentials.services.NotificationListener::class.java
+            )
             val sessions = manager.getActiveSessions(componentName)
             val activeSession = sessions?.sortedWith(
-                compareByDescending<android.media.session.MediaController> { 
+                compareByDescending<android.media.session.MediaController> {
                     val state = it.playbackState?.state
                     state == android.media.session.PlaybackState.STATE_PLAYING || state == android.media.session.PlaybackState.STATE_BUFFERING
                 }.thenByDescending {
@@ -2150,13 +2180,16 @@ class MainViewModel : ViewModel() {
 
             if (activeSession != null) {
                 val metadata = activeSession.metadata
-                val title = metadata?.getString(android.media.MediaMetadata.METADATA_KEY_TITLE) ?: ""
-                val artist = metadata?.getString(android.media.MediaMetadata.METADATA_KEY_ARTIST) ?: ""
+                val title =
+                    metadata?.getString(android.media.MediaMetadata.METADATA_KEY_TITLE) ?: ""
+                val artist =
+                    metadata?.getString(android.media.MediaMetadata.METADATA_KEY_ARTIST) ?: ""
                 val packageName = activeSession.packageName
 
-                val artwork = metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_ALBUM_ART)
-                    ?: metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_ART)
-                    ?: metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_DISPLAY_ICON)
+                val artwork =
+                    metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_ALBUM_ART)
+                        ?: metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_ART)
+                        ?: metadata?.getBitmap(android.media.MediaMetadata.METADATA_KEY_DISPLAY_ICON)
 
                 val filesDirFile = File(context.filesDir, "music_artwork.png")
                 if (artwork != null) {
@@ -2164,7 +2197,8 @@ class MainViewModel : ViewModel() {
                         FileOutputStream(filesDirFile).use { out ->
                             artwork.compress(Bitmap.CompressFormat.PNG, 100, out)
                         }
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 } else {
                     if (filesDirFile.exists()) filesDirFile.delete()
                 }
@@ -2177,7 +2211,8 @@ class MainViewModel : ViewModel() {
                 settingsRepository.setPixelSearchbarMusicPackage(packageName)
                 settingsRepository.incrementPixelSearchbarWidgetRevision()
             }
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 
     fun updatePixelSearchbarWidget(context: Context) {
@@ -2185,7 +2220,8 @@ class MainViewModel : ViewModel() {
             try {
                 val manager = androidx.glance.appwidget.GlanceAppWidgetManager(context)
                 val widget = com.sameerasw.essentials.services.widgets.PixelSearchbarWidget()
-                val glanceIds = manager.getGlanceIds(com.sameerasw.essentials.services.widgets.PixelSearchbarWidget::class.java)
+                val glanceIds =
+                    manager.getGlanceIds(com.sameerasw.essentials.services.widgets.PixelSearchbarWidget::class.java)
                 for (glanceId in glanceIds) {
                     widget.update(context, glanceId)
                 }
@@ -4116,20 +4152,30 @@ class MainViewModel : ViewModel() {
     }
 
     // Daily Wallpaper Support
-    val dailyWallpaperInfo = mutableStateOf<com.sameerasw.essentials.domain.model.WallpaperInfo?>(null)
+    val dailyWallpaperInfo =
+        mutableStateOf<com.sameerasw.essentials.domain.model.WallpaperInfo?>(null)
     val isWallpaperLoading = mutableStateOf(false)
     private val wallpaperRepository = com.sameerasw.essentials.data.repository.WallpaperRepository()
 
     fun loadCachedWallpaper() {
         if (!::settingsRepository.isInitialized) return
-        val id = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID) ?: return
-        val url = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL) ?: ""
-        val urlMobile = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE) ?: ""
-        val urlFull = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL) ?: ""
-        val authorName = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME) ?: ""
-        val authorLink = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK) ?: ""
-        val photoLink = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK) ?: ""
-        val updatedAt = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT) ?: ""
+        val id =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID) ?: return
+        val url =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL) ?: ""
+        val urlMobile =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE)
+                ?: ""
+        val urlFull =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL) ?: ""
+        val authorName =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME) ?: ""
+        val authorLink =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK) ?: ""
+        val photoLink =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK) ?: ""
+        val updatedAt =
+            settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT) ?: ""
 
         dailyWallpaperInfo.value = com.sameerasw.essentials.domain.model.WallpaperInfo(
             id = id,
@@ -4150,13 +4196,34 @@ class MainViewModel : ViewModel() {
             val info = wallpaperRepository.fetchTodayWallpaper()
             if (info != null) {
                 dailyWallpaperInfo.value = info
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID, info.id)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL, info.url)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE, info.urlMobile)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME, info.authorName)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK, info.authorLink)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK, info.photoLink)
-                settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT, info.updatedAt)
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID,
+                    info.id
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL,
+                    info.url
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE,
+                    info.urlMobile
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME,
+                    info.authorName
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK,
+                    info.authorLink
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK,
+                    info.photoLink
+                )
+                settingsRepository.putString(
+                    SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT,
+                    info.updatedAt
+                )
             }
             isWallpaperLoading.value = false
         }
@@ -4188,9 +4255,10 @@ class MainViewModel : ViewModel() {
         val data = androidx.work.Data.Builder()
             .putBoolean("force", true)
             .build()
-        val workRequest = androidx.work.OneTimeWorkRequestBuilder<com.sameerasw.essentials.services.DailyWallpaperWorker>()
-            .setInputData(data)
-            .build()
+        val workRequest =
+            androidx.work.OneTimeWorkRequestBuilder<com.sameerasw.essentials.services.DailyWallpaperWorker>()
+                .setInputData(data)
+                .build()
         androidx.work.WorkManager.getInstance(context).enqueue(workRequest)
     }
 
@@ -4208,6 +4276,7 @@ class MainViewModel : ViewModel() {
     }
 
     private fun cancelPeriodicWallpaperCheck(context: Context) {
-        androidx.work.WorkManager.getInstance(context).cancelUniqueWork("daily_wallpaper_check_work")
+        androidx.work.WorkManager.getInstance(context)
+            .cancelUniqueWork("daily_wallpaper_check_work")
     }
 }

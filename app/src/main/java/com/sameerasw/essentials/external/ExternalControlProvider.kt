@@ -3,7 +3,6 @@ package com.sameerasw.essentials.external
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
-import android.database.MatrixCursor
 import android.net.Uri
 import android.os.Bundle
 

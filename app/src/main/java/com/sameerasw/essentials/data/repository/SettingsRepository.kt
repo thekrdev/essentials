@@ -548,6 +548,7 @@ class SettingsRepository(private val context: Context) {
     fun loadPocketModeExcludedApps() = loadAppSelection(KEY_POCKET_MODE_EXCLUDED_APPS)
     fun savePocketModeExcludedApps(apps: List<AppSelection>) =
         saveAppSelection(KEY_POCKET_MODE_EXCLUDED_APPS, apps)
+
     fun updatePocketModeExcludedAppSelection(packageName: String, enabled: Boolean) =
         updateAppSelection(KEY_POCKET_MODE_EXCLUDED_APPS, packageName, enabled)
 
@@ -943,7 +944,10 @@ class SettingsRepository(private val context: Context) {
         putBoolean(KEY_PIXEL_SEARCHBAR_BACKGROUND_PILL, enabled)
 
     fun getPixelSearchbarWidgetId(): Int =
-        prefs.getInt(KEY_PIXEL_SEARCHBAR_WIDGET_ID, android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID)
+        prefs.getInt(
+            KEY_PIXEL_SEARCHBAR_WIDGET_ID,
+            android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
+        )
 
     fun setPixelSearchbarWidgetId(id: Int) =
         prefs.edit().putInt(KEY_PIXEL_SEARCHBAR_WIDGET_ID, id).apply()
@@ -1012,7 +1016,9 @@ class SettingsRepository(private val context: Context) {
         putString(KEY_PIXEL_SEARCHBAR_MUSIC_PACKAGE, value)
 
     fun getEdgeLightingSweepSelectedShapes(): Set<String> {
-        val defaultShapes = com.sameerasw.essentials.utils.AmbientMusicShapeHelper.allShapesWithNames.map { it.first }.toSet()
+        val defaultShapes =
+            com.sameerasw.essentials.utils.AmbientMusicShapeHelper.allShapesWithNames.map { it.first }
+                .toSet()
         val json = prefs.getString(KEY_EDGE_LIGHTING_SWEEP_SELECTED_SHAPES, null)
         return if (json != null) {
             try {
@@ -1149,7 +1155,10 @@ class SettingsRepository(private val context: Context) {
 
     fun saveLiveWallpaperCustomVideos(videos: List<String>) =
         liveWallpaperPrefs.edit()
-            .putString(KEY_LIVE_WALLPAPER_CUSTOM_VIDEOS, videos.filter { it.isNotEmpty() }.distinct().joinToString("\n")).apply()
+            .putString(
+                KEY_LIVE_WALLPAPER_CUSTOM_VIDEOS,
+                videos.filter { it.isNotEmpty() }.distinct().joinToString("\n")
+            ).apply()
 
     fun addLiveWallpaperCustomVideo(uri: String) {
         val current = getLiveWallpaperCustomVideos().toMutableList()

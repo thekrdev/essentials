@@ -49,6 +49,7 @@ import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.model.NotificationLightingColorMode
 import com.sameerasw.essentials.domain.model.NotificationLightingStyle
 import com.sameerasw.essentials.domain.model.NotificationLightingSweepPosition
+import com.sameerasw.essentials.ui.components.cards.FeatureCard
 import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.components.pickers.GlowSidesPicker
@@ -59,7 +60,6 @@ import com.sameerasw.essentials.ui.components.sheets.AppSelectionSheet
 import com.sameerasw.essentials.ui.components.sheets.PermissionItem
 import com.sameerasw.essentials.ui.components.sheets.PermissionsBottomSheet
 import com.sameerasw.essentials.ui.components.sheets.SweepShapesBottomSheet
-import com.sameerasw.essentials.ui.components.cards.FeatureCard
 import com.sameerasw.essentials.ui.components.sliders.ConfigSliderItem
 import com.sameerasw.essentials.ui.modifiers.highlight
 import com.sameerasw.essentials.utils.HapticUtil

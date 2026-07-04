@@ -2,6 +2,7 @@ package com.sameerasw.essentials.services.tiles
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -14,7 +15,6 @@ import android.media.session.MediaSessionManager
 import android.os.Handler
 import android.os.Looper
 import android.os.Vibrator
-import android.app.KeyguardManager
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
 import com.sameerasw.essentials.data.repository.SettingsRepository
@@ -24,12 +24,12 @@ import com.sameerasw.essentials.services.InputEventListenerService
 import com.sameerasw.essentials.services.NotificationListener
 import com.sameerasw.essentials.services.handlers.AmbientGlanceHandler
 import com.sameerasw.essentials.services.handlers.AodForceTurnOffHandler
-import com.sameerasw.essentials.services.handlers.PocketModeHandler
 import com.sameerasw.essentials.services.handlers.AppFlowHandler
 import com.sameerasw.essentials.services.handlers.ButtonRemapHandler
 import com.sameerasw.essentials.services.handlers.FlashlightHandler
 import com.sameerasw.essentials.services.handlers.NotificationLightingHandler
 import com.sameerasw.essentials.services.handlers.OmniGestureOverlayHandler
+import com.sameerasw.essentials.services.handlers.PocketModeHandler
 import com.sameerasw.essentials.services.handlers.StatusBarIconHandler
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
 import com.sameerasw.essentials.utils.FreezeManager
@@ -90,14 +90,16 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
         return appCategoryCache.getOrPut(packageName) {
             try {
                 val info = packageManager.getApplicationInfo(packageName, 0)
-                val isLegacyGame = (info.flags and android.content.pm.ApplicationInfo.FLAG_IS_GAME) != 0
-                val isCategoryMatch = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    val category = info.category
-                    category == android.content.pm.ApplicationInfo.CATEGORY_GAME ||
-                    category == android.content.pm.ApplicationInfo.CATEGORY_VIDEO
-                } else {
-                    false
-                }
+                val isLegacyGame =
+                    (info.flags and android.content.pm.ApplicationInfo.FLAG_IS_GAME) != 0
+                val isCategoryMatch =
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        val category = info.category
+                        category == android.content.pm.ApplicationInfo.CATEGORY_GAME ||
+                                category == android.content.pm.ApplicationInfo.CATEGORY_VIDEO
+                    } else {
+                        false
+                    }
                 isLegacyGame || isCategoryMatch
             } catch (e: Exception) {
                 false
@@ -108,11 +110,12 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
     private fun hasActiveMediaSession(packageName: String): Boolean {
         return try {
             val msm = getSystemService(MEDIA_SESSION_SERVICE) as MediaSessionManager
-            val componentName = android.content.ComponentName(this, NotificationListener::class.java)
+            val componentName =
+                android.content.ComponentName(this, NotificationListener::class.java)
             val sessions = msm.getActiveSessions(componentName)
             sessions.any {
                 it.packageName == packageName &&
-                it.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING
+                        it.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING
             }
         } catch (e: Exception) {
             false
@@ -435,10 +438,10 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
             if (pocketModeEnabled && !pocketModeHandler.isBypassed) {
                 val currentApp = appFlowHandler.currentPackage
                 val shouldBypass = (currentApp != null && (
-                    pocketModeExcludedAppsSet.contains(currentApp) ||
-                    isGameOrVideoApp(currentApp) ||
-                    hasActiveMediaSession(currentApp)
-                )) || (lockScreenOnly && !keyguardManager.isKeyguardLocked)
+                        pocketModeExcludedAppsSet.contains(currentApp) ||
+                                isGameOrVideoApp(currentApp) ||
+                                hasActiveMediaSession(currentApp)
+                        )) || (lockScreenOnly && !keyguardManager.isKeyguardLocked)
                 if (!shouldBypass) {
                     pocketModeHandler.onProximityChanged(
                         isBlocked = flashlightHandler.isProximityBlocked,
@@ -471,10 +474,10 @@ class ScreenOffAccessibilityService : AccessibilityService(), SensorEventListene
             if (pocketModeEnabled && !pocketModeHandler.isBypassed) {
                 val currentApp = appFlowHandler.currentPackage
                 val shouldBypass = (currentApp != null && (
-                    pocketModeExcludedAppsSet.contains(currentApp) ||
-                    isGameOrVideoApp(currentApp) ||
-                    hasActiveMediaSession(currentApp)
-                )) || (lockScreenOnly && !keyguardManager.isKeyguardLocked)
+                        pocketModeExcludedAppsSet.contains(currentApp) ||
+                                isGameOrVideoApp(currentApp) ||
+                                hasActiveMediaSession(currentApp)
+                        )) || (lockScreenOnly && !keyguardManager.isKeyguardLocked)
                 if (!shouldBypass) {
                     pocketModeHandler.onProximityChanged(
                         isBlocked = isBlocked,

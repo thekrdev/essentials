@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -121,7 +120,8 @@ fun SweepShapesBottomSheet(
                 OutlinedButton(
                     onClick = {
                         HapticUtil.performVirtualKeyHaptic(view)
-                        val allNames = AmbientMusicShapeHelper.allShapesWithNames.map { it.first }.toSet()
+                        val allNames =
+                            AmbientMusicShapeHelper.allShapesWithNames.map { it.first }.toSet()
                         selectedShapes = allNames - selectedShapes
                     },
                     modifier = Modifier.weight(1f)

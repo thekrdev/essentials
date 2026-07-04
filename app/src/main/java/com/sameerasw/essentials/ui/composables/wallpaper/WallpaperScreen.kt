@@ -10,13 +10,35 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,10 +48,33 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonGroupDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SplitButtonDefaults
+import androidx.compose.material3.SplitButtonLayout
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -117,8 +162,9 @@ fun WallpaperScreen(
 
     LaunchedEffect(availableVideos) {
         if (selectedVideo == SettingsRepository.LIVE_WALLPAPER_DEFAULT_VIDEO && availableVideos.isNotEmpty()) {
-            val first = availableVideos.firstOrNull { it != SettingsRepository.LIVE_WALLPAPER_DEFAULT_VIDEO }
-                ?: availableVideos.firstOrNull()
+            val first =
+                availableVideos.firstOrNull { it != SettingsRepository.LIVE_WALLPAPER_DEFAULT_VIDEO }
+                    ?: availableVideos.firstOrNull()
             if (first != null) {
                 selectedVideo = first
                 repository.saveLiveWallpaperSelectedVideo(first)
@@ -285,7 +331,11 @@ fun WallpaperScreen(
                                     .padding(top = statusBarHeight + 64.dp),
                                 contentAlignment = Alignment.TopCenter
                             ) {
-                                val scale = if (isLoading) 1f else pullRefreshState.distanceFraction.coerceIn(0f, 1f)
+                                val scale =
+                                    if (isLoading) 1f else pullRefreshState.distanceFraction.coerceIn(
+                                        0f,
+                                        1f
+                                    )
                                 if (scale > 0f) {
                                     Card(
                                         shape = CircleShape,
@@ -356,10 +406,16 @@ fun WallpaperScreen(
                                     selectedVideo = video
                                     repository.saveLiveWallpaperSelectedVideo(video)
                                 },
-                                onRemove = if (context.resources.getIdentifier(video, "raw", context.packageName) == 0) {
+                                onRemove = if (context.resources.getIdentifier(
+                                        video,
+                                        "raw",
+                                        context.packageName
+                                    ) == 0
+                                ) {
                                     {
                                         repository.removeLiveWallpaperCustomVideo(video)
-                                        availableVideos = repository.getLiveWallpaperAvailableVideos()
+                                        availableVideos =
+                                            repository.getLiveWallpaperAvailableVideos()
                                         selectedVideo = repository.getLiveWallpaperSelectedVideo()
                                     }
                                 } else null
@@ -373,7 +429,11 @@ fun WallpaperScreen(
         AnimatedVisibility(
             visible = (pagerState.currentPage == 0 && wallpaperInfo != null) || pagerState.currentPage == 1,
             enter = fadeIn(animationSpec = tween(400)) + slideInVertically(animationSpec = tween(400)) { it / 2 },
-            exit = fadeOut(animationSpec = tween(400)) + slideOutVertically(animationSpec = tween(400)) { it / 2 },
+            exit = fadeOut(animationSpec = tween(400)) + slideOutVertically(
+                animationSpec = tween(
+                    400
+                )
+            ) { it / 2 },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 24.dp)
@@ -386,8 +446,16 @@ fun WallpaperScreen(
             ) {
                 AnimatedVisibility(
                     visible = showSettingsCard,
-                    enter = expandVertically(animationSpec = tween(300)) + fadeIn(animationSpec = tween(300)),
-                    exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(animationSpec = tween(300))
+                    enter = expandVertically(animationSpec = tween(300)) + fadeIn(
+                        animationSpec = tween(
+                            300
+                        )
+                    ),
+                    exit = shrinkVertically(animationSpec = tween(300)) + fadeOut(
+                        animationSpec = tween(
+                            300
+                        )
+                    )
                 ) {
                     Card(
                         shape = RoundedCornerShape(16.dp),
@@ -475,13 +543,18 @@ fun WallpaperScreen(
                                 )
 
                                 val options = listOf(
-                                    SettingsRepository.LIVE_WALLPAPER_TRIGGER_UNLOCK to stringResource(R.string.live_wallpaper_trigger_unlock),
-                                    SettingsRepository.LIVE_WALLPAPER_TRIGGER_SCREEN_ON to stringResource(R.string.live_wallpaper_trigger_screen_on)
+                                    SettingsRepository.LIVE_WALLPAPER_TRIGGER_UNLOCK to stringResource(
+                                        R.string.live_wallpaper_trigger_unlock
+                                    ),
+                                    SettingsRepository.LIVE_WALLPAPER_TRIGGER_SCREEN_ON to stringResource(
+                                        R.string.live_wallpaper_trigger_screen_on
+                                    )
                                 )
 
                                 SegmentedPicker(
                                     items = options,
-                                    selectedItem = options.find { it.first == playbackTrigger } ?: options.first(),
+                                    selectedItem = options.find { it.first == playbackTrigger }
+                                        ?: options.first(),
                                     onItemSelected = { option ->
                                         HapticUtil.performUIHaptic(view)
                                         playbackTrigger = option.first
@@ -498,8 +571,10 @@ fun WallpaperScreen(
                                         onClick = {
                                             HapticUtil.performHeavyHaptic(view)
                                             repository.saveLiveWallpaperCustomVideos(emptyList())
-                                            availableVideos = repository.getLiveWallpaperAvailableVideos()
-                                            selectedVideo = repository.getLiveWallpaperSelectedVideo()
+                                            availableVideos =
+                                                repository.getLiveWallpaperAvailableVideos()
+                                            selectedVideo =
+                                                repository.getLiveWallpaperSelectedVideo()
                                         },
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -532,18 +607,26 @@ fun WallpaperScreen(
                                     wallpaperInfo?.urlMobile?.let { url ->
                                         viewModel.applyWallpaper(context, url) { success ->
                                             if (!success) {
-                                                Toast.makeText(context, R.string.label_wallpaper_apply_failed, Toast.LENGTH_SHORT).show()
+                                                Toast.makeText(
+                                                    context,
+                                                    R.string.label_wallpaper_apply_failed,
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
                                             }
                                         }
                                     }
                                 } else {
                                     HapticUtil.performCustomHaptic(view, 0.8f)
-                                    val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
-                                        putExtra(
-                                            WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                                            ComponentName(context, LiveWallpaperService::class.java)
-                                        )
-                                    }
+                                    val intent =
+                                        Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                                            putExtra(
+                                                WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                                                ComponentName(
+                                                    context,
+                                                    LiveWallpaperService::class.java
+                                                )
+                                            )
+                                        }
                                     context.startActivity(intent)
                                 }
                             },
@@ -602,7 +685,8 @@ fun WallpaperScreen(
                 wallpaperInfo = wallpaperInfo,
                 onViewImage = {
                     try {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wallpaperInfo?.photoLink ?: ""))
+                        val intent =
+                            Intent(Intent.ACTION_VIEW, Uri.parse(wallpaperInfo?.photoLink ?: ""))
                         context.startActivity(intent)
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -610,7 +694,8 @@ fun WallpaperScreen(
                 },
                 onViewAuthor = {
                     try {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(wallpaperInfo?.authorLink ?: ""))
+                        val intent =
+                            Intent(Intent.ACTION_VIEW, Uri.parse(wallpaperInfo?.authorLink ?: ""))
                         context.startActivity(intent)
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -618,7 +703,10 @@ fun WallpaperScreen(
                 },
                 onViewCollection = {
                     try {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://unsplash.com/collections/LqO9knU9z2A/Likes"))
+                        val intent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://unsplash.com/collections/LqO9knU9z2A/Likes")
+                        )
                         context.startActivity(intent)
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -665,7 +753,10 @@ fun WallpaperHelpBottomSheet(
                     RoundedCardContainer {
                         Column(
                             modifier = Modifier
-                                .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceBright,
+                                    shape = MaterialTheme.shapes.extraSmall
+                                )
                                 .padding(16.dp),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
@@ -711,7 +802,10 @@ fun WallpaperHelpBottomSheet(
                 RoundedCardContainer {
                     Column(
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                            .background(
+                                MaterialTheme.colorScheme.surfaceBright,
+                                shape = MaterialTheme.shapes.extraSmall
+                            )
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
@@ -719,8 +813,8 @@ fun WallpaperHelpBottomSheet(
                             onClick = onViewCollection,
                             modifier = Modifier.fillMaxWidth(),
                             colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                             )
                         ) {
                             Text(text = "View Sameera's Collection")
@@ -742,7 +836,10 @@ fun WallpaperHelpBottomSheet(
                 RoundedCardContainer {
                     Column(
                         modifier = Modifier
-                            .background(MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
+                            .background(
+                                MaterialTheme.colorScheme.surfaceBright,
+                                shape = MaterialTheme.shapes.extraSmall
+                            )
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {

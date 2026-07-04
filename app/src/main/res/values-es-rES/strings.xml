@@ -101,6 +101,8 @@
     <string name="settings_section_other">Otro</string>
     <string name="flashlight_always_off_title">Apagar siempre la linterna</string>
     <string name="flashlight_always_off_desc">Incluso cuando la pantalla está encendida</string>
+    <string name="flashlight_pocket_title">Detección de bolsillo</string>
+    <string name="flashlight_pocket_desc">Apagar la linterna cuando el teléfono esté en el bolsillo</string>
     <string name="content_desc_settings">Ajustes</string>
     <!-- Caffeinate / Permissions -->
     <string name="permission_show_notification_title">Mostrar notificación</string>
@@ -460,6 +462,16 @@ Sin embargo, sí te permite reanudarla desde la lista de aplicaciones del lanzad
     <string name="feat_freeze_desc">Desactivar aplicaciones de uso poco frecuente</string>
     <string name="feat_watermark_title">Marca de agua</string>
     <string name="feat_watermark_desc">Añadir datos EXIF ​​y logotipos a las fotos</string>
+    <string name="feat_daily_wallpaper_title">Fondo de pantalla</string>
+    <string name="feat_daily_wallpaper_desc">Fondos de pantalla animados y seleccionados diariamente</string>
+    <string name="label_wallpaper_apply">Aplicar fondo de pantalla</string>
+    <string name="label_wallpaper_by">Foto de</string>
+    <string name="label_wallpaper_applied">Fondo de pantalla aplicado correctamente</string>
+    <string name="label_wallpaper_apply_failed">No se pudo aplicar el fondo de pantalla</string>
+    <string name="label_wallpaper_applying">Aplicando el nuevo fondo de pantalla</string>
+    <string name="label_wallpaper_auto_update">Actualización automática</string>
+    <string name="label_wallpaper_auto_update_desc">Comprueba dos veces al día si hay un nuevo fondo de pantalla en segundo plano</string>
+    <string name="label_clear_custom_videos">Borrar videos personalizados</string>
     <string name="feat_always_on_display_title">Pantalla siempre activa</string>
     <string name="feat_always_on_display_desc">Mostrar hora e información con la pantalla apagada</string>
     <string name="feat_calendar_sync_title">Sincronización del calendario</string>
@@ -580,6 +592,8 @@ Sin embargo, sí te permite reanudarla desde la lista de aplicaciones del lanzad
     <string name="search_remap_haptic_desc">Retroalimentación de vibración cuando se presiona el botón reasignado</string>
     <string name="search_remap_flashlight_title">Activar/desactivar la linterna</string>
     <string name="search_remap_flashlight_desc">Activar/desactivar la linterna con los botones de volumen</string>
+    <string name="search_flashlight_pocket_title">Detección de bolsillo para la linterna</string>
+    <string name="search_flashlight_pocket_desc">Apagado automático de la linterna al colocar el teléfono en el bolsillo</string>
     <string name="search_night_light_enable_title">Activar Luz nocturna dinámica</string>
     <string name="search_night_light_enable_desc">Interruptor principal para la luz nocturna dinámica</string>
     <string name="search_app_lock_enable_title">Activar bloqueo de aplicaciones</string>
@@ -935,6 +949,13 @@ Cuando llegue un mensaje o alerta de una aplicación seleccionada, la Pantalla s
         <item>linterna</item>
         <item>destello</item>
         <item>notificación</item>
+    </string-array>
+    <string-array name="keywords_pocket_detection">
+        <item>bolsillo</item>
+        <item>proximidad</item>
+        <item>sensor</item>
+        <item>torch</item>
+        <item>auto</item>
     </string-array>
     <string-array name="keywords_qs_stay_awake">
         <item>despierto</item>
@@ -1473,7 +1494,7 @@ Cuando llegue un mensaje o alerta de una aplicación seleccionada, la Pantalla s
     <string name="lock_screen_clock_metro">Metro</string>
     <string name="lock_screen_clock_numoverlap">Superposición de números</string>
     <string name="lock_screen_clock_weather">El tiempo</string>
-    <string name="lock_screen_clock_select_label">Seleccionar estilo del reloj</string>
+    <string name="lock_screen_clock_select_label">Seleccionar el estilo del reloj</string>
     <string name="lock_screen_clock_current_label">Actual</string>
     <string name="lock_screen_clock_apply_label">Aplicar</string>
     <string name="lock_screen_clock_applied_toast">Estilo del reloj aplicado</string>
@@ -1535,4 +1556,17 @@ Cuando llegue un mensaje o alerta de una aplicación seleccionada, la Pantalla s
     <string name="pixel_searchbar_style_music">Música</string>
     <string name="action_restart_shizuku">Reiniciar Shizuku</string>
     <string name="toast_enter_shizuku_token">Por favor, introduce primero el token de autenticación de Shizuku en los ajustes</string>
+    <!-- Pocket Mode -->
+    <string name="feat_pocket_mode_title">Modo bolsillo</string>
+    <string name="feat_pocket_mode_desc">Evitar toques accidentales mientras el teléfono está en el bolsillo</string>
+    <string name="pocket_mode_use_light_title">Usar el sensor de luz</string>
+    <string name="pocket_mode_use_light_desc">Usar el nivel de luz ambiental además de la proximidad para mejorar la precisión</string>
+    <string name="pocket_mode_active">Modo bolsillo activo</string>
+    <string name="pocket_mode_dismiss_hint">Pulsa cualquier tecla de volumen para descartar</string>
+    <string name="pocket_mode_warning">Advertencia: En algunos dispositivos que carecen de ciertos sensores, activar el Modo bolsillo puede impedir el modo de suspensión profunda y provocar un mayor consumo de batería</string>
+    <string name="pocket_mode_exclude_apps_title">Exclude apps</string>
+    <string name="pocket_mode_exclude_apps_desc">Choose apps where Pocket Mode should not trigger. Pocket mode will not work when streaming or gaming by default</string>
+    <string name="pocket_mode_trigger_delay_title">Trigger delay</string>
+    <string name="pocket_mode_lock_screen_only_title">Lock screen only</string>
+    <string name="pocket_mode_lock_screen_only_desc">Only trigger pocket mode when the device is locked</string>
 </resources>

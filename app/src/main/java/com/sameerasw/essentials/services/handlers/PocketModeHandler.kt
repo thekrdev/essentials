@@ -134,7 +134,12 @@ class PocketModeHandler(private val service: AccessibilityService) {
         isBypassed = false
     }
 
-    fun onProximityChanged(isBlocked: Boolean, isLightDark: Boolean, useLightSensor: Boolean, triggerDelayMs: Long = 3000L) {
+    fun onProximityChanged(
+        isBlocked: Boolean,
+        isLightDark: Boolean,
+        useLightSensor: Boolean,
+        triggerDelayMs: Long = 3000L
+    ) {
         val shouldShow = isBlocked && (!useLightSensor || isLightDark)
         if (shouldShow) {
             if (!isBypassed && !isOverlayVisible && !isPending) {
@@ -158,13 +163,15 @@ class PocketModeHandler(private val service: AccessibilityService) {
         isBypassed = false
     }
 
-    private class OverlayLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner, ViewModelStoreOwner {
+    private class OverlayLifecycleOwner : LifecycleOwner, SavedStateRegistryOwner,
+        ViewModelStoreOwner {
         private val lifecycleRegistry = LifecycleRegistry(this)
         private val savedStateRegistryController = SavedStateRegistryController.create(this)
         private val store = ViewModelStore()
 
         override val lifecycle: Lifecycle = lifecycleRegistry
-        override val savedStateRegistry: SavedStateRegistry = savedStateRegistryController.savedStateRegistry
+        override val savedStateRegistry: SavedStateRegistry =
+            savedStateRegistryController.savedStateRegistry
         override val viewModelStore: ViewModelStore = store
 
         fun onCreate() {

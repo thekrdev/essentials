@@ -6,14 +6,12 @@ import android.content.Intent
 import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.os.Build
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.provider.Settings
 import android.view.KeyEvent
 import android.widget.Toast
-import com.sameerasw.essentials.domain.diy.Action
-import com.sameerasw.essentials.domain.ScreenOffMethod
 import com.sameerasw.essentials.domain.HapticFeedbackType
+import com.sameerasw.essentials.domain.ScreenOffMethod
+import com.sameerasw.essentials.domain.diy.Action
 import com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
 import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.utils.performHapticFeedback
@@ -229,21 +227,37 @@ object CombinedActionExecutor {
                                 context.contentResolver,
                                 Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
                             )
-                            val hasAccess = enabledServices?.contains("com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService") == true
+                            val hasAccess =
+                                enabledServices?.contains("com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService") == true
                             if (hasAccess) {
-                                val serviceIntent = Intent(context, ScreenOffAccessibilityService::class.java).apply {
+                                val serviceIntent = Intent(
+                                    context,
+                                    ScreenOffAccessibilityService::class.java
+                                ).apply {
                                     this.action = "LOCK_SCREEN"
                                 }
                                 context.startService(serviceIntent)
                             } else {
-                                Toast.makeText(context, "Missing Accessibility permission", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Missing Accessibility permission",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
+
                         ScreenOffMethod.INPUT -> {
                             if (ShellUtils.hasPermission(context)) {
-                                ShellUtils.runCommand(context, "input keyevent ${KeyEvent.KEYCODE_POWER}")
+                                ShellUtils.runCommand(
+                                    context,
+                                    "input keyevent ${KeyEvent.KEYCODE_POWER}"
+                                )
                             } else {
-                                Toast.makeText(context, "Missing Shizuku/Root permission", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "Missing Shizuku/Root permission",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -251,20 +265,50 @@ object CombinedActionExecutor {
 
                 is Action.MediaPlayPause -> {
                     val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_DOWN,
+                            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+                        )
+                    )
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_UP,
+                            KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+                        )
+                    )
                 }
 
                 is Action.MediaNext -> {
                     val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT))
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT))
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_DOWN,
+                            KeyEvent.KEYCODE_MEDIA_NEXT
+                        )
+                    )
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_UP,
+                            KeyEvent.KEYCODE_MEDIA_NEXT
+                        )
+                    )
                 }
 
                 is Action.MediaPrevious -> {
                     val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
-                    am.dispatchMediaKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS))
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_DOWN,
+                            KeyEvent.KEYCODE_MEDIA_PREVIOUS
+                        )
+                    )
+                    am.dispatchMediaKeyEvent(
+                        KeyEvent(
+                            KeyEvent.ACTION_UP,
+                            KeyEvent.KEYCODE_MEDIA_PREVIOUS
+                        )
+                    )
                 }
 
                 is Action.AIAssistant -> {
@@ -284,7 +328,11 @@ object CombinedActionExecutor {
                         if (serviceInst != null) {
                             serviceInst.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT)
                         } else {
-                            Toast.makeText(context, "Accessibility service is not running", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "Accessibility service is not running",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -292,7 +340,8 @@ object CombinedActionExecutor {
                 is Action.ToggleMediaVolume -> {
                     val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     val currentVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC)
-                    val prefs = context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
+                    val prefs =
+                        context.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
 
                     if (currentVolume > 0) {
                         prefs.edit().putInt("last_media_volume", currentVolume).apply()
@@ -302,7 +351,11 @@ object CombinedActionExecutor {
                             "last_media_volume",
                             am.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 2
                         )
-                        am.setStreamVolume(AudioManager.STREAM_MUSIC, lastVolume, AudioManager.FLAG_SHOW_UI)
+                        am.setStreamVolume(
+                            AudioManager.STREAM_MUSIC,
+                            lastVolume,
+                            AudioManager.FLAG_SHOW_UI
+                        )
                     }
                 }
 
@@ -321,18 +374,27 @@ object CombinedActionExecutor {
                 is Action.PinApp -> {
                     try {
                         val useActivityTask = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-                        val serviceName = if (useActivityTask) "activity_task" else Context.ACTIVITY_SERVICE
-                        val stubClassName = if (useActivityTask) "android.app.IActivityTaskManager\$Stub" else "android.app.IActivityManager\$Stub"
-                        val interfaceClassName = if (useActivityTask) "android.app.IActivityTaskManager" else "android.app.IActivityManager"
+                        val serviceName =
+                            if (useActivityTask) "activity_task" else Context.ACTIVITY_SERVICE
+                        val stubClassName =
+                            if (useActivityTask) "android.app.IActivityTaskManager\$Stub" else "android.app.IActivityManager\$Stub"
+                        val interfaceClassName =
+                            if (useActivityTask) "android.app.IActivityTaskManager" else "android.app.IActivityManager"
 
                         val binder = SystemServiceHelper.getSystemService(serviceName)
                         val stubClass = Class.forName(stubClassName)
                         val interfaceClass = Class.forName(interfaceClassName)
 
                         val serviceInstance = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                            org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(stubClass, null, "asInterface", ShizukuBinderWrapper(binder))
+                            org.lsposed.hiddenapibypass.HiddenApiBypass.invoke(
+                                stubClass,
+                                null,
+                                "asInterface",
+                                ShizukuBinderWrapper(binder)
+                            )
                         } else {
-                            val asInterfaceMethod = stubClass.getMethod("asInterface", android.os.IBinder::class.java)
+                            val asInterfaceMethod =
+                                stubClass.getMethod("asInterface", android.os.IBinder::class.java)
                             asInterfaceMethod.invoke(null, ShizukuBinderWrapper(binder))
                         }
 
@@ -356,11 +418,15 @@ object CombinedActionExecutor {
                                     0
                                 ) as List<*>
                             } else {
-                                val getTasksMethod = interfaceClass.getMethod("getTasks", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType)
+                                val getTasksMethod = interfaceClass.getMethod(
+                                    "getTasks",
+                                    Int::class.javaPrimitiveType,
+                                    Int::class.javaPrimitiveType
+                                )
                                 getTasksMethod.invoke(serviceInstance, 5, 0) as List<*>
                             }
                         }
-                        
+
                         var targetTaskId = -1
                         for (task in tasks) {
                             val taskInfo = task as? ActivityManager.RunningTaskInfo ?: continue
@@ -370,7 +436,7 @@ object CombinedActionExecutor {
                                 break
                             }
                         }
-                        
+
                         if (targetTaskId == -1 && tasks.isNotEmpty()) {
                             val firstTask = tasks.firstOrNull() as? ActivityManager.RunningTaskInfo
                             if (firstTask != null) {
@@ -387,15 +453,26 @@ object CombinedActionExecutor {
                                     targetTaskId
                                 )
                             } else {
-                                val startLockTaskMethod = interfaceClass.getMethod("startSystemLockTaskMode", Int::class.javaPrimitiveType)
+                                val startLockTaskMethod = interfaceClass.getMethod(
+                                    "startSystemLockTaskMode",
+                                    Int::class.javaPrimitiveType
+                                )
                                 startLockTaskMethod.invoke(serviceInstance, targetTaskId)
                             }
                         } else {
-                            Toast.makeText(context, "No active foreground task found", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                "No active foreground task found",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        Toast.makeText(context, "Failed to pin app: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Failed to pin app: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }

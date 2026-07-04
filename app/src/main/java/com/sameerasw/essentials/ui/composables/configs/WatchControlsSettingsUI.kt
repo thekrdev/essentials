@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -52,9 +51,13 @@ fun WatchControlsSettingsUI(
 
     val defaultLayout = "LOCK,SOUND,FLASHLIGHT,FLASHLIGHT_PULSE,AOD,TAP_TO_WAKE"
     val savedLayout = prefs.getString("watch_controls_layout", defaultLayout) ?: defaultLayout
-    var activeControls by remember { mutableStateOf(savedLayout.split(",").filter { it.isNotBlank() }) }
+    var activeControls by remember {
+        mutableStateOf(
+            savedLayout.split(",").filter { it.isNotBlank() })
+    }
 
-    val allPossible = listOf("LOCK", "SOUND", "FLASHLIGHT", "FLASHLIGHT_PULSE", "AOD", "TAP_TO_WAKE")
+    val allPossible =
+        listOf("LOCK", "SOUND", "FLASHLIGHT", "FLASHLIGHT_PULSE", "AOD", "TAP_TO_WAKE")
     var disabledControls by remember {
         mutableStateOf(allPossible.filter { it !in activeControls })
     }
@@ -91,6 +94,7 @@ fun WatchControlsSettingsUI(
         val fromKey: String = when {
             from.index < originalActiveSize -> activeControls.getOrNull(from.index)
                 ?: return@rememberReorderableLazyListState
+
             from.index == originalActiveSize -> "separator"
             else -> disabledControls.getOrNull(from.index - originalActiveSize - 1)
                 ?: return@rememberReorderableLazyListState
@@ -150,7 +154,8 @@ fun WatchControlsSettingsUI(
                             detectTapGestures(onLongPress = {
                                 if (activeControls.size > 1) {
                                     val toDisable = activeControls[index]
-                                    activeControls = activeControls.toMutableList().apply { removeAt(index) }
+                                    activeControls =
+                                        activeControls.toMutableList().apply { removeAt(index) }
                                     disabledControls = disabledControls + toDisable
                                 }
                                 save()
@@ -163,7 +168,9 @@ fun WatchControlsSettingsUI(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = controlIcons[key] ?: R.drawable.rounded_watch_24),
+                            painter = painterResource(
+                                id = controlIcons[key] ?: R.drawable.rounded_watch_24
+                            ),
                             contentDescription = key,
                             modifier = Modifier.size(24.dp),
                             tint = MaterialTheme.colorScheme.primary
@@ -222,7 +229,8 @@ fun WatchControlsSettingsUI(
                         .pointerInput(Unit) {
                             detectTapGestures(onLongPress = {
                                 val toEnable = disabledControls[index]
-                                disabledControls = disabledControls.toMutableList().apply { removeAt(index) }
+                                disabledControls =
+                                    disabledControls.toMutableList().apply { removeAt(index) }
                                 activeControls = activeControls + toEnable
                                 save()
                                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -234,7 +242,9 @@ fun WatchControlsSettingsUI(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
-                            painter = painterResource(id = controlIcons[key] ?: R.drawable.rounded_watch_24),
+                            painter = painterResource(
+                                id = controlIcons[key] ?: R.drawable.rounded_watch_24
+                            ),
                             contentDescription = key,
                             modifier = Modifier.size(24.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant

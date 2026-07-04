@@ -6,8 +6,8 @@ import com.sameerasw.essentials.EssentialsApp
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.model.Feature
 import com.sameerasw.essentials.domain.model.SearchSetting
-import com.sameerasw.essentials.ui.activities.WatermarkActivity
 import com.sameerasw.essentials.ui.activities.PixelSearchbarSettingsActivity
+import com.sameerasw.essentials.ui.activities.WatermarkActivity
 import com.sameerasw.essentials.utils.DeviceUtils
 import com.sameerasw.essentials.utils.ShellUtils
 import com.sameerasw.essentials.viewmodels.MainViewModel
@@ -299,7 +299,7 @@ object FeatureRegistry {
             override fun isEnabled(viewModel: MainViewModel) = true
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {}
         },
- 
+
         object : Feature(
             id = "Pixel Searchbar",
             title = R.string.feat_pixel_searchbar_title,
@@ -313,15 +313,20 @@ object FeatureRegistry {
             isBeta = true,
             parentFeatureId = "Widgets"
         ) {
-            override fun isEnabled(viewModel: MainViewModel) = viewModel.isPixelSearchbarEnabled.value
+            override fun isEnabled(viewModel: MainViewModel) =
+                viewModel.isPixelSearchbarEnabled.value
+
             override fun isToggleEnabled(viewModel: MainViewModel, context: Context) =
                 viewModel.isWriteSecureSettingsEnabled.value || viewModel.isShizukuPermissionGranted.value || viewModel.isRootPermissionGranted.value
+
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
                 viewModel.setPixelSearchbarEnabled(enabled, context)
             }
+
             override fun onClick(context: Context, viewModel: MainViewModel) {
                 context.startActivity(Intent(context, PixelSearchbarSettingsActivity::class.java))
             }
+
             override fun isDeviceSupported(context: Context) = DeviceUtils.isGoogleDevice()
         },
 
@@ -958,6 +963,7 @@ object FeatureRegistry {
 
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) =
                 viewModel.setPocketModeEnabled(enabled)
+
             override fun isDeviceSupported(context: Context) = !DeviceUtils.isGoogleDevice()
         },
         object : Feature(
@@ -1101,7 +1107,12 @@ object FeatureRegistry {
             override fun isEnabled(viewModel: MainViewModel) = true
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {}
             override fun onClick(context: Context, viewModel: MainViewModel) {
-                context.startActivity(Intent(context, com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java))
+                context.startActivity(
+                    Intent(
+                        context,
+                        com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java
+                    )
+                )
             }
         },
 
@@ -1166,7 +1177,8 @@ object FeatureRegistry {
 
             override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
                 // Send message to watch to toggle ADB Wifi
-                val messageClient = com.google.android.gms.wearable.Wearable.getMessageClient(context)
+                val messageClient =
+                    com.google.android.gms.wearable.Wearable.getMessageClient(context)
                 val nodeClient = com.google.android.gms.wearable.Wearable.getNodeClient(context)
                 nodeClient.connectedNodes.addOnSuccessListener { nodes ->
                     for (node in nodes) {

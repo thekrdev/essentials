@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
+    android:tint="?android:attr/colorControlNormal"
     android:viewportWidth="15.998"
-    android:viewportHeight="15.998"
-    android:tint="?android:attr/colorControlNormal">
+    android:viewportHeight="15.998">
     <group
         android:translateX="22.002"
         android:translateY="-0.002">

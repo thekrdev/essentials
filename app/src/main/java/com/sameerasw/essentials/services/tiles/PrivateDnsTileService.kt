@@ -84,6 +84,7 @@ class PrivateDnsTileService : BaseTileService() {
                 MODE_AUTO -> {
                     if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
                 }
+
                 MODE_HOSTNAME -> MODE_OFF
                 else -> MODE_OFF
             }
@@ -92,9 +93,11 @@ class PrivateDnsTileService : BaseTileService() {
                 MODE_OFF -> {
                     if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
                 }
+
                 MODE_AUTO -> {
                     if (getPrivateDnsHostname().isNullOrEmpty()) MODE_OFF else MODE_HOSTNAME
                 }
+
                 MODE_HOSTNAME -> MODE_OFF
                 else -> MODE_OFF
             }

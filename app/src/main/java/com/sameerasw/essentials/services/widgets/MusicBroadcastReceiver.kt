@@ -23,11 +23,16 @@ class MusicBroadcastReceiver : BroadcastReceiver() {
 
         // Update media info from the current active session
         try {
-            val manager = context.getSystemService(Context.MEDIA_SESSION_SERVICE) as? MediaSessionManager ?: return
-            val componentName = android.content.ComponentName(context, com.sameerasw.essentials.services.NotificationListener::class.java)
+            val manager =
+                context.getSystemService(Context.MEDIA_SESSION_SERVICE) as? MediaSessionManager
+                    ?: return
+            val componentName = android.content.ComponentName(
+                context,
+                com.sameerasw.essentials.services.NotificationListener::class.java
+            )
             val sessions = manager.getActiveSessions(componentName)
             val activeSession = sessions?.sortedWith(
-                compareByDescending<MediaController> { 
+                compareByDescending<MediaController> {
                     val state = it.playbackState?.state
                     state == PlaybackState.STATE_PLAYING || state == PlaybackState.STATE_BUFFERING
                 }.thenByDescending {
@@ -52,7 +57,8 @@ class MusicBroadcastReceiver : BroadcastReceiver() {
                         FileOutputStream(filesDirFile).use { out ->
                             artwork.compress(Bitmap.CompressFormat.PNG, 100, out)
                         }
-                    } catch (_: Exception) {}
+                    } catch (_: Exception) {
+                    }
                 } else {
                     if (filesDirFile.exists()) filesDirFile.delete()
                 }
@@ -65,7 +71,8 @@ class MusicBroadcastReceiver : BroadcastReceiver() {
                 // Trigger immediate Glance widget redraw
                 CoroutineScope(Dispatchers.IO).launch {
                     runCatching {
-                        val managerGlance = androidx.glance.appwidget.GlanceAppWidgetManager(context)
+                        val managerGlance =
+                            androidx.glance.appwidget.GlanceAppWidgetManager(context)
                         val widgetGlance = PixelSearchbarWidget()
                         val glanceIds = managerGlance.getGlanceIds(PixelSearchbarWidget::class.java)
                         for (glanceId in glanceIds) {
@@ -74,6 +81,7 @@ class MusicBroadcastReceiver : BroadcastReceiver() {
                     }
                 }
             }
-        } catch (_: Exception) {}
+        } catch (_: Exception) {
+        }
     }
 }

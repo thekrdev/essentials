@@ -13,7 +13,6 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalSize
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionStartActivity
@@ -116,26 +115,40 @@ class FavoritesWidget : GlanceAppWidget() {
                                         val rowFeatures = rows.getOrNull(rowIndex)
                                         if (rowFeatures != null) {
                                             Row(
-                                                modifier = GlanceModifier.fillMaxWidth().height(cellHeight),
+                                                modifier = GlanceModifier.fillMaxWidth()
+                                                    .height(cellHeight),
                                                 verticalAlignment = Alignment.CenterVertically,
                                                 horizontalAlignment = Alignment.CenterHorizontally
                                             ) {
                                                 for (colIndex in 0 until columnsCount) {
                                                     val feature = rowFeatures.getOrNull(colIndex)
                                                     if (feature != null) {
-                                                        val resolvedTitle = context.getString(feature.title)
-                                                        val pastelColor = ColorUtil.getPastelColorFor(resolvedTitle)
-                                                        val vibrantColor = ColorUtil.getVibrantColorFor(resolvedTitle)
+                                                        val resolvedTitle =
+                                                            context.getString(feature.title)
+                                                        val pastelColor =
+                                                            ColorUtil.getPastelColorFor(
+                                                                resolvedTitle
+                                                            )
+                                                        val vibrantColor =
+                                                            ColorUtil.getVibrantColorFor(
+                                                                resolvedTitle
+                                                            )
 
-                                                        val intent = Intent(context, FeatureSettingsActivity::class.java).apply {
+                                                        val intent = Intent(
+                                                            context,
+                                                            FeatureSettingsActivity::class.java
+                                                        ).apply {
                                                             putExtra("feature", feature.id)
                                                             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                                         }
 
-                                                        val isVertical = cellHeight >= (cellWidth - 40.dp)
+                                                        val isVertical =
+                                                            cellHeight >= (cellWidth - 40.dp)
                                                         val isSmall = cellHeight < 90.dp
-                                                        val iconBoxSize = if (isSmall) 36.dp else 48.dp
-                                                        val iconCornerRadius = if (isSmall) 8.dp else 12.dp
+                                                        val iconBoxSize =
+                                                            if (isSmall) 36.dp else 48.dp
+                                                        val iconCornerRadius =
+                                                            if (isSmall) 8.dp else 12.dp
                                                         val iconSize = if (isSmall) 22.dp else 28.dp
                                                         val fontSize = if (isSmall) 12.sp else 15.sp
                                                         val spacerSize = if (isSmall) 4.dp else 8.dp
@@ -144,37 +157,60 @@ class FavoritesWidget : GlanceAppWidget() {
                                                             modifier = GlanceModifier
                                                                 .defaultWeight()
                                                                 .fillMaxHeight()
-                                                                .padding(horizontal = halfSpacing, vertical = halfSpacing),
+                                                                .padding(
+                                                                    horizontal = halfSpacing,
+                                                                    vertical = halfSpacing
+                                                                ),
                                                             contentAlignment = Alignment.Center
                                                         ) {
                                                             val cardModifier = GlanceModifier
                                                                 .fillMaxSize()
                                                                 .cornerRadius(16.dp)
                                                                 .background(GlanceTheme.colors.widgetBackground)
-                                                                .clickable(actionStartActivity(intent))
+                                                                .clickable(
+                                                                    actionStartActivity(
+                                                                        intent
+                                                                    )
+                                                                )
 
                                                             if (isVertical) {
                                                                 Column(
-                                                                    modifier = cardModifier.padding(8.dp),
+                                                                    modifier = cardModifier.padding(
+                                                                        8.dp
+                                                                    ),
                                                                     horizontalAlignment = Alignment.CenterHorizontally,
                                                                     verticalAlignment = Alignment.CenterVertically
                                                                 ) {
                                                                     Box(
                                                                         modifier = GlanceModifier
                                                                             .size(iconBoxSize)
-                                                                            .cornerRadius(iconCornerRadius)
+                                                                            .cornerRadius(
+                                                                                iconCornerRadius
+                                                                            )
                                                                             .background(pastelColor),
                                                                         contentAlignment = Alignment.Center
                                                                     ) {
                                                                         Image(
-                                                                            provider = ImageProvider(feature.iconRes),
+                                                                            provider = ImageProvider(
+                                                                                feature.iconRes
+                                                                            ),
                                                                             contentDescription = resolvedTitle,
-                                                                            colorFilter = ColorFilter.tint(ColorProvider(vibrantColor)),
-                                                                            modifier = GlanceModifier.size(iconSize)
+                                                                            colorFilter = ColorFilter.tint(
+                                                                                ColorProvider(
+                                                                                    vibrantColor
+                                                                                )
+                                                                            ),
+                                                                            modifier = GlanceModifier.size(
+                                                                                iconSize
+                                                                            )
                                                                         )
                                                                     }
 
-                                                                    Spacer(modifier = GlanceModifier.height(spacerSize))
+                                                                    Spacer(
+                                                                        modifier = GlanceModifier.height(
+                                                                            spacerSize
+                                                                        )
+                                                                    )
 
                                                                     Text(
                                                                         text = resolvedTitle,
@@ -182,33 +218,52 @@ class FavoritesWidget : GlanceAppWidget() {
                                                                             color = GlanceTheme.colors.onSurface,
                                                                             fontSize = fontSize,
                                                                             fontWeight = FontWeight.Normal,
-                                                                            fontFamily = FontFamily("google-sans-flex"),
+                                                                            fontFamily = FontFamily(
+                                                                                "google-sans-flex"
+                                                                            ),
                                                                             textAlign = TextAlign.Center
                                                                         )
                                                                     )
                                                                 }
                                                             } else {
                                                                 Row(
-                                                                    modifier = cardModifier.padding(horizontal = 12.dp, vertical = 6.dp),
+                                                                    modifier = cardModifier.padding(
+                                                                        horizontal = 12.dp,
+                                                                        vertical = 6.dp
+                                                                    ),
                                                                     horizontalAlignment = Alignment.CenterHorizontally,
                                                                     verticalAlignment = Alignment.CenterVertically
                                                                 ) {
                                                                     Box(
                                                                         modifier = GlanceModifier
                                                                             .size(iconBoxSize)
-                                                                            .cornerRadius(iconCornerRadius)
+                                                                            .cornerRadius(
+                                                                                iconCornerRadius
+                                                                            )
                                                                             .background(pastelColor),
                                                                         contentAlignment = Alignment.Center
                                                                     ) {
                                                                         Image(
-                                                                            provider = ImageProvider(feature.iconRes),
+                                                                            provider = ImageProvider(
+                                                                                feature.iconRes
+                                                                            ),
                                                                             contentDescription = resolvedTitle,
-                                                                            colorFilter = ColorFilter.tint(ColorProvider(vibrantColor)),
-                                                                            modifier = GlanceModifier.size(iconSize)
+                                                                            colorFilter = ColorFilter.tint(
+                                                                                ColorProvider(
+                                                                                    vibrantColor
+                                                                                )
+                                                                            ),
+                                                                            modifier = GlanceModifier.size(
+                                                                                iconSize
+                                                                            )
                                                                         )
                                                                     }
 
-                                                                    Spacer(modifier = GlanceModifier.width(spacerSize))
+                                                                    Spacer(
+                                                                        modifier = GlanceModifier.width(
+                                                                            spacerSize
+                                                                        )
+                                                                    )
 
                                                                     Text(
                                                                         text = resolvedTitle,
@@ -216,7 +271,9 @@ class FavoritesWidget : GlanceAppWidget() {
                                                                             color = GlanceTheme.colors.onSurface,
                                                                             fontSize = fontSize,
                                                                             fontWeight = FontWeight.Normal,
-                                                                            fontFamily = FontFamily("google-sans-flex"),
+                                                                            fontFamily = FontFamily(
+                                                                                "google-sans-flex"
+                                                                            ),
                                                                             textAlign = TextAlign.Start
                                                                         ),
                                                                         modifier = GlanceModifier.defaultWeight()
@@ -229,7 +286,10 @@ class FavoritesWidget : GlanceAppWidget() {
                                                             modifier = GlanceModifier
                                                                 .defaultWeight()
                                                                 .fillMaxHeight()
-                                                                .padding(horizontal = halfSpacing, vertical = halfSpacing)
+                                                                .padding(
+                                                                    horizontal = halfSpacing,
+                                                                    vertical = halfSpacing
+                                                                )
                                                         )
                                                     }
                                                 }

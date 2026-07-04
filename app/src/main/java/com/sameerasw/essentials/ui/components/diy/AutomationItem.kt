@@ -163,6 +163,7 @@ fun AutomationItem(
                                 it
                             )
                         }
+
                         Automation.Type.ACTION_SHORTCUT -> stringResource(R.string.diy_create_action_shortcut_title)
                         Automation.Type.PIXEL_SEARCHBAR -> stringResource(R.string.diy_create_pixel_searchbar_title)
                         Automation.Type.STATE -> automation.state?.title?.let { stringResource(it) }

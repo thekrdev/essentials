@@ -30,7 +30,6 @@ import com.sameerasw.essentials.ui.components.sheets.PermissionsBottomSheet
 import com.sameerasw.essentials.ui.components.sliders.ConfigSliderItem
 import com.sameerasw.essentials.ui.modifiers.highlight
 import com.sameerasw.essentials.viewmodels.MainViewModel
-import com.sameerasw.essentials.ui.activities.PixelSearchbarSettingsActivity
 
 enum class PermissionModule {
     HIDE_GESTURE_BAR,
