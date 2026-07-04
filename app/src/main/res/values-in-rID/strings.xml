@@ -395,6 +395,13 @@
     <string name="search_no_results">Tidak ditemukan untuk \"%1$s\"</string>
     <string name="search_results_title">Hasil pencarian</string>
     <string name="requires_following_permissions">%1$s requires following permissions</string>
+    <string name="setting_enable_unsupported_features_title">Enable unsupported features</string>
+    <string name="setting_enable_unsupported_features_desc">Show OEM-specific or redundant features that are hidden by default.</string>
+    <string name="unsupported_features_warning_title">Enable unsupported features?</string>
+    <string name="unsupported_features_warning_desc">These features may not work on every device and could require extra permissions or root access.</string>
+    <string name="unsupported_features_confirm">Enable anyway</string>
+    <string name="unsupported_features_cancel">Cancel</string>
+    <string name="disabled_on_this_device">Disabled on this device</string>
     <!-- Features -->
     <string name="feat_screen_off_widget_title">Screen off widget</string>
     <string name="feat_screen_off_widget_desc">Invisible widget to turn the screen off</string>
@@ -462,7 +469,7 @@
     <string name="feat_watermark_title">Tanda air</string>
     <string name="feat_watermark_desc">Tambahkan data EXIF dan logo di foto</string>
     <string name="feat_daily_wallpaper_title">Wallpaper</string>
-    <string name="feat_daily_wallpaper_desc">Daily curated and live wallpaper</string>
+    <string name="feat_daily_wallpaper_desc">Daily curated handpicked wallpaper</string>
     <string name="label_wallpaper_apply">Apply Wallpaper</string>
     <string name="label_wallpaper_by">Photo by</string>
     <string name="label_wallpaper_applied">Wallpaper applied successfully</string>
@@ -757,7 +764,7 @@
     <string name="about_desc_screen_off_widget">Easily turn the screen off with a tap on a transparent resizable widget that does not add icons or any clutter to your home screen.</string>
     <string name="about_desc_statusbar_icons">Take full control over your status bar icons.\n\nHide specific icons like WiFi, Bluetooth, or cellular data to keep your status bar clean. You can also customize the clock format and battery indicator with some smart controls as well. These are the list of available AOSP controls so your device OS might not respect all the controls.</string>
     <string name="about_desc_caffeinate">Caffeinate prevents your screen from turning off automatically.\n\nKeep your screen awake for a specific duration or indefinitely. Useful when reading long articles or referencing a recipe.</string>
-    <string name="about_desc_maps_power_saving">Use Google Maps Power Saving mode with a minimal pitch-black background to display over your lock screen on supported Android devices. Start a navigation session, turn the screen off and back on.</string>
+    <string name="about_desc_maps_power_saving">Get the Pixel 10 series exclusive Google Maps Power Saving mode with the minimal pitch black background to display over your lock screen on any Android device. Start a navigation session, turn the screen off and back on. </string>
     <string name="about_desc_flashlight_pulse">Pulse the flashlight when you receive a notification.\n\nWith devices have hardware support for flashlight dimming, the pulse will be smoothly animated.</string>
     <string name="about_desc_snooze_notifications">Snooze annoying persistent system notifications which can not be modified by default. \n\nPlease wait until the notification arrives and then go into this feature where it\'s notification channel will be listed. Select that to snooze from next time.\n\nAny snoozed notification can still be accessed from your notification history in Android.</string>
     <string name="about_desc_quick_settings_tiles">Add custom tiles to your Quick Settings panel.\n\nLong press any of them to learn what they do.</string>
@@ -1131,7 +1138,7 @@
     <string name="instruction_section_shizuku_title">Shizuku</string>
     <string name="instruction_section_shizuku_desc">Shizuku is a powerful tool that allows apps to use system APIs directly with ADB or root permissions. It is required for features like Maps min mode, App Freezer. And willa ssist granting some permissions such as WRITE_SECURE_SETTINGS. \n\nBut the Play Store version of Shizuku might be outdated and will probably be unusable on recent Android versions so in that case, please get the latest version from the github or an up-to-date fork of it.</string>
     <string name="instruction_section_maps_title">Maps power saving mode</string>
-    <string name="instruction_section_maps_desc">This feature automatically triggers Google Maps power saving mode on supported Android devices. A community member discovered that it is still usable by launching the maps minMode activity with root privileges. \n\nAnd then, I had it automated with Tasker to automatically trigger when the screen turns off during a navigation session and then was able to achieve the same with just runtime Shizuku permissions. \n\nIt is intended to overlay the navigation experience, so you may see an occasional message about landscape mode not being supported. That is not avoidable by the app and you can ignore it.</string>
+    <string name="instruction_section_maps_desc">This feature automatically triggers Google Maps power saving mode which is currently exclusive to the Pixel 10 series. A community member discovered that it is still usable on any Android device by launching the maps minMode activity with root privileges. \n\nAnd then, I had it automated with Tasker to automatically trigger when the screen turns off during a navigation session and then was able to achieve the same with just runtime Shizuku permissions. \n\nIt is intended to be shown over the AOD of Pixel 10 series so because of that, you may see an occasional message popping up on the display that it does not support landscape mode. That is not avoidable by the app and you can ignore.</string>
     <string name="instruction_section_silent_title">Silent sound mode</string>
     <string name="instruction_section_silent_desc">You may have noticed that the silent mode also triggers DND. \n\nThis is due to how the Android implemented it as even if we use the same API to switch to vibrate mode, it for some reason turns on DND along with the silent mode and this is not avoidable at this moment. :(</string>
     <string name="instruction_section_freeze_title">What is freeze?</string>
