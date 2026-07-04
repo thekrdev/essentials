@@ -11,7 +11,8 @@ class SettingsExternalHandler : ExternalHandler {
 
     override fun onQuery(context: Context, remainingPath: String, extras: Bundle?): Cursor? {
         val key = remainingPath
-        val prefs = context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs =
+            context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
         if (!prefs.contains(key)) return null
 
         val value = prefs.all[key] ?: return null
@@ -20,9 +21,15 @@ class SettingsExternalHandler : ExternalHandler {
         return cursor
     }
 
-    override fun onUpdate(context: Context, remainingPath: String, value: String?, extras: Bundle?): Boolean {
+    override fun onUpdate(
+        context: Context,
+        remainingPath: String,
+        value: String?,
+        extras: Bundle?
+    ): Boolean {
         val key = remainingPath
-        val prefs = context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
+        val prefs =
+            context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
         if (!prefs.contains(key)) return false
 
         val currentValue = prefs.all[key] ?: return false
@@ -43,10 +50,16 @@ class SettingsExternalHandler : ExternalHandler {
         }
     }
 
-    override fun onAction(context: Context, remainingPath: String, action: String?, extras: Bundle?): Bundle? {
+    override fun onAction(
+        context: Context,
+        remainingPath: String,
+        action: String?,
+        extras: Bundle?
+    ): Bundle? {
         if (action == "toggle") {
             val key = remainingPath
-            val prefs = context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs =
+                context.getSharedPreferences(SettingsRepository.PREFS_NAME, Context.MODE_PRIVATE)
             val currentValue = prefs.all[key]
             if (currentValue is Boolean) {
                 val repository = SettingsRepository(context)

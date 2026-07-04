@@ -31,9 +31,9 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
+import com.sameerasw.essentials.data.repository.SettingsRepository
 import com.sameerasw.essentials.domain.model.NotificationLightingSide
 import com.sameerasw.essentials.domain.model.NotificationLightingStyle
-import com.sameerasw.essentials.data.repository.SettingsRepository
 import androidx.compose.ui.graphics.Color as ComposeColor
 
 /**
@@ -241,14 +241,15 @@ object OverlayHelper {
         }
 
         val selectedShapes = SettingsRepository(context).getEdgeLightingSweepSelectedShapes()
-        val sweepView = SweepShapeView(context, color, strokeDp, randomShapes, selectedShapes).apply {
-            tag = "sweep_view"
-            alpha = 0f
-            layoutParams = FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
+        val sweepView =
+            SweepShapeView(context, color, strokeDp, randomShapes, selectedShapes).apply {
+                tag = "sweep_view"
+                alpha = 0f
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
         overlay.addView(sweepView)
 
         return overlay

@@ -12,24 +12,12 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import com.sameerasw.essentials.utils.HapticUtil
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.Icon
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
-import com.sameerasw.essentials.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,15 +46,24 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.graphics.shapes.toPath
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.sameerasw.essentials.R
 import com.sameerasw.essentials.data.repository.LocationReachedRepository
 import com.sameerasw.essentials.ui.theme.EssentialsTheme
+import com.sameerasw.essentials.utils.HapticUtil
 import com.sameerasw.essentials.viewmodels.MainViewModel
 import kotlinx.coroutines.delay
 import java.util.Calendar
@@ -87,11 +85,13 @@ class TravelCompassActivity : ComponentActivity(), SensorEventListener {
         // Make activity truly full screen (hide status/navigation bars, fit system windows false, allow display cutout)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            window.attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            window.attributes.layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
         val controller = WindowCompat.getInsetsController(window, window.decorView)
         controller.hide(WindowInsetsCompat.Type.systemBars())
-        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         rotationVectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR)
@@ -161,8 +161,20 @@ private fun CompassScreen(
     val repository = remember { LocationReachedRepository(context) }
     val fusedLocation = remember { LocationServices.getFusedLocationProviderClient(context) }
     val is24h = remember { DateFormat.is24HourFormat(context) }
-    val sharedPrefs = remember { context.getSharedPreferences("essentials_prefs", android.content.Context.MODE_PRIVATE) }
-    var useIcon by remember { mutableStateOf(sharedPrefs.getBoolean("location_reached_compass_use_icon", false)) }
+    val sharedPrefs = remember {
+        context.getSharedPreferences(
+            "essentials_prefs",
+            android.content.Context.MODE_PRIVATE
+        )
+    }
+    var useIcon by remember {
+        mutableStateOf(
+            sharedPrefs.getBoolean(
+                "location_reached_compass_use_icon",
+                false
+            )
+        )
+    }
 
     var currentTime by remember { mutableStateOf("") }
     var distanceText by remember { mutableStateOf("") }
@@ -252,7 +264,10 @@ private fun CompassScreen(
 
     val animatedRotation by animateFloatAsState(
         targetValue = continuousTargetRotation,
-        animationSpec = spring(stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioMediumBouncy),
+        animationSpec = spring(
+            stiffness = Spring.StiffnessLow,
+            dampingRatio = Spring.DampingRatioMediumBouncy
+        ),
         label = "arrowRotation"
     )
 
@@ -303,7 +318,8 @@ private fun CompassScreen(
                     onLongPress = {
                         HapticUtil.performHeavyHaptic(view)
                         useIcon = !useIcon
-                        sharedPrefs.edit().putBoolean("location_reached_compass_use_icon", useIcon).apply()
+                        sharedPrefs.edit().putBoolean("location_reached_compass_use_icon", useIcon)
+                            .apply()
                     }
                 )
             },
@@ -322,7 +338,8 @@ private fun CompassScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                 val arrowSize = if (isLandscape) 180.dp else 220.dp
 
                 when (page) {
@@ -417,6 +434,7 @@ private fun CompassScreen(
                             }
                         }
                     }
+
                     1 -> { // Minimal
                         CompassArrowContainer(
                             rotationDegrees = animatedRotation,
@@ -427,6 +445,7 @@ private fun CompassScreen(
                                 .align(Alignment.Center)
                         )
                     }
+
                     2 -> { // Most Details
                         if (isLandscape) {
                             Row(

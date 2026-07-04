@@ -19,7 +19,10 @@ class DailyWallpaperWorker(
         val wallpaperRepository = WallpaperRepository()
 
         return try {
-            val isEnabled = settingsRepository.getBoolean(SettingsRepository.KEY_DAILY_WALLPAPER_AUTO_UPDATE, false)
+            val isEnabled = settingsRepository.getBoolean(
+                SettingsRepository.KEY_DAILY_WALLPAPER_AUTO_UPDATE,
+                false
+            )
             if (!isEnabled) {
                 return Result.success()
             }
@@ -27,8 +30,10 @@ class DailyWallpaperWorker(
             val force = inputData.getBoolean("force", false)
             val todayWallpaper = wallpaperRepository.fetchTodayWallpaper()
             if (todayWallpaper != null) {
-                val cachedId = settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID) ?: ""
-                
+                val cachedId =
+                    settingsRepository.getString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID)
+                        ?: ""
+
                 // If it is a new wallpaper (or forced run), fetch and apply
                 if (force || todayWallpaper.id != cachedId) {
                     val applyHome = settingsRepository.getDailyWallpaperApplyHome()
@@ -38,16 +43,44 @@ class DailyWallpaperWorker(
                     if (applyLock) flags = flags or android.app.WallpaperManager.FLAG_LOCK
 
                     if (flags != 0) {
-                        val applied = wallpaperRepository.autoApplyWallpaper(context, todayWallpaper.urlMobile, flags)
+                        val applied = wallpaperRepository.autoApplyWallpaper(
+                            context,
+                            todayWallpaper.urlMobile,
+                            flags
+                        )
                         if (applied) {
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID, todayWallpaper.id)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL, todayWallpaper.url)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE, todayWallpaper.urlMobile)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME, todayWallpaper.authorName)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK, todayWallpaper.authorLink)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK, todayWallpaper.photoLink)
-                            settingsRepository.putString(SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT, todayWallpaper.updatedAt)
-                            Log.d("DailyWallpaperWorker", "Successfully auto-applied wallpaper (force=$force, flags=$flags): ${todayWallpaper.id}")
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_LAST_ID,
+                                todayWallpaper.id
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL,
+                                todayWallpaper.url
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_LAST_URL_MOBILE,
+                                todayWallpaper.urlMobile
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_NAME,
+                                todayWallpaper.authorName
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_AUTHOR_LINK,
+                                todayWallpaper.authorLink
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_PHOTO_LINK,
+                                todayWallpaper.photoLink
+                            )
+                            settingsRepository.putString(
+                                SettingsRepository.KEY_DAILY_WALLPAPER_UPDATED_AT,
+                                todayWallpaper.updatedAt
+                            )
+                            Log.d(
+                                "DailyWallpaperWorker",
+                                "Successfully auto-applied wallpaper (force=$force, flags=$flags): ${todayWallpaper.id}"
+                            )
                         }
                     }
                 }

@@ -11,53 +11,58 @@ object SearchRegistry {
     fun search(context: Context, query: String): List<SearchableItem> =
         search(context, query, SettingsRepository(context).isEnableUnsupportedFeatures())
 
-    fun search(context: Context, query: String, includeUnsupportedFeatures: Boolean = false): List<SearchableItem> {
+    fun search(
+        context: Context,
+        query: String,
+        includeUnsupportedFeatures: Boolean = false
+    ): List<SearchableItem> {
         val q = query.trim().lowercase()
         if (q.isEmpty()) return emptyList()
 
         val allItems = mutableListOf<SearchableItem>()
 
         // --- Index Features and Sub-settings ---
-        FeatureRegistry.getFilteredFeatures(context, includeUnsupportedFeatures).forEach { feature ->
-            val featureTitle = context.getString(feature.title)
-            val featureCategory = context.getString(feature.category)
+        FeatureRegistry.getFilteredFeatures(context, includeUnsupportedFeatures)
+            .forEach { feature ->
+                val featureTitle = context.getString(feature.title)
+                val featureCategory = context.getString(feature.category)
 
-            // Index the feature itself
-            allItems.add(
-                SearchableItem(
-                    title = featureTitle,
-                    description = context.getString(feature.description),
-                    category = featureCategory,
-                    icon = feature.iconRes,
-                    featureKey = feature.id,
-                    keywords = listOf(
-                        context.getString(R.string.keyword_feature),
-                        context.getString(R.string.keyword_settings)
-                    ),
-                    isBeta = feature.isBeta
-                )
-            )
-
-            // Index sub-settings
-            feature.searchableSettings.forEach { setting ->
+                // Index the feature itself
                 allItems.add(
                     SearchableItem(
-                        title = context.getString(setting.title),
-                        description = context.getString(setting.description),
-                        category = setting.category?.let { context.getString(it) }
-                            ?: featureCategory,
+                        title = featureTitle,
+                        description = context.getString(feature.description),
+                        category = featureCategory,
                         icon = feature.iconRes,
                         featureKey = feature.id,
-                        parentFeature = featureTitle,
-                        targetSettingHighlightKey = setting.targetSettingHighlightKey,
-                        keywords = if (setting.keywordRes != 0) context.resources.getStringArray(
-                            setting.keywordRes
-                        ).toList() else emptyList(),
+                        keywords = listOf(
+                            context.getString(R.string.keyword_feature),
+                            context.getString(R.string.keyword_settings)
+                        ),
                         isBeta = feature.isBeta
                     )
                 )
+
+                // Index sub-settings
+                feature.searchableSettings.forEach { setting ->
+                    allItems.add(
+                        SearchableItem(
+                            title = context.getString(setting.title),
+                            description = context.getString(setting.description),
+                            category = setting.category?.let { context.getString(it) }
+                                ?: featureCategory,
+                            icon = feature.iconRes,
+                            featureKey = feature.id,
+                            parentFeature = featureTitle,
+                            targetSettingHighlightKey = setting.targetSettingHighlightKey,
+                            keywords = if (setting.keywordRes != 0) context.resources.getStringArray(
+                                setting.keywordRes
+                            ).toList() else emptyList(),
+                            isBeta = feature.isBeta
+                        )
+                    )
+                }
             }
-        }
 
         // --- Dynamic Status Bar Icons ---
         StatusBarIconRegistry.ALL_ICONS.forEach { icon ->

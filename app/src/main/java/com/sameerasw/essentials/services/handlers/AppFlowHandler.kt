@@ -61,7 +61,9 @@ class AppFlowHandler(
                     cancelRestoreNotification()
                     val autoPkg = intent.getStringExtra(EXTRA_AUTO_ARCHIVE_PACKAGE)
                     val pkgName = intent.getStringExtra(EXTRA_PACKAGE_NAME)
-                    val settingsRepo = com.sameerasw.essentials.data.repository.SettingsRepository(context ?: return)
+                    val settingsRepo = com.sameerasw.essentials.data.repository.SettingsRepository(
+                        context ?: return
+                    )
                     val config = if (pkgName != null) {
                         settingsRepo.loadShutUpConfigs().find { it.packageName == pkgName }
                     } else null
@@ -656,61 +658,62 @@ class AppFlowHandler(
         val text = "Do you want to restore now?"
         val criticalText = "Restore Now"
 
-        val notification = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            val builder = android.app.Notification.Builder(context, "shutup_restore_channel")
-                .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setCategory(android.app.Notification.CATEGORY_SERVICE)
-                .setVisibility(android.app.Notification.VISIBILITY_PUBLIC)
-                .setOnlyAlertOnce(true)
-                .setOngoing(true)
-                .addAction(
-                    android.app.Notification.Action.Builder(
-                        android.graphics.drawable.Icon.createWithResource(
-                            context,
-                            com.sameerasw.essentials.R.drawable.rounded_code_24
-                        ),
+        val notification =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                val builder = android.app.Notification.Builder(context, "shutup_restore_channel")
+                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setCategory(android.app.Notification.CATEGORY_SERVICE)
+                    .setVisibility(android.app.Notification.VISIBILITY_PUBLIC)
+                    .setOnlyAlertOnce(true)
+                    .setOngoing(true)
+                    .addAction(
+                        android.app.Notification.Action.Builder(
+                            android.graphics.drawable.Icon.createWithResource(
+                                context,
+                                com.sameerasw.essentials.R.drawable.rounded_code_24
+                            ),
+                            "Restore Now",
+                            restorePendingIntent
+                        ).build()
+                    )
+
+                try {
+                    val setShortCriticalText = builder.javaClass.getMethod(
+                        "setShortCriticalText",
+                        CharSequence::class.java
+                    )
+                    setShortCriticalText.invoke(builder, criticalText)
+                } catch (_: Throwable) {
+                }
+
+                val extras = android.os.Bundle()
+                extras.putBoolean("android.requestPromotedOngoing", true)
+                extras.putString("android.shortCriticalText", criticalText)
+                builder.addExtras(extras)
+                builder.build()
+            } else {
+                NotificationCompat.Builder(context, "shutup_restore_channel")
+                    .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
+                    .setContentTitle(title)
+                    .setContentText(text)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
+                    .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                    .setOnlyAlertOnce(true)
+                    .setOngoing(true)
+                    .addAction(
+                        com.sameerasw.essentials.R.drawable.rounded_code_24,
                         "Restore Now",
                         restorePendingIntent
-                    ).build()
-                )
-
-            try {
-                val setShortCriticalText = builder.javaClass.getMethod(
-                    "setShortCriticalText",
-                    CharSequence::class.java
-                )
-                setShortCriticalText.invoke(builder, criticalText)
-            } catch (_: Throwable) {
+                    )
+                    .addExtras(android.os.Bundle().apply {
+                        putBoolean("android.requestPromotedOngoing", true)
+                        putString("android.shortCriticalText", criticalText)
+                    })
+                    .build()
             }
-
-            val extras = android.os.Bundle()
-            extras.putBoolean("android.requestPromotedOngoing", true)
-            extras.putString("android.shortCriticalText", criticalText)
-            builder.addExtras(extras)
-            builder.build()
-        } else {
-            NotificationCompat.Builder(context, "shutup_restore_channel")
-                .setSmallIcon(com.sameerasw.essentials.R.drawable.rounded_code_24)
-                .setContentTitle(title)
-                .setContentText(text)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setOnlyAlertOnce(true)
-                .setOngoing(true)
-                .addAction(
-                    com.sameerasw.essentials.R.drawable.rounded_code_24,
-                    "Restore Now",
-                    restorePendingIntent
-                )
-                .addExtras(android.os.Bundle().apply {
-                    putBoolean("android.requestPromotedOngoing", true)
-                    putString("android.shortCriticalText", criticalText)
-                })
-                .build()
-        }
 
         notificationManager.notify(NOTIFICATION_ID_SHUTUP_RESTORE, notification)
     }
@@ -811,7 +814,8 @@ class AppFlowHandler(
     }
 
     private fun restartShizuku() {
-        val settingsRepository = com.sameerasw.essentials.data.repository.SettingsRepository(context)
+        val settingsRepository =
+            com.sameerasw.essentials.data.repository.SettingsRepository(context)
         val token = settingsRepository.getShizukuAuthToken()
         if (token.isEmpty()) {
             Log.w("AppFlowHandler", "Shizuku auth token is missing, cannot restart Shizuku")

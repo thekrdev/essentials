@@ -5,8 +5,8 @@ import androidx.annotation.Keep
 import androidx.annotation.StringRes
 import com.google.gson.annotations.SerializedName
 import com.sameerasw.essentials.R
-import com.sameerasw.essentials.domain.ScreenOffMethod
 import com.sameerasw.essentials.domain.HapticFeedbackType
+import com.sameerasw.essentials.domain.ScreenOffMethod
 
 @Keep
 sealed interface Action {

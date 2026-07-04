@@ -455,7 +455,7 @@ private fun parseMarkdown(text: String): AnnotatedString {
                     }
                 }
 
-                ((matchValue.startsWith("*") && matchValue.endsWith("*") && !matchValue.startsWith("**")) || 
+                ((matchValue.startsWith("*") && matchValue.endsWith("*") && !matchValue.startsWith("**")) ||
                         (matchValue.startsWith("_") && matchValue.endsWith("_"))) && matchValue.length >= 2 -> {
                     withStyle(style = SpanStyle(fontStyle = FontStyle.Italic)) {
                         append(matchValue.substring(1, matchValue.length - 1))

@@ -72,10 +72,10 @@ import com.sameerasw.essentials.ui.composables.configs.LockScreenClockSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.MapsPowerSavingSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.NotificationLightingSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.OtherCustomizationsSettingsUI
+import com.sameerasw.essentials.ui.composables.configs.PocketModeSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.QuickSettingsTilesSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.RefreshRateSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.RemoteLockSettingsUI
-import com.sameerasw.essentials.ui.composables.configs.PocketModeSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.ScreenLockedSecuritySettingsUI
 import com.sameerasw.essentials.ui.composables.configs.ScreenOffWidgetSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.ShutUpSettingsUI
@@ -83,11 +83,11 @@ import com.sameerasw.essentials.ui.composables.configs.SnoozeNotificationsSettin
 import com.sameerasw.essentials.ui.composables.configs.SoundModeTileSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.StatusBarIconSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.TextAnimationsSettingsUI
-import com.sameerasw.essentials.ui.composables.configs.WatchSettingsUI
 import com.sameerasw.essentials.ui.composables.configs.WatchControlsSettingsUI
+import com.sameerasw.essentials.ui.composables.configs.WatchSettingsUI
 import com.sameerasw.essentials.ui.modifiers.BlurDirection
-import com.sameerasw.essentials.ui.modifiers.progressiveBlur
 import com.sameerasw.essentials.ui.modifiers.highlight
+import com.sameerasw.essentials.ui.modifiers.progressiveBlur
 import com.sameerasw.essentials.ui.theme.EssentialsTheme
 import com.sameerasw.essentials.utils.BiometricSecurityHelper
 import com.sameerasw.essentials.utils.HapticUtil
@@ -227,13 +227,14 @@ class FeatureSettingsActivity : AppCompatActivity() {
                         mutableStateOf(prefs.getBoolean("watch_sync_sound_mode_enabled", false))
                     }
                     androidx.compose.runtime.DisposableEffect(prefs) {
-                        val listener = android.content.SharedPreferences.OnSharedPreferenceChangeListener { p, key ->
-                            if (key == "watch_adb_wifi_enabled") {
-                                watchAdbWifiEnabled = p.getBoolean(key, false)
-                            } else if (key == "watch_sync_sound_mode_enabled") {
-                                watchSyncSoundModeEnabled = p.getBoolean(key, false)
+                        val listener =
+                            android.content.SharedPreferences.OnSharedPreferenceChangeListener { p, key ->
+                                if (key == "watch_adb_wifi_enabled") {
+                                    watchAdbWifiEnabled = p.getBoolean(key, false)
+                                } else if (key == "watch_sync_sound_mode_enabled") {
+                                    watchSyncSoundModeEnabled = p.getBoolean(key, false)
+                                }
                             }
-                        }
                         prefs.registerOnSharedPreferenceChangeListener(listener)
                         onDispose {
                             prefs.unregisterOnSharedPreferenceChangeListener(listener)
@@ -249,11 +250,17 @@ class FeatureSettingsActivity : AppCompatActivity() {
                             fabExpanded = false
                         }
                         if (featureId == "Watch") {
-                            val messageClient = com.google.android.gms.wearable.Wearable.getMessageClient(context)
-                            val nodeClient = com.google.android.gms.wearable.Wearable.getNodeClient(context)
+                            val messageClient =
+                                com.google.android.gms.wearable.Wearable.getMessageClient(context)
+                            val nodeClient =
+                                com.google.android.gms.wearable.Wearable.getNodeClient(context)
                             nodeClient.connectedNodes.addOnSuccessListener { nodes ->
                                 for (node in nodes) {
-                                    messageClient.sendMessage(node.id, "/request_watch_status", byteArrayOf())
+                                    messageClient.sendMessage(
+                                        node.id,
+                                        "/request_watch_status",
+                                        byteArrayOf()
+                                    )
                                 }
                             }
                         }
@@ -603,7 +610,9 @@ class FeatureSettingsActivity : AppCompatActivity() {
                                             modifier = Modifier.padding(top = 16.dp),
                                             highlightSetting = highlightSetting,
                                             onShowPermissionSheet = { showPermissionSheet = it },
-                                            onSetChildFeatureForPermissions = { childFeatureForPermissions = it }
+                                            onSetChildFeatureForPermissions = {
+                                                childFeatureForPermissions = it
+                                            }
                                         )
                                     }
 

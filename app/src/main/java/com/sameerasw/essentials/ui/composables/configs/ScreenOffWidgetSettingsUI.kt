@@ -21,8 +21,6 @@ import androidx.core.content.edit
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.domain.ScreenOffMethod
-import com.sameerasw.essentials.ui.components.cards.FeatureCard
-import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.components.pickers.HapticFeedbackPicker
 import com.sameerasw.essentials.ui.components.pickers.ScreenOffMethodPicker

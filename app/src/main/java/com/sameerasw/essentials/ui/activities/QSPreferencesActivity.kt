@@ -61,7 +61,8 @@ class QSPreferencesActivity : ComponentActivity() {
             }
 
             if (componentName.className == "com.sameerasw.essentials.services.tiles.DeveloperOptionsTileService" ||
-                componentName.className == "com.sameerasw.essentials.services.tiles.UsbDebuggingTileService") {
+                componentName.className == "com.sameerasw.essentials.services.tiles.UsbDebuggingTileService"
+            ) {
                 val devIntent = Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                 }

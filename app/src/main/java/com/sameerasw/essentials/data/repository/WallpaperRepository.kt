@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.sameerasw.essentials.domain.model.WallpaperInfo
@@ -75,51 +74,57 @@ class WallpaperRepository {
         }
     }
 
-    suspend fun applyWallpaper(context: Context, urlString: String): Boolean = withContext(Dispatchers.IO) {
-        try {
-            val bitmap = downloadBitmap(urlString) ?: return@withContext false
-            val cacheFile = File(context.cacheDir, "today_wallpaper.jpg")
-            FileOutputStream(cacheFile).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+    suspend fun applyWallpaper(context: Context, urlString: String): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                val bitmap = downloadBitmap(urlString) ?: return@withContext false
+                val cacheFile = File(context.cacheDir, "today_wallpaper.jpg")
+                FileOutputStream(cacheFile).use { out ->
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+                }
+
+                val uri = FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    cacheFile
+                )
+
+                val wallpaperManager = WallpaperManager.getInstance(context)
+                val intent = wallpaperManager.getCropAndSetWallpaperIntent(uri)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
             }
-
-            val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                cacheFile
-            )
-
-            val wallpaperManager = WallpaperManager.getInstance(context)
-            val intent = wallpaperManager.getCropAndSetWallpaperIntent(uri)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
         }
-    }
 
-    suspend fun autoApplyWallpaper(context: Context, urlString: String, flags: Int): Boolean = withContext(Dispatchers.IO) {
-        try {
-            val rawBitmap = downloadBitmap(urlString) ?: return@withContext false
-            val bitmap = centerCropToScreen(context, rawBitmap)
-            withContext(Dispatchers.Main) {
-                android.widget.Toast.makeText(context, com.sameerasw.essentials.R.string.label_wallpaper_applying, android.widget.Toast.LENGTH_SHORT).show()
+    suspend fun autoApplyWallpaper(context: Context, urlString: String, flags: Int): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                val rawBitmap = downloadBitmap(urlString) ?: return@withContext false
+                val bitmap = centerCropToScreen(context, rawBitmap)
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(
+                        context,
+                        com.sameerasw.essentials.R.string.label_wallpaper_applying,
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+                val wallpaperManager = WallpaperManager.getInstance(context)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    wallpaperManager.setBitmap(bitmap, null, true, flags)
+                } else {
+                    wallpaperManager.setBitmap(bitmap)
+                }
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
             }
-            val wallpaperManager = WallpaperManager.getInstance(context)
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                wallpaperManager.setBitmap(bitmap, null, true, flags)
-            } else {
-                wallpaperManager.setBitmap(bitmap)
-            }
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
         }
-    }
 
     private fun centerCropToScreen(context: Context, bitmap: Bitmap): Bitmap {
         val displayMetrics = context.resources.displayMetrics

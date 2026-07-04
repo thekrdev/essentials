@@ -12,10 +12,11 @@ import kotlinx.coroutines.launch
 class ActionShortcutActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         DIYRepository.init(applicationContext)
-        val automation = DIYRepository.automations.value.find { it.type == Automation.Type.ACTION_SHORTCUT }
-        
+        val automation =
+            DIYRepository.automations.value.find { it.type == Automation.Type.ACTION_SHORTCUT }
+
         if (automation != null && automation.actions.isNotEmpty()) {
             lifecycleScope.launch {
                 automation.actions.forEach { action ->
@@ -24,7 +25,8 @@ class ActionShortcutActivity : ComponentActivity() {
                 finish()
             }
         } else {
-            Toast.makeText(this, "No customized action shortcut configured", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No customized action shortcut configured", Toast.LENGTH_SHORT)
+                .show()
             finish()
         }
     }

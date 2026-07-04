@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sameerasw.essentials.R
-import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.domain.ScreenOffMethod
 import com.sameerasw.essentials.domain.diy.Action
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
@@ -86,7 +85,11 @@ fun ScreenOffSettingsSheet(
                     onMethodSelected = { type ->
                         HapticUtil.performUIHaptic(view)
                         if (type == ScreenOffMethod.INPUT && !ShellUtils.hasPermission(context)) {
-                            android.widget.Toast.makeText(context, "Shizuku/Root permission required for Input method", android.widget.Toast.LENGTH_SHORT).show()
+                            android.widget.Toast.makeText(
+                                context,
+                                "Shizuku/Root permission required for Input method",
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             selectedMethod = type
                         }

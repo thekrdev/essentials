@@ -19,7 +19,8 @@ class FavoritesWidgetReceiver : GlanceAppWidgetReceiver() {
         ) {
             kotlinx.coroutines.MainScope().launch {
                 try {
-                    val glanceAppWidgetManager = androidx.glance.appwidget.GlanceAppWidgetManager(context)
+                    val glanceAppWidgetManager =
+                        androidx.glance.appwidget.GlanceAppWidgetManager(context)
                     if (action == Intent.ACTION_CONFIGURATION_CHANGED) {
                         kotlinx.coroutines.delay(500)
                     }

@@ -11,10 +11,11 @@ import kotlinx.coroutines.launch
 class PixelSearchbarTapActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         DIYRepository.init(applicationContext)
-        val automation = DIYRepository.automations.value.find { it.type == Automation.Type.PIXEL_SEARCHBAR }
-        
+        val automation =
+            DIYRepository.automations.value.find { it.type == Automation.Type.PIXEL_SEARCHBAR }
+
         if (automation != null && automation.actions.isNotEmpty() && automation.isEnabled) {
             lifecycleScope.launch {
                 automation.actions.forEach { action ->

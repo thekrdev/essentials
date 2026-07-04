@@ -452,16 +452,18 @@ class AutomationEditorActivity : ComponentActivity() {
                                             )
 
                                             RoundedCardContainer(spacing = 2.dp) {
-                                                val editorTitle = if (automationType == Automation.Type.PIXEL_SEARCHBAR) {
-                                                    stringResource(R.string.diy_create_pixel_searchbar_title)
-                                                } else {
-                                                    stringResource(R.string.diy_create_action_shortcut_title)
-                                                }
-                                                val editorIcon = if (automationType == Automation.Type.PIXEL_SEARCHBAR) {
-                                                    R.drawable.rounded_search_24
-                                                } else {
-                                                    R.drawable.rounded_rocket_launch_24
-                                                }
+                                                val editorTitle =
+                                                    if (automationType == Automation.Type.PIXEL_SEARCHBAR) {
+                                                        stringResource(R.string.diy_create_pixel_searchbar_title)
+                                                    } else {
+                                                        stringResource(R.string.diy_create_action_shortcut_title)
+                                                    }
+                                                val editorIcon =
+                                                    if (automationType == Automation.Type.PIXEL_SEARCHBAR) {
+                                                        R.drawable.rounded_search_24
+                                                    } else {
+                                                        R.drawable.rounded_rocket_launch_24
+                                                    }
                                                 EditorActionItem(
                                                     title = editorTitle,
                                                     iconRes = editorIcon,
@@ -630,6 +632,7 @@ class AutomationEditorActivity : ComponentActivity() {
                                                     when (automationType) {
                                                         Automation.Type.TRIGGER -> selectedAction =
                                                             null
+
                                                         Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
                                                             null
 
@@ -656,6 +659,7 @@ class AutomationEditorActivity : ComponentActivity() {
                                                         when (automationType) {
                                                             Automation.Type.TRIGGER -> selectedAction =
                                                                 resolvedAction
+
                                                             Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
                                                                 resolvedAction
 
@@ -681,16 +685,16 @@ class AutomationEditorActivity : ComponentActivity() {
                                                         }
                                                     },
                                                     onSettingsClick = {
-                                                         configAction = resolvedAction
-                                                         if (resolvedAction is Action.DimWallpaper) {
-                                                             showDimSettings = true
-                                                         } else if (resolvedAction is Action.ScreenOff) {
-                                                             showScreenOffSettings = true
-                                                         } else if (resolvedAction is Action.DeviceEffects) {
-                                                             showDeviceEffectsSettings = true
-                                                         } else if (resolvedAction is Action.SoundMode) {
-                                                             showSoundModeSettings = true
-                                                         }
+                                                        configAction = resolvedAction
+                                                        if (resolvedAction is Action.DimWallpaper) {
+                                                            showDimSettings = true
+                                                        } else if (resolvedAction is Action.ScreenOff) {
+                                                            showScreenOffSettings = true
+                                                        } else if (resolvedAction is Action.DeviceEffects) {
+                                                            showDeviceEffectsSettings = true
+                                                        } else if (resolvedAction is Action.SoundMode) {
+                                                            showSoundModeSettings = true
+                                                        }
                                                     }
                                                 )
                                             }
@@ -723,9 +727,11 @@ class AutomationEditorActivity : ComponentActivity() {
                                 onSave = { newAction ->
                                     showDimSettings = false
                                     // Update the selection with configured action
-                                                                    when (automationType) {
+                                    when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
-                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
+                                            newAction
+
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -744,7 +750,9 @@ class AutomationEditorActivity : ComponentActivity() {
                                     showScreenOffSettings = false
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
-                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
+                                            newAction
+
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -763,7 +771,9 @@ class AutomationEditorActivity : ComponentActivity() {
                                     showDeviceEffectsSettings = false
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
-                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
+                                            newAction
+
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction
@@ -782,7 +792,9 @@ class AutomationEditorActivity : ComponentActivity() {
                                     showSoundModeSettings = false
                                     when (automationType) {
                                         Automation.Type.TRIGGER -> selectedAction = newAction
-                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction = newAction
+                                        Automation.Type.ACTION_SHORTCUT, Automation.Type.PIXEL_SEARCHBAR -> selectedAction =
+                                            newAction
+
                                         Automation.Type.STATE, Automation.Type.APP -> {
                                             if (selectedActionTab == 0) selectedInAction = newAction
                                             else selectedOutAction = newAction

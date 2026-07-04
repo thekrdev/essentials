@@ -165,7 +165,11 @@ class ShutUpShortcutActivity : ComponentActivity() {
             // as some apps check this specific setting directly.
             if (config.disableUsbDebugging) {
                 val current =
-                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, Settings.Global.ADB_ENABLED)
+                    safeReadSetting(
+                        contentResolver,
+                        SettingsTable.GLOBAL,
+                        Settings.Global.ADB_ENABLED
+                    )
                         ?: "0"
                 if (current == "1") {
                     if (!originalSettings.containsKey("global:${Settings.Global.ADB_ENABLED}")) {
@@ -177,7 +181,8 @@ class ShutUpShortcutActivity : ComponentActivity() {
 
             if (config.disableWirelessDebugging) {
                 val current =
-                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, "adb_wifi_enabled") ?: "0"
+                    safeReadSetting(contentResolver, SettingsTable.GLOBAL, "adb_wifi_enabled")
+                        ?: "0"
                 if (current == "1") {
                     if (!originalSettings.containsKey("global:adb_wifi_enabled")) {
                         originalSettings["global:adb_wifi_enabled"] = "1"

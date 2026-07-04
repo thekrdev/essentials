@@ -4,22 +4,22 @@ plugins {
 }
 
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org . jetbrains . kotlin . gradle . dsl . JvmTarget
 
-kotlin {
-    compilerOptions {
-        jvmTarget.set(JvmTarget.JVM_21)
-        freeCompilerArgs.add("-Xannotation-default-target=param-property")
-        optIn.addAll(
-            "androidx.compose.material3.ExperimentalMaterial3Api",
-            "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
-            "androidx.compose.foundation.ExperimentalFoundationApi",
-            "androidx.compose.ui.text.ExperimentalTextApi",
-            "androidx.compose.foundation.ExperimentalFoundationApi",
-            "androidx.compose.foundation.layout.ExperimentalLayoutApi"
-        )
-    }
-}
+        kotlin {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_21)
+                freeCompilerArgs.add("-Xannotation-default-target=param-property")
+                optIn.addAll(
+                    "androidx.compose.material3.ExperimentalMaterial3Api",
+                    "androidx.compose.material3.ExperimentalMaterial3ExpressiveApi",
+                    "androidx.compose.foundation.ExperimentalFoundationApi",
+                    "androidx.compose.ui.text.ExperimentalTextApi",
+                    "androidx.compose.foundation.ExperimentalFoundationApi",
+                    "androidx.compose.foundation.layout.ExperimentalLayoutApi"
+                )
+            }
+        }
 
 android {
     namespace = "com.sameerasw.essentials"
@@ -139,7 +139,7 @@ dependencies {
     implementation(libs.androidx.wear.remote.interactions)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.gson)
-    
+
     // Kotlin Reflect for dynamic sealed class serialization
     implementation(kotlin("reflect"))
 

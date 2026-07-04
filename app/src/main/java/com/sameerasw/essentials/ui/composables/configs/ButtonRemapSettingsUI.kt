@@ -43,7 +43,6 @@ import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.shizuku.ShizukuPermissionHelper
 import com.sameerasw.essentials.shizuku.ShizukuStatus
-import com.sameerasw.essentials.ui.components.cards.FeatureCard
 import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
 import com.sameerasw.essentials.ui.components.pickers.HapticFeedbackPicker
@@ -463,7 +462,12 @@ fun ButtonRemapSettingsUI(
                         title = stringResource(R.string.flashlight_always_off_title),
                         description = stringResource(R.string.flashlight_always_off_desc),
                         isChecked = viewModel.isFlashlightAlwaysTurnOffEnabled.value,
-                        onCheckedChange = { viewModel.setFlashlightAlwaysTurnOffEnabled(it, context) }
+                        onCheckedChange = {
+                            viewModel.setFlashlightAlwaysTurnOffEnabled(
+                                it,
+                                context
+                            )
+                        }
                     )
 
                 }

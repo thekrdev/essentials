@@ -24,7 +24,9 @@ import java.io.File
 sealed class WatermarkUiState {
     data object Idle : WatermarkUiState()
     data object Processing : WatermarkUiState()
-    data class Success(val file: File, val bitmap: android.graphics.Bitmap? = null) : WatermarkUiState()
+    data class Success(val file: File, val bitmap: android.graphics.Bitmap? = null) :
+        WatermarkUiState()
+
     data class Error(val message: String) : WatermarkUiState()
 }
 

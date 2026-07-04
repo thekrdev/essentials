@@ -1,8 +1,8 @@
 package com.sameerasw.essentials.ui.composables.watermark
 
 import android.app.Activity
-import android.content.pm.ActivityInfo
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box

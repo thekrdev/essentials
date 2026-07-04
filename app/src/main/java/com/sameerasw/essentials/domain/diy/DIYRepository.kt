@@ -124,8 +124,12 @@ object DIYRepository {
 
     private fun updateActionShortcutLauncherState() {
         val context = appContext ?: return
-        val showLauncher = _automations.value.any { it.type == Automation.Type.ACTION_SHORTCUT && it.isEnabled }
-        val componentName = android.content.ComponentName(context, "com.sameerasw.essentials.ActionShortcutLauncher")
+        val showLauncher =
+            _automations.value.any { it.type == Automation.Type.ACTION_SHORTCUT && it.isEnabled }
+        val componentName = android.content.ComponentName(
+            context,
+            "com.sameerasw.essentials.ActionShortcutLauncher"
+        )
         try {
             val targetState = if (showLauncher) {
                 android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED

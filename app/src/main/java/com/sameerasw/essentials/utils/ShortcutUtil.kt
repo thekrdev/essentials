@@ -50,28 +50,40 @@ object ShortcutUtil {
             val shortcuts = mutableListOf<ShortcutInfo>()
 
             // Wallpaper
-            val wallpaperIntent = Intent(context, com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java).apply {
+            val wallpaperIntent = Intent(
+                context,
+                com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java
+            ).apply {
                 action = Intent.ACTION_VIEW
             }
             val wallpaperShortcut = ShortcutInfo.Builder(context, "shortcut_wallpaper")
                 .setShortLabel(context.getString(com.sameerasw.essentials.R.string.feat_daily_wallpaper_title))
                 .setLongLabel(context.getString(com.sameerasw.essentials.R.string.feat_daily_wallpaper_title))
-                .setIcon(Icon.createWithResource(context, com.sameerasw.essentials.R.drawable.rounded_wallpaper_24))
+                .setIcon(
+                    Icon.createWithResource(
+                        context,
+                        com.sameerasw.essentials.R.drawable.rounded_wallpaper_24
+                    )
+                )
                 .setIntent(wallpaperIntent)
                 .build()
             shortcuts.add(wallpaperShortcut)
 
             // Dynamic shortcuts
             val pinnedKeys = repository.getPinnedFeatures()
-            val featuresMap = com.sameerasw.essentials.domain.registry.FeatureRegistry.ALL_FEATURES.associateBy { it.id }
+            val featuresMap =
+                com.sameerasw.essentials.domain.registry.FeatureRegistry.ALL_FEATURES.associateBy { it.id }
 
             var count = 0
             for (key in pinnedKeys) {
-                if (count >= 2) break 
+                if (count >= 2) break
                 val feature = featuresMap[key] ?: continue
                 if (feature.id == "DailyWallpaper" || feature.id == "LiveWallpaper") continue
 
-                val intent = Intent(context, com.sameerasw.essentials.FeatureSettingsActivity::class.java).apply {
+                val intent = Intent(
+                    context,
+                    com.sameerasw.essentials.FeatureSettingsActivity::class.java
+                ).apply {
                     action = Intent.ACTION_VIEW
                     putExtra("feature", feature.id)
                 }

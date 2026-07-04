@@ -18,12 +18,14 @@ class PixelSearchbarWidgetReceiver : GlanceAppWidgetReceiver() {
         ) {
             kotlinx.coroutines.MainScope().launch {
                 try {
-                    val glanceAppWidgetManager = androidx.glance.appwidget.GlanceAppWidgetManager(context)
+                    val glanceAppWidgetManager =
+                        androidx.glance.appwidget.GlanceAppWidgetManager(context)
                     if (action == Intent.ACTION_CONFIGURATION_CHANGED) {
                         kotlinx.coroutines.delay(500)
                     }
 
-                    val glanceIds = glanceAppWidgetManager.getGlanceIds(PixelSearchbarWidget::class.java)
+                    val glanceIds =
+                        glanceAppWidgetManager.getGlanceIds(PixelSearchbarWidget::class.java)
                     glanceIds.forEach { glanceId ->
                         glanceAppWidget.update(context, glanceId)
                     }

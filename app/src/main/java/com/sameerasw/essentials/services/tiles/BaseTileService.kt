@@ -5,7 +5,6 @@ import android.os.Build
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.data.repository.SettingsRepository

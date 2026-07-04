@@ -1,12 +1,12 @@
 package com.sameerasw.essentials.ui.composables
 
-import androidx.activity.compose.BackHandler
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -1345,32 +1345,44 @@ private fun RecentSearchesSection(
                         viewModel.addRecentSearch(result)
                         val feature = allFeatures.find { it.id == result.featureKey }
                         if (feature != null) {
-                            val targetFeatureKey = if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
-                                feature.parentFeatureId
-                            } else {
-                                feature.id
-                            }
-                            val highlightKey = if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
-                                feature.id
-                            } else {
-                                result.targetSettingHighlightKey
-                            }
+                            val targetFeatureKey =
+                                if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
+                                    feature.parentFeatureId
+                                } else {
+                                    feature.id
+                                }
+                            val highlightKey =
+                                if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
+                                    feature.id
+                                } else {
+                                    result.targetSettingHighlightKey
+                                }
                             BiometricSecurityHelper.runWithAuth(
                                 activity = context as FragmentActivity,
                                 feature = feature,
                                 action = {
-                                    val intent = if (targetFeatureKey == "LiveWallpaper" || targetFeatureKey == "Daily Wallpaper") {
-                                        Intent(context, com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java).apply {
-                                            putExtra("tab", if (targetFeatureKey == "LiveWallpaper") "live" else "daily")
-                                        }
-                                    } else {
-                                        Intent(context, FeatureSettingsActivity::class.java).apply {
-                                            putExtra("feature", targetFeatureKey)
-                                            highlightKey?.let {
-                                                putExtra("highlight_setting", it)
+                                    val intent =
+                                        if (targetFeatureKey == "LiveWallpaper" || targetFeatureKey == "Daily Wallpaper") {
+                                            Intent(
+                                                context,
+                                                com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    "tab",
+                                                    if (targetFeatureKey == "LiveWallpaper") "live" else "daily"
+                                                )
+                                            }
+                                        } else {
+                                            Intent(
+                                                context,
+                                                FeatureSettingsActivity::class.java
+                                            ).apply {
+                                                putExtra("feature", targetFeatureKey)
+                                                highlightKey?.let {
+                                                    putExtra("highlight_setting", it)
+                                                }
                                             }
                                         }
-                                    }
                                     context.startActivity(intent)
                                 }
                             )
@@ -1419,48 +1431,67 @@ private fun SearchResultsSection(
                         viewModel.addRecentSearch(result)
                         val feature = allFeatures.find { it.id == result.featureKey }
                         if (feature != null) {
-                            val targetFeatureKey = if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
-                                feature.parentFeatureId
-                            } else {
-                                feature.id
-                            }
-                            val highlightKey = if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
-                                feature.id
-                            } else {
-                                result.targetSettingHighlightKey
-                            }
+                            val targetFeatureKey =
+                                if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
+                                    feature.parentFeatureId
+                                } else {
+                                    feature.id
+                                }
+                            val highlightKey =
+                                if (!feature.hasMoreSettings && feature.parentFeatureId != null) {
+                                    feature.id
+                                } else {
+                                    result.targetSettingHighlightKey
+                                }
                             BiometricSecurityHelper.runWithAuth(
                                 activity = context as FragmentActivity,
                                 feature = feature,
                                 action = {
-                                    val intent = if (targetFeatureKey == "LiveWallpaper" || targetFeatureKey == "Daily Wallpaper") {
-                                        Intent(context, com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java).apply {
-                                            putExtra("tab", if (targetFeatureKey == "LiveWallpaper") "live" else "daily")
-                                        }
-                                    } else {
-                                        Intent(context, FeatureSettingsActivity::class.java).apply {
-                                            putExtra("feature", targetFeatureKey)
-                                            highlightKey?.let {
-                                                putExtra("highlight_setting", it)
+                                    val intent =
+                                        if (targetFeatureKey == "LiveWallpaper" || targetFeatureKey == "Daily Wallpaper") {
+                                            Intent(
+                                                context,
+                                                com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    "tab",
+                                                    if (targetFeatureKey == "LiveWallpaper") "live" else "daily"
+                                                )
+                                            }
+                                        } else {
+                                            Intent(
+                                                context,
+                                                FeatureSettingsActivity::class.java
+                                            ).apply {
+                                                putExtra("feature", targetFeatureKey)
+                                                highlightKey?.let {
+                                                    putExtra("highlight_setting", it)
+                                                }
                                             }
                                         }
-                                    }
                                     context.startActivity(intent)
                                 }
                             )
                         } else {
-                            val intent = if (result.featureKey == "LiveWallpaper" || result.featureKey == "Daily Wallpaper") {
-                                Intent(context, com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java).apply {
-                                    putExtra("tab", if (result.featureKey == "LiveWallpaper") "live" else "daily")
-                                }
-                            } else {
-                                Intent(context, FeatureSettingsActivity::class.java).apply {
-                                    putExtra("feature", result.featureKey)
-                                    result.targetSettingHighlightKey?.let {
-                                        putExtra("highlight_setting", it)
+                            val intent =
+                                if (result.featureKey == "LiveWallpaper" || result.featureKey == "Daily Wallpaper") {
+                                    Intent(
+                                        context,
+                                        com.sameerasw.essentials.ui.activities.WallpaperActivity::class.java
+                                    ).apply {
+                                        putExtra(
+                                            "tab",
+                                            if (result.featureKey == "LiveWallpaper") "live" else "daily"
+                                        )
+                                    }
+                                } else {
+                                    Intent(context, FeatureSettingsActivity::class.java).apply {
+                                        putExtra("feature", result.featureKey)
+                                        result.targetSettingHighlightKey?.let {
+                                            putExtra("highlight_setting", it)
+                                        }
                                     }
                                 }
-                            }
                             context.startActivity(intent)
                         }
                     },

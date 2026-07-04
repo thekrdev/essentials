@@ -126,15 +126,27 @@ class LocationReachedService : Service() {
         }
     }
 
-    private fun saveTravelProgress(active: Boolean, alarm: LocationAlarm?, progressPercent: Int, etaText: String?, distanceText: String?) {
+    private fun saveTravelProgress(
+        active: Boolean,
+        alarm: LocationAlarm?,
+        progressPercent: Int,
+        etaText: String?,
+        distanceText: String?
+    ) {
         val prefs = getSharedPreferences("essentials_prefs", MODE_PRIVATE)
         val editor = prefs.edit()
         if (active && alarm != null) {
             editor.putBoolean("travel_active", true)
             editor.putString("travel_name", alarm.name)
             editor.putFloat("travel_progress", progressPercent.toFloat() / 100f)
-            editor.putString("travel_remaining_time", etaText ?: getString(R.string.location_reached_calculating))
-            editor.putString("travel_remaining_distance", distanceText ?: getString(R.string.location_reached_calculating))
+            editor.putString(
+                "travel_remaining_time",
+                etaText ?: getString(R.string.location_reached_calculating)
+            )
+            editor.putString(
+                "travel_remaining_distance",
+                distanceText ?: getString(R.string.location_reached_calculating)
+            )
             editor.putString("travel_icon_name", alarm.iconResName)
             editor.putBoolean("travel_is_paused", alarm.isPaused)
             if (progressPercent >= 100) {

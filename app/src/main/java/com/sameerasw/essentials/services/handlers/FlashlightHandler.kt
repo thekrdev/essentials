@@ -9,6 +9,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Icon
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.Build
@@ -18,6 +22,7 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.domain.HapticFeedbackType
 import com.sameerasw.essentials.services.receivers.FlashlightActionReceiver
@@ -26,15 +31,10 @@ import com.sameerasw.essentials.utils.performHapticFeedback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
-import androidx.core.content.edit
 
 class FlashlightHandler(
     private val service: AccessibilityService,
@@ -68,7 +68,8 @@ class FlashlightHandler(
             super.onTorchModeChanged(cameraId, enabled)
             isTorchOn = enabled
 
-            val screenOffService = service as? com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
+            val screenOffService =
+                service as? com.sameerasw.essentials.services.tiles.ScreenOffAccessibilityService
             screenOffService?.updateFlashlightProximityRegistration(enabled)
 
             val prefs = service.getSharedPreferences("essentials_prefs", Context.MODE_PRIVATE)
@@ -343,7 +344,8 @@ class FlashlightHandler(
     }
 
     private suspend fun getProximityStatus(context: Context): Boolean {
-        val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager ?: return false
+        val sensorManager =
+            context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager ?: return false
         val proximitySensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY) ?: return false
 
         return withTimeoutOrNull(250L.milliseconds) {
@@ -364,7 +366,11 @@ class FlashlightHandler(
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
                 }
 
-                sensorManager.registerListener(listener, proximitySensor, SensorManager.SENSOR_DELAY_FASTEST)
+                sensorManager.registerListener(
+                    listener,
+                    proximitySensor,
+                    SensorManager.SENSOR_DELAY_FASTEST
+                )
                 continuation.invokeOnCancellation {
                     sensorManager.unregisterListener(listener)
                 }

@@ -3,6 +3,8 @@ package com.sameerasw.essentials.ui.activities
 import android.app.Activity
 import android.appwidget.AppWidgetHost
 import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,6 +36,7 @@ import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -58,19 +61,15 @@ import com.sameerasw.essentials.services.widgets.WidgetScraperService
 import com.sameerasw.essentials.ui.components.EssentialsFloatingToolbar
 import com.sameerasw.essentials.ui.components.cards.IconToggleItem
 import com.sameerasw.essentials.ui.components.containers.RoundedCardContainer
-import com.sameerasw.essentials.ui.components.sliders.ConfigSliderItem
-import androidx.compose.material3.Switch
-
 import com.sameerasw.essentials.ui.components.pickers.SegmentedPicker
 import com.sameerasw.essentials.ui.components.sheets.FeatureHelpBottomSheet
 import com.sameerasw.essentials.ui.components.sheets.PermissionsBottomSheet
+import com.sameerasw.essentials.ui.components.sliders.ConfigSliderItem
 import com.sameerasw.essentials.ui.modifiers.BlurDirection
 import com.sameerasw.essentials.ui.modifiers.progressiveBlur
 import com.sameerasw.essentials.ui.theme.EssentialsTheme
 import com.sameerasw.essentials.utils.HapticUtil
 import com.sameerasw.essentials.viewmodels.MainViewModel
-import android.content.Context
-import android.content.Intent
 
 class PixelSearchbarSettingsActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -98,8 +97,14 @@ class PixelSearchbarSettingsActivity : ComponentActivity() {
                     showToggle = true,
                     hasMoreSettings = true
                 ) {
-                    override fun isEnabled(viewModel: MainViewModel) = viewModel.isPixelSearchbarEnabled.value
-                    override fun onToggle(viewModel: MainViewModel, context: Context, enabled: Boolean) {
+                    override fun isEnabled(viewModel: MainViewModel) =
+                        viewModel.isPixelSearchbarEnabled.value
+
+                    override fun onToggle(
+                        viewModel: MainViewModel,
+                        context: Context,
+                        enabled: Boolean
+                    ) {
                         viewModel.setPixelSearchbarEnabled(enabled, context)
                     }
                 }
@@ -149,7 +154,8 @@ class PixelSearchbarSettingsActivity : ComponentActivity() {
 
                             Spacer(
                                 modifier = Modifier.height(
-                                    WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 150.dp
+                                    WindowInsets.navigationBars.asPaddingValues()
+                                        .calculateBottomPadding() + 150.dp
                                 )
                             )
                         }
@@ -211,7 +217,10 @@ fun PixelSearchbarSettingsUI(
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data ?: return@rememberLauncherForActivityResult
-            val widgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+            val widgetId = data.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID
+            )
             if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
                 val info = awm.getAppWidgetInfo(widgetId)
                 val providerName = info?.provider?.flattenToString()
@@ -287,10 +296,12 @@ fun PixelSearchbarSettingsUI(
                                     WidgetScraperService.start(context)
                                     viewModel.setPixelSearchbarType(type, context)
                                 }
+
                                 currentType == "widget" || currentType == "music" -> {
                                     WidgetScraperService.stop(context)
                                     viewModel.setPixelSearchbarType(type, context)
                                 }
+
                                 else -> viewModel.setPixelSearchbarType(type, context)
                             }
                         },
@@ -445,7 +456,8 @@ fun PixelSearchbarSettingsUI(
                         "dd/MM/yyyy"
                     )
                     val currentDate = remember { java.util.Date() }
-                    val googleSansFlexRound = remember { FontFamily(Font(R.font.google_sans_flex_round)) }
+                    val googleSansFlexRound =
+                        remember { FontFamily(Font(R.font.google_sans_flex_round)) }
 
                     Column(
                         modifier = Modifier
@@ -480,7 +492,10 @@ fun PixelSearchbarSettingsUI(
                                 val isSelected = currentDateFormat == format
                                 val formattedDate = remember(format, currentDate) {
                                     try {
-                                        java.text.SimpleDateFormat(format, java.util.Locale.getDefault()).format(currentDate)
+                                        java.text.SimpleDateFormat(
+                                            format,
+                                            java.util.Locale.getDefault()
+                                        ).format(currentDate)
                                     } catch (e: Exception) {
                                         format
                                     }
@@ -497,7 +512,10 @@ fun PixelSearchbarSettingsUI(
                                             selected = isSelected,
                                             onClick = {
                                                 HapticUtil.performVirtualKeyHaptic(view)
-                                                viewModel.setPixelSearchbarDateFormat(format, context)
+                                                viewModel.setPixelSearchbarDateFormat(
+                                                    format,
+                                                    context
+                                                )
                                             }
                                         )
                                     },
@@ -533,8 +551,14 @@ fun PixelSearchbarSettingsUI(
                         onClick = {
                             if (tapActionEnabled) {
                                 HapticUtil.performVirtualKeyHaptic(view)
-                                val intent = Intent(context, com.sameerasw.essentials.MainActivity::class.java).apply {
-                                    putExtra("target_tab", com.sameerasw.essentials.domain.DIYTabs.DIY.name)
+                                val intent = Intent(
+                                    context,
+                                    com.sameerasw.essentials.MainActivity::class.java
+                                ).apply {
+                                    putExtra(
+                                        "target_tab",
+                                        com.sameerasw.essentials.domain.DIYTabs.DIY.name
+                                    )
                                 }
                                 context.startActivity(intent)
                             }
@@ -545,7 +569,9 @@ fun PixelSearchbarSettingsUI(
                                 painter = painterResource(id = R.drawable.rounded_rocket_launch_24),
                                 contentDescription = null,
                                 modifier = Modifier.size(24.dp),
-                                tint = if (tapActionEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
+                                tint = if (tapActionEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                    alpha = 0.38f
+                                )
                             )
                         },
                         trailingContent = {
@@ -561,7 +587,9 @@ fun PixelSearchbarSettingsUI(
                             Text(
                                 text = stringResource(R.string.pixel_searchbar_tap_action_enabled_desc),
                                 style = MaterialTheme.typography.labelMedium,
-                                color = if (tapActionEnabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
+                                color = if (tapActionEnabled) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                    alpha = 0.38f
+                                )
                             )
                         },
                         colors = ListItemDefaults.colors(
@@ -571,7 +599,9 @@ fun PixelSearchbarSettingsUI(
                         Text(
                             text = stringResource(R.string.pixel_searchbar_tap_action_enabled),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = if (tapActionEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                            color = if (tapActionEnabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurface.copy(
+                                alpha = 0.38f
+                            )
                         )
                     }
                 }
@@ -581,7 +611,11 @@ fun PixelSearchbarSettingsUI(
 
     if (showPermissionSheet) {
         val permissionItem = remember(context, viewModel) {
-            com.sameerasw.essentials.utils.PermissionUIHelper.getPermissionItem("WRITE_SECURE_SETTINGS", context, viewModel)
+            com.sameerasw.essentials.utils.PermissionUIHelper.getPermissionItem(
+                "WRITE_SECURE_SETTINGS",
+                context,
+                viewModel
+            )
         }
         if (permissionItem != null) {
             PermissionsBottomSheet(

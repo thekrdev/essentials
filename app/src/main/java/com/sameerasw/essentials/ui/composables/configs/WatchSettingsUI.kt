@@ -62,8 +62,14 @@ fun WatchSettingsUI(
                         .background(MaterialTheme.colorScheme.surfaceBright)
                         .clickable {
                             HapticUtil.performUIHaptic(view)
-                            android.widget.Toast.makeText(context, "Syncing...", android.widget.Toast.LENGTH_SHORT).show()
-                            com.sameerasw.essentials.services.DeviceInfoSyncManager.forceSync(context)
+                            android.widget.Toast.makeText(
+                                context,
+                                "Syncing...",
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                            com.sameerasw.essentials.services.DeviceInfoSyncManager.forceSync(
+                                context
+                            )
                             com.sameerasw.essentials.services.CalendarSyncManager.forceSync(context)
                         }
                         .padding(24.dp),
