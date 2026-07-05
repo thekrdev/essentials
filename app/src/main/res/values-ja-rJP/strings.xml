@@ -598,8 +598,8 @@
     <string name="search_remap_haptic_desc">再設定されたボタンを押したときの感触フィードバック</string>
     <string name="search_remap_flashlight_title">フラッシュライト</string>
     <string name="search_remap_flashlight_desc">フラッシュライトを音量ボタンで切り替える</string>
-    <string name="search_flashlight_pocket_title">Flashlight pocket detection</string>
-    <string name="search_flashlight_pocket_desc">Auto-turn off flashlight when placed in pocket</string>
+    <string name="search_flashlight_pocket_title">フラッシュライト ポケット検出</string>
+    <string name="search_flashlight_pocket_desc">ポケットに入れたときにフラッシュライトを自動でオフにする</string>
     <string name="search_night_light_enable_title">ダイナミックナイトモードを有効にする</string>
     <string name="search_night_light_enable_desc">ダイナミックナイトモードを使うか切り替える</string>
     <string name="search_app_lock_enable_title">アプリロックを有効にする</string>
@@ -650,7 +650,7 @@
     <string name="perm_action_enable">設定で有効にする</string>
     <string name="perm_action_how_to">付与の方法</string>
     <string name="perm_action_granted">付与済み</string>
-    <string name="perm_action_grant_shizuku">Grant using Shizuku</string>
+    <string name="perm_action_grant_shizuku">Shizukuを使って付与</string>
     <string name="perm_write_secure_instructions">この権限は、PCからADBを使用して付与することができます。ADBコマンドをコピーして、シェルで実行してください。\n\nまたは、下のボタンから「Shizuku」を使って簡単に付与することもできます。\n\nこの権限の付与は一回だけで済みます。</string>
     <string name="perm_battery_optimization_title">バッテリーの最適化を無視</string>
     <string name="perm_battery_optimization_desc">バッテリー節約のためにシステムがアプリを強制終了しないようにしてください。</string>
@@ -779,7 +779,7 @@
     <string name="location_reached_name_label">名前</string>
     <string name="location_reached_save_btn">保存</string>
     <string name="location_reached_cancel_btn">キャンセル</string>
-    <string name="location_reached_resolving">Resolving location…</string>
+    <string name="location_reached_resolving">位置情報を特定中…</string>
     <string name="location_reached_last_trip">最後の旅行</string>
     <string name="location_reached_saved_destinations">保存済みの目的地</string>
     <string name="location_reached_no_saved_dest">目的地が保存されていません。</string>
@@ -788,7 +788,7 @@
     <string name="location_reached_restart_btn">リスタート</string>
     <string name="location_reached_instructional_desc">Google マップの座標（指定した地点）を Essentials に共有し、目的地として保存します。\n\n表示される距離は、目的地までの直線距離であり、道のりではありません。\n\n所要時間や距離の計算結果は必ずしも正確ではないため、あくまで目安としてご利用ください。</string>
     <string name="tile_location_reached">まだ着かないの？</string>
-    <string name="location_reached_pause">Pause</string>
+    <string name="location_reached_pause">一時停止</string>
     <string name="location_reached_resume">Resume</string>
     <string name="location_reached_radius_label">半径：%1$dm</string>
     <string name="location_reached_distance_label">Distance to target: %1$s</string>
@@ -846,16 +846,16 @@
     <string name="diy_action_low_power_on">バッテリーセーバーオン</string>
     <string name="diy_action_low_power_off">バッテリーセーバーオフ</string>
     <string name="diy_action_dim_wallpaper">暗い壁紙</string>
-    <string name="diy_action_screen_off">Screen Off</string>
-    <string name="diy_action_media_play_pause">Media Play/Pause</string>
-    <string name="diy_action_media_next">Media Next</string>
-    <string name="diy_action_media_previous">Media Previous</string>
-    <string name="diy_action_ai_assistant">AI Assistant</string>
-    <string name="diy_action_take_screenshot">Take Screenshot</string>
-    <string name="diy_action_toggle_media_volume">Toggle Media Volume</string>
-    <string name="diy_action_like_current_song">Like Current Song</string>
-    <string name="diy_action_circle_to_search">Circle to Search</string>
-    <string name="diy_action_pin_app">Pin Foreground App</string>
+    <string name="diy_action_screen_off">画面オフ</string>
+    <string name="diy_action_media_play_pause">メディア 再生/一時停止</string>
+    <string name="diy_action_media_next">メディア 次へ</string>
+    <string name="diy_action_media_previous">メディア 前へ</string>
+    <string name="diy_action_ai_assistant">アシスタント</string>
+    <string name="diy_action_take_screenshot">スクリーンショット</string>
+    <string name="diy_action_toggle_media_volume">メディア音量のオンオフ</string>
+    <string name="diy_action_like_current_song">再生中の曲をいいね</string>
+    <string name="diy_action_circle_to_search">かこって検索</string>
+    <string name="diy_action_pin_app">フォアグラウンドのアプリを固定</string>
     <string name="diy_dim_wallpaper_desc">このアクションでは、壁紙を暗くするために、ShizukuまたはRootが必要です。</string>
     <string name="diy_select_trigger">トリガーを選択</string>
     <string name="diy_create_app_title">アプリ</string>
@@ -910,9 +910,9 @@
     <string name="label_shizuku_ritaka">Shizuku (Rikka)</string>
     <string name="label_shizuku_tuozi">Shizuku (TuoZi)</string>
     <string name="label_search_content_description">検索</string>
-    <string name="label_recent_searches">Recent Searches</string>
-    <string name="label_no_recent_searches">No recent searches</string>
-    <string name="label_clear_all">Clear all</string>
+    <string name="label_recent_searches">検索履歴</string>
+    <string name="label_no_recent_searches">検索履歴はありません</string>
+    <string name="label_clear_all">すべてクリア</string>
     <string name="perm_device_admin_explanation">ロック画面で不正なネットワーク変更が試みられた場合、デバイスをハードロックする必要があります。</string>
     <string name="biometric_subtitle_access_settings">設定にアクセスするための認証</string>
     <string name="biometric_title_settings_format">%1$s設定</string>
@@ -956,11 +956,11 @@
         <item>通知</item>
     </string-array>
     <string-array name="keywords_pocket_detection">
-        <item>pocket</item>
-        <item>proximity</item>
-        <item>sensor</item>
-        <item>torch</item>
-        <item>auto</item>
+        <item>ポケット</item>
+        <item>近接</item>
+        <item>センサー</item>
+        <item>トーチ</item>
+        <item>自動</item>
     </string-array>
     <string-array name="keywords_qs_stay_awake">
         <item>起動</item>
@@ -1086,7 +1086,7 @@
     <string-array name="keywords_battery">
         <item>バッテリー</item>
         <item>充電</item>
-        <item>optimization</item>
+        <item>最適化</item>
         <item>ピクセル</item>
     </string-array>
     <!-- App Selection Extra -->
@@ -1301,12 +1301,12 @@
     <string name="watch_help_title">ウォッチにインストール</string>
     <string name="watch_help_description">ウォッチの機能を利用するには、Wear OSウォッチにEssentialsコンパニオンアプリをインストールする必要があります。下のボタンをクリックすると、ウォッチでPlayストアが直接開きます。</string>
     <string name="watch_help_open_play_store">Open on Watch</string>
-    <string name="feat_watch_controls_title">Customize</string>
-    <string name="feat_watch_controls_desc">Customize WearOS app controls</string>
-    <string name="watch_controls_long_press_hint">Long press to enable or disable buttons</string>
-    <string name="watch_controls_reorder_title">Reorder watch controls</string>
-    <string name="feat_watch_wireless_debugging_title">Wireless Debugging</string>
-    <string name="feat_watch_wireless_debugging_desc">Enable remotely</string>
+    <string name="feat_watch_controls_title">カスタマイズ</string>
+    <string name="feat_watch_controls_desc">WearOSアプリのコントロールをカスタマイズする</string>
+    <string name="watch_controls_long_press_hint">長押しでボタンの有効と無効を切り替える</string>
+    <string name="watch_controls_reorder_title">ウォッチコントロールを並べ替え</string>
+    <string name="feat_watch_wireless_debugging_title">ワイヤレスデバッグ</string>
+    <string name="feat_watch_wireless_debugging_desc">遠隔で有効にする</string>
     <string name="feat_sync_sound_mode_title">Sync sound mode</string>
     <string name="feat_sync_sound_mode_desc">Automatically sync with watch</string>
     <string name="perm_watch_write_secure_title">Watch Secure Settings</string>
