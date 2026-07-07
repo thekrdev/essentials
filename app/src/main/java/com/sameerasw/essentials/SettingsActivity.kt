@@ -92,6 +92,7 @@ import com.sameerasw.essentials.ui.components.pickers.DefaultTabPicker
 import com.sameerasw.essentials.ui.components.pickers.LanguagePicker
 import com.sameerasw.essentials.ui.components.sheets.InstructionsBottomSheet
 import com.sameerasw.essentials.ui.components.sheets.UnsupportedFeaturesConfirmationSheet
+import com.sameerasw.essentials.ui.components.sheets.ImportConfigConfirmationSheet
 import com.sameerasw.essentials.ui.components.sheets.UpdateBottomSheet
 import com.sameerasw.essentials.ui.modifiers.BlurDirection
 import com.sameerasw.essentials.ui.modifiers.progressiveBlur
@@ -262,6 +263,30 @@ fun SettingsContent(
     var showInstructionsSheet by remember { mutableStateOf(false) }
     var showShizukuHelpBottomSheet by remember { mutableStateOf(false) }
     var showUnsupportedFeaturesSheet by remember { mutableStateOf(false) }
+    var showImportConfirmSheet by remember { mutableStateOf(false) }
+    var selectedImportUri by remember { mutableStateOf<Uri?>(null) }
+
+    val onImportConfig: (Boolean) -> Unit = { keepPrefs ->
+        selectedImportUri?.let { uri ->
+            try {
+                context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                    if (viewModel.importConfigs(context, inputStream, keepPrefs)) {
+                        Toast.makeText(context, "Config imported successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(context, "Failed to import config", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(context, "Failed to import config", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            } finally {
+                selectedImportUri = null
+                showImportConfirmSheet = false
+            }
+        }
+    }
 
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/json")
@@ -284,20 +309,8 @@ fun SettingsContent(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
         uri?.let {
-            try {
-                context.contentResolver.openInputStream(it)?.use { inputStream ->
-                    if (viewModel.importConfigs(context, inputStream)) {
-                        Toast.makeText(context, "Config imported successfully", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        Toast.makeText(context, "Failed to import config", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            } catch (e: Exception) {
-                Toast.makeText(context, "Failed to import config", Toast.LENGTH_SHORT).show()
-                e.printStackTrace()
-            }
+            selectedImportUri = it
+            showImportConfirmSheet = true
         }
     }
 
@@ -323,6 +336,21 @@ fun SettingsContent(
                 viewModel.setEnableUnsupportedFeatures(true, context)
             },
             featureTitleResIds = FeatureRegistry.getUnsupportedFeatures(context).map { it.title }
+        )
+    }
+
+    if (showImportConfirmSheet) {
+        ImportConfigConfirmationSheet(
+            onDismissRequest = {
+                showImportConfirmSheet = false
+                selectedImportUri = null
+            },
+            onConfirmOverride = {
+                onImportConfig(false)
+            },
+            onConfirmMerge = {
+                onImportConfig(true)
+            }
         )
     }
 
@@ -953,14 +981,6 @@ fun SettingsContent(
             )
 
             RoundedCardContainer {
-                IconToggleItem(
-                    iconRes = R.drawable.rounded_front_hand_24,
-                    title = stringResource(R.string.label_keep_new_settings),
-                    description = stringResource(R.string.desc_keep_new_settings),
-                    isChecked = viewModel.isKeepPrefs.value,
-                    onCheckedChange = { viewModel.toggleKeepPrefs(it) }
-                )
-
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

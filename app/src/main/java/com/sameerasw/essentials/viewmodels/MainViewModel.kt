@@ -332,7 +332,6 @@ class MainViewModel : ViewModel() {
     private var workflowPollingJob: kotlinx.coroutines.Job? = null
     val gitHubUser = mutableStateOf<com.sameerasw.essentials.domain.model.github.GitHubUser?>(null)
 
-    val isKeepPrefs = mutableStateOf(false)
 
     private val contentObserver = object : ContentObserver(Handler(Looper.getMainLooper())) {
         override fun onChange(selfChange: Boolean, uri: Uri?) {
@@ -1501,7 +1500,6 @@ class MainViewModel : ViewModel() {
             startBatteryNotificationService(context)
         }
 
-        isKeepPrefs.value = settingsRepository.getBoolean(SettingsRepository.KEY_KEEP_PREFS)
     }
 
     private fun startBatteryNotificationService(context: Context) {
@@ -3938,8 +3936,8 @@ class MainViewModel : ViewModel() {
         settingsRepository.exportConfigs(outputStream)
     }
 
-    fun importConfigs(context: Context, inputStream: java.io.InputStream): Boolean {
-        val success = settingsRepository.importConfigs(inputStream, isKeepPrefs.value)
+    fun importConfigs(context: Context, inputStream: java.io.InputStream, keepPrefs: Boolean): Boolean {
+        val success = settingsRepository.importConfigs(inputStream, keepPrefs)
         if (success) {
             settingsRepository.syncSystemSettingsWithSaved()
             com.sameerasw.essentials.domain.diy.DIYRepository.reloadAutomations()
@@ -4307,8 +4305,4 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun toggleKeepPrefs(enabled: Boolean) {
-        isKeepPrefs.value = enabled
-        settingsRepository.putBoolean(SettingsRepository.KEY_KEEP_PREFS, enabled)
-    }
 }
