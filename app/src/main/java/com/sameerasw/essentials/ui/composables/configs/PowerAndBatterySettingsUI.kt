@@ -68,6 +68,20 @@ fun PowerAndBatterySettingsUI(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         RoundedCardContainer(spacing = 2.dp) {
+            ConfigSliderItem(
+                title = stringResource(R.string.label_low_power_trigger_level),
+                description = stringResource(R.string.desc_low_power_trigger_level),
+                value = viewModel.lowPowerTriggerLevel.intValue.toFloat(),
+                onValueChange = {
+                    viewModel.setLowPowerTriggerLevel(context, it.toInt())
+                    HapticUtil.performSliderHaptic(view)
+                },
+                valueRange = 0f..100f,
+                increment = 5f,
+                valueFormatter = { "${it.toInt()}%" },
+                iconRes = R.drawable.rounded_battery_charging_60_24,
+                enabled = isEnabled
+            )
             IconToggleItem(
                 title = stringResource(R.string.label_advertise_is_enabled),
                 description = stringResource(R.string.desc_advertise_is_enabled),

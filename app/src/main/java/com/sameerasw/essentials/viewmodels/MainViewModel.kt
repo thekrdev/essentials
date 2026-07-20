@@ -326,6 +326,10 @@ class MainViewModel : ViewModel() {
     // Audio Safe Volume State
     val isAudioSafeVolumeDisabled = mutableStateOf(false)
 
+    // Battery Saver Low Power Trigger Level
+    val lowPowerTriggerLevel = mutableIntStateOf(0)
+
+
 
 
     private var lastUpdateCheckTime: Long = 0
@@ -392,6 +396,10 @@ class MainViewModel : ViewModel() {
 
                     Settings.Global.getUriFor("audio_safe_volume_state") -> {
                         appContext?.let { syncAudioSafeVolumeState(it) }
+                    }
+
+                    Settings.Global.getUriFor("low_power_trigger_level") -> {
+                        appContext?.let { syncLowPowerTriggerLevel(it) }
                     }
                 }
             }
@@ -1122,8 +1130,19 @@ class MainViewModel : ViewModel() {
             e.printStackTrace()
         }
 
+        try {
+            context.contentResolver.registerContentObserver(
+                Settings.Global.getUriFor("low_power_trigger_level"),
+                false,
+                contentObserver
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         loadBatterySaverConstants(context)
         syncAudioSafeVolumeState(context)
+        syncLowPowerTriggerLevel(context)
 
         isPowerSaveModeEnabled.value = DeviceUtils.isPowerSaveMode(context)
         updateBlurState(context)
@@ -4415,6 +4434,20 @@ class MainViewModel : ViewModel() {
         try {
             Settings.Global.putInt(context.contentResolver, "audio_safe_volume_state", targetValue)
             isAudioSafeVolumeDisabled.value = disabled
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun syncLowPowerTriggerLevel(context: Context) {
+        val level = Settings.Global.getInt(context.contentResolver, "low_power_trigger_level", 0)
+        lowPowerTriggerLevel.intValue = level
+    }
+
+    fun setLowPowerTriggerLevel(context: Context, level: Int) {
+        try {
+            Settings.Global.putInt(context.contentResolver, "low_power_trigger_level", level)
+            lowPowerTriggerLevel.intValue = level
         } catch (e: Exception) {
             e.printStackTrace()
         }

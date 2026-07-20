@@ -1407,6 +1407,8 @@
 
     <string name="feat_power_battery_title">Power and battery</string>
     <string name="feat_power_battery_desc">Configure the power saving policies</string>
+    <string name="label_low_power_trigger_level">Custom trigger level</string>
+    <string name="desc_low_power_trigger_level">for power saving</string>
     <string name="title_battery_saver_general">General Settings</string>
     <string name="title_battery_saver_display">Display &amp; Brightness</string>
     <string name="title_battery_saver_power">Power &amp; Performance</string>
