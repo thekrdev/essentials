@@ -1004,7 +1004,7 @@ object FeatureRegistry {
                     )
                         .getBoolean(com.sameerasw.essentials.data.repository.SettingsRepository.KEY_USE_USAGE_ACCESS)
                 )
-                    listOf("USAGE_STATS") else listOf("ACCESSIBILITY")
+                    listOf("USAGE_STATS", "ACCESSIBILITY") else listOf("ACCESSIBILITY")
 
             override fun isEnabled(viewModel: MainViewModel) = viewModel.isAppLockEnabled.value
             override fun isToggleEnabled(viewModel: MainViewModel, context: Context) =
