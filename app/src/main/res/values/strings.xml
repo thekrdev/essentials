@@ -782,6 +782,9 @@
     <string name="unit_minutes">%d minutes</string>
     <string name="action_restart_systemui">Restart SystemUI</string>
     <string name="desc_restart_systemui">Kills and restarts SystemUI process to apply some changes immediately</string>
+    <string name="tile_restart_systemui">SystemUI Restart</string>
+    <string name="tile_restart_systemui_subtitle_restart">Now</string>
+    <string name="about_desc_restart_systemui_tile">Easily restart SystemUI directly from your Quick Settings panel. Helpful to quickly resolve status bar glitches or apply system UI modifications immediately. Requires root or Shizuku shell access.</string>
     <string name="msg_error_load_release_notes">Couldn\'t load the release note</string>
     <string name="action_view_on_web">View on web</string>
 

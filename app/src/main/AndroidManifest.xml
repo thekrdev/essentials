@@ -1105,6 +1105,20 @@
                 android:value="android.service.quicksettings.CATEGORY_DISPLAY" />
         </service>
 
+        <service
+            android:name=".services.tiles.RestartSystemUiTileService"
+            android:exported="true"
+            android:icon="@drawable/reopen_window_24px"
+            android:label="@string/tile_restart_systemui"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TILE_CATEGORY"
+                android:value="android.service.quicksettings.CATEGORY_UTILITIES" />
+        </service>
+
         <provider
             android:name=".external.ExternalControlProvider"
             android:authorities="${applicationId}.external"
