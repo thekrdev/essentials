@@ -146,7 +146,7 @@ Essential tools, mods and workarounds for Pixels and other Androids
 # Requirements
 
 - Android 8.0 or higher (Feature support may vary)
-- App permissions are optional, Grant necessary permissions for each feature
+- App permissions are optional, grant necessary permissions for each feature
 - Targetted for Google Pixel devices extending to other Androids
 - Tested on Google Pixel 7 (Android 17 beta program).
 - > Some features and functionalities might not work as expected on other OEMs. (Especially NothingOS and OneUI)
