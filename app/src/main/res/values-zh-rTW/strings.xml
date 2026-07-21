@@ -639,6 +639,11 @@
     <string name="perm_accessibility_desc_lighting">需要在新通知上触发通知光效</string>
     <string name="perm_default_browser_title">默认浏览器</string>
     <string name="perm_default_browser_desc">需要高效处理链接</string>
+    <string name="perm_install_packages_title">Install Unknown Apps</string>
+    <string name="perm_install_packages_desc">Required to automatically download and install application updates.</string>
+    <string name="action_install_update">Install Update</string>
+    <string name="downloading_update_progress">Downloading update (%1$d%%)</string>
+    <string name="update_download_failed">Download failed</string>
     <string name="perm_accessibility_desc_remap">需要拦截硬件按钮事件</string>
     <string name="perm_accessibility_desc_essentials_on_display">必須在螢幕關閉時攔截音量鍵事件，以觸發簡約一覽覆蓋層。</string>
     <string name="perm_accessibility_desc_night_light">需要监控前台应用。</string>
@@ -913,6 +918,9 @@
     <string name="update_channel_name">应用更新</string>
     <string name="update_channel_desc">新应用更新的通知</string>
     <string name="notification_update_available">有可用更新</string>
+    <string name="notification_update_subtext">Check out what\'s new in Essentials v%1$s</string>
+    <string name="action_update_to_version">Update to Essentials v%1$s</string>
+    <string name="action_check_for_updates">Check for updates</string>
     <string name="battery_notification_no_devices">未连接设备</string>
     <string name="label_unknown">未知</string>
     <string name="network_type_5g">5G</string>
