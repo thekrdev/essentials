@@ -1,0 +1,48 @@
+{
+  "$schema": "https://inlang.com/schema/project-settings",
+  "sourceLanguageTag": "en",
+  "languageTags": [
+    "en",
+    "ach",
+    "af",
+    "ar",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "es",
+    "fi",
+    "fr",
+    "he",
+    "hu",
+    "id",
+    "it",
+    "iw",
+    "ja",
+    "ko",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "pt-BR",
+    "pt-PT",
+    "ro",
+    "ru",
+    "si",
+    "sr",
+    "sv",
+    "tr",
+    "uk",
+    "vi",
+    "zh",
+    "zh-CN",
+    "zh-TW"
+  ],
+  "modules": [
+    "https://cdn.jsdelivr.net/npm/@inlang/plugin-xml@latest/dist/index.js"
+  ],
+  "plugin.inlang.xml": {
+    "pathPattern": "./app/src/main/res/values{languageTag}/strings.xml"
+  }
+}
