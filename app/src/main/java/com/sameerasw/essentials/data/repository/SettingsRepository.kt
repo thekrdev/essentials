@@ -290,7 +290,13 @@ class SettingsRepository(private val context: Context) {
         const val KEY_POCKET_MODE_TRIGGER_DELAY = "pocket_mode_trigger_delay"
         const val KEY_POCKET_MODE_LOCK_SCREEN_ONLY = "pocket_mode_lock_screen_only"
         const val KEY_KEEP_PREFS = "keep_prefs"
+        const val KEY_TRANSLATION_MODE_DO_NOT_SHOW_WARNING = "translation_mode_do_not_show_warning"
     }
+
+    fun isTranslationModeWarningSuppressed(): Boolean = getBoolean(KEY_TRANSLATION_MODE_DO_NOT_SHOW_WARNING, false)
+    fun setTranslationModeWarningSuppressed(suppressed: Boolean) = putBoolean(KEY_TRANSLATION_MODE_DO_NOT_SHOW_WARNING, suppressed)
+
+
 
     // Observe changes
     fun observeKeyChanges(): Flow<String?> = callbackFlow {

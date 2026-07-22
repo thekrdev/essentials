@@ -279,9 +279,11 @@ fun SettingsContent(
     var showTranslationSessionSheet by remember { mutableStateOf(false) }
     var showLanguagePickerSheet by remember { mutableStateOf(false) }
     var showGitHubAuthSheet by remember { mutableStateOf(false) }
+    var showTranslationWarningDialog by remember { mutableStateOf(false) }
     val gitHubAuthViewModel: GitHubAuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
     val settingsRepo = remember { com.sameerasw.essentials.data.repository.SettingsRepository(context) }
     var currentUser by remember { mutableStateOf(settingsRepo.getGitHubUser()) }
+
 
     val isTranslationModeActive by TranslationManager.isTranslationModeEnabled
     val sessionEditsCount = remember(TranslationManager.session.edits.size) { TranslationManager.session.edits.size }
@@ -776,13 +778,20 @@ fun SettingsContent(
                 isChecked = isTranslationModeActive && !isEnglishApp,
                 enabled = !isEnglishApp,
                 onCheckedChange = { enabled ->
-                    if (enabled && currentUser == null) {
-                        showGitHubAuthSheet = true
+                    if (enabled) {
+                        if (currentUser == null) {
+                            showGitHubAuthSheet = true
+                        } else if (!settingsRepo.isTranslationModeWarningSuppressed()) {
+                            showTranslationWarningDialog = true
+                        } else {
+                            TranslationManager.isTranslationModeEnabled.value = true
+                        }
                     } else {
-                        TranslationManager.isTranslationModeEnabled.value = enabled
+                        TranslationManager.isTranslationModeEnabled.value = false
                     }
                 }
             )
+
 
             // Pending Edits Summary Card
             if (sessionEditsCount > 0) {
@@ -1497,5 +1506,20 @@ fun SettingsContent(
             }
         )
     }
+
+    if (showTranslationWarningDialog) {
+        com.sameerasw.essentials.translation.ui.TranslationWarningBottomSheet(
+            onDismissRequest = { showTranslationWarningDialog = false },
+            onConfirm = { dontShow ->
+                if (dontShow) {
+                    settingsRepo.setTranslationModeWarningSuppressed(true)
+                }
+                TranslationManager.isTranslationModeEnabled.value = true
+                showTranslationWarningDialog = false
+            }
+        )
+    }
 }
+
+
 

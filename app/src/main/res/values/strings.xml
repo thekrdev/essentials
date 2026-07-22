@@ -1818,6 +1818,17 @@
     <string name="translation_submit_error">Submission failed. Check your connection.</string>
     <string name="translation_key_label">String key</string>
     <string name="translation_saved_toast">Translation edit saved! Tap Submit to publish</string>
+    <string name="translation_warning_title">Enable Translation Mode</string>
+    <string name="translation_warning_desc">Please ensure all contributed translations are accurate and responsible. Note that not all submitted changes may be merged due to potential conflicts or review criteria.</string>
+    <string name="translation_warning_point1_title">Accuracy &amp; Responsibility</string>
+    <string name="translation_warning_point1_desc">Ensure all contributed translations are accurate, respectful, and appropriate for all users.</string>
+    <string name="translation_warning_point2_title">Conflicts &amp; Merging</string>
+    <string name="translation_warning_point2_desc">Not all submitted changes are guaranteed to be merged due to potential conflicts or review criteria.</string>
+    <string name="translation_warning_point3_title">GitHub Pull Request</string>
+    <string name="translation_warning_point3_desc">Submissions automatically create or update a dedicated pull request on GitHub under your account.</string>
+    <string name="translation_warning_do_not_show">Do not show again</string>
 </resources>
+
+
 
 
