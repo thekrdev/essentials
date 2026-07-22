@@ -1,5 +1,6 @@
 package com.sameerasw.essentials.translation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.glance.layout.Spacer
 import com.sameerasw.essentials.R
 import com.sameerasw.essentials.data.repository.GitHubRepository
 import com.sameerasw.essentials.data.repository.SettingsRepository
@@ -96,11 +98,13 @@ fun TranslationSessionSheet(
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "${edits.size} edit(s) in this session",
+                        text = "${edits.size} edit(s)",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
+
+                Spacer()
 
                 Row {
                     OutlinedButton(
@@ -187,8 +191,7 @@ fun TranslationSessionSheet(
             if (edits.isNotEmpty()) {
                 RoundedCardContainer {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(2.dp),
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
                         items(
                             items = edits,
@@ -235,9 +238,7 @@ fun TranslationSessionSheet(
                                         }
                                     }
                                 } else null,
-                                colors = ListItemDefaults.colors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceBright
-                                )
+                                modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
                             )
                         }
                     }

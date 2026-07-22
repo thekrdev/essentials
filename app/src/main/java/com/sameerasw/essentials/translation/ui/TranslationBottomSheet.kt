@@ -1,5 +1,6 @@
 package com.sameerasw.essentials.translation.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -110,9 +111,7 @@ fun TranslationBottomSheet(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     },
-                    colors = ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surfaceBright
-                    )
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
                 )
 
                 ListItem(
@@ -129,16 +128,15 @@ fun TranslationBottomSheet(
                             OutlinedTextField(
                                 value = inputText,
                                 onValueChange = { inputText = it },
-                                modifier = Modifier.fillMaxWidth(),
+                                modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
                                 placeholder = { Text("Enter translation in ${currentLocale.uppercase()}…") },
                                 singleLine = false,
-                                maxLines = 4
+                                maxLines = 4,
+                                shape = MaterialTheme.shapes.large
                             )
                         }
                     },
-                    colors = ListItemDefaults.colors(
-                        containerColor = MaterialTheme.colorScheme.surfaceBright
-                    )
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceBright, shape = MaterialTheme.shapes.extraSmall)
                 )
             }
 

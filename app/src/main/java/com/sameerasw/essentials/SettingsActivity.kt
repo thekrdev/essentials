@@ -713,7 +713,7 @@ fun SettingsContent(
             // GitHub Account Card (Tap to Sign In when logged out, Long Press to Sign Out when logged in)
             FeatureCard(
                 title = if (currentUser != null) "@${currentUser?.login}" else stringResource(R.string.action_sign_in_github),
-                description = if (currentUser != null) "Logged in as ${currentUser?.name ?: currentUser?.login} (Long press to sign out)" else "Sign in required to enable translation mode",
+                description = if (currentUser != null) "Logged in as ${currentUser?.name ?: currentUser?.login}" else "Sign in required to translate",
                 isEnabled = true,
                 onToggle = {},
                 onClick = {
