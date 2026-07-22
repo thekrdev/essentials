@@ -18,10 +18,15 @@ object TranslationManager {
     val activeTargetText = mutableStateOf<String?>(null)
 
     fun addEdit(key: String, locale: String, originalValue: String, newValue: String) {
+        if (newValue.trim() == originalValue.trim() || newValue.isBlank()) {
+            removeEdit(key, locale)
+            return
+        }
         val edit = TranslationEdit(key, locale, originalValue, newValue)
         session.addOrUpdate(edit)
         liveOverrides[Pair(key, locale)] = newValue
     }
+
 
     fun removeEdit(key: String, locale: String) {
         session.remove(key, locale)

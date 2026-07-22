@@ -167,18 +167,23 @@ fun TranslationBottomSheet(
                 Button(
                     onClick = {
                         HapticUtil.performUIHaptic(view)
-                        TranslationManager.addEdit(
-                            key = stringKey,
-                            locale = currentLocale,
-                            originalValue = originalTargetVal,
-                            newValue = inputText
-                        )
-                        android.widget.Toast.makeText(
-                            context,
-                            context.getString(R.string.translation_saved_toast),
-                            android.widget.Toast.LENGTH_SHORT
-                        ).show()
+                        if (inputText.trim() != originalTargetVal.trim() && inputText.isNotBlank()) {
+                            TranslationManager.addEdit(
+                                key = stringKey,
+                                locale = currentLocale,
+                                originalValue = originalTargetVal,
+                                newValue = inputText
+                            )
+                            android.widget.Toast.makeText(
+                                context,
+                                context.getString(R.string.translation_saved_toast),
+                                android.widget.Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            TranslationManager.removeEdit(stringKey, currentLocale)
+                        }
                         onDismissRequest()
+
                     }
                 ) {
                     Icon(
