@@ -41,6 +41,8 @@ jobs:
           fetch-depth: 0
 
       - name: Parse Inputs & Prepare JSON
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo '${{ inputs.translations_json }}' > /tmp/edits.json
@@ -48,10 +50,9 @@ jobs:
             echo "CONTRIBUTOR_NAME=${{ inputs.contributor_name || inputs.contributor }}" >> $GITHUB_ENV
             echo "CONTRIBUTOR_EMAIL=${{ inputs.contributor_email }}" >> $GITHUB_ENV
           else
-            # Extract JSON block between ```json and ``` from discussion comment body
             python3 -c '
 import os, json, re
-body = """${{ github.event.comment.body }}"""
+body = os.environ.get("COMMENT_BODY", "")
 match = re.search(r"```json\s*(.*?)\s*```", body, re.DOTALL)
 if match:
     json_str = match.group(1)
