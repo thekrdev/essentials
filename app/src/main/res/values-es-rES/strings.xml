@@ -1685,16 +1685,16 @@ Cuando llegue un mensaje o alerta de una aplicación seleccionada, la Pantalla s
     <string name="label_wallpaper_hours">%1$d horas</string>
     <string name="label_wallpaper_a_few_minutes">unos minutos</string>
     <!-- In-App Translation Mode -->
-    <string name="settings_translations_section">Translations</string>
-    <string name="settings_translate_mode">Translation Mode</string>
-    <string name="settings_translate_mode_desc">Long press any text to translate and contribute to the community</string>
-    <string name="settings_translated_texts">Translated</string>
-    <string name="settings_translated_texts_desc">%d edit(s) pending — tap to submit or discard</string>
-    <string name="translation_submit">Submit</string>
-    <string name="translation_discard">Discard</string>
-    <string name="translation_menu_translate">Translate</string>
-    <string name="translation_menu_view">View All</string>
-    <string name="translation_menu_dismiss">Dismiss</string>
+    <string name="settings_translations_section">Traducciones</string>
+    <string name="settings_translate_mode">Modo de traducción</string>
+    <string name="settings_translate_mode_desc">Mantén pulsado cualquier texto para traducirlo y contribuir con comunidad</string>
+    <string name="settings_translated_texts">Traducido</string>
+    <string name="settings_translated_texts_desc">%d edición(es) pendiente(s) — toca para enviar o descartar</string>
+    <string name="translation_submit">Enviar</string>
+    <string name="translation_discard">Descartar</string>
+    <string name="translation_menu_translate">Traducir</string>
+    <string name="translation_menu_view">Ver todo</string>
+    <string name="translation_menu_dismiss">Descartar</string>
     <string name="translation_source_label">Source (English)</string>
     <string name="translation_login_required">GitHub login required to submit translations</string>
     <string name="translation_submitting">Submitting…</string>
