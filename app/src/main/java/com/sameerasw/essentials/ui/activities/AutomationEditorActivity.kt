@@ -962,6 +962,13 @@ class AutomationEditorActivity : ComponentActivity() {
                                             ) {
                                                 actions.forEach { action ->
                                                     val resolvedAction = if (currentSelection != null && currentSelection::class == action::class) currentSelection else action
+                                                    val missing = getMissingPermissionsHelper(resolvedAction)
+                                                    fun showPermissionSheet() {
+                                                        permissionKeysToShow = missing
+                                                        permissionFeatureTitle = resolvedAction.title
+                                                        showPermissionSheet = true
+                                                    }
+
                                                     EditorActionItem(
                                                         title = stringResource(resolvedAction.title),
                                                         iconRes = resolvedAction.icon,
@@ -976,14 +983,14 @@ class AutomationEditorActivity : ComponentActivity() {
                                                                     else selectedOutAction = resolvedAction
                                                                 }
                                                             }
-                                                            val missing = getMissingPermissionsHelper(resolvedAction)
-                                                            if (missing.isNotEmpty()) {
-                                                                permissionKeysToShow = missing
-                                                                permissionFeatureTitle = resolvedAction.title
-                                                                showPermissionSheet = true
-                                                            }
+                                                            if(missing.isNotEmpty()) showPermissionSheet()
                                                         },
                                                         onSettingsClick = {
+                                                            if(missing.isNotEmpty()) {
+                                                                showPermissionSheet()
+                                                                return@EditorActionItem
+                                                            }
+
                                                             configAction = resolvedAction
                                                             when (resolvedAction) {
                                                                 is Action.DimWallpaper -> showDimSettings = true
